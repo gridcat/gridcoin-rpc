@@ -1,5 +1,4 @@
-const jayson = require('jayson/promise')
-import IConfig from './contracts/config'
+import JsonRPC, { IParameters } from './JsonRPC'
 import IDifficulty from './contracts/difficulty'
 import ICpid from './contracts/cpid'
 import IBeaconStatus from './contracts/beaconStatus'
@@ -26,11 +25,17 @@ import IInput from './contracts/input'
 import IOutput from './contracts/output'
 import ITransaction from './contracts/transaction'
 import IScript from './contracts/script'
-
-// square brackets [optional option]
-// angle brackets <required argument>
-// curly braces {default values}
-// parenthesis (miscellaneous info)
+import IWalletInfo from './contracts/walletInfo'
+import IReceivement from './contracts/receivement'
+import IAddress from './contracts/address'
+import IUnspent from './contracts/unspent'
+import ITransactionShort from './contracts/transactionShort'
+import IListSinceBlock from './contracts/listSinceBolck'
+import ITransactionUnspent from './contracts/transactionUnspent'
+import IKeysPair from './contracts/keysPair'
+import IBurnAddress from './contracts/burnAddress'
+import IReserve from './contracts/reserve'
+import IRain from './contracts/rain'
 
 function filterParameters(parameters: Array<any>): Array<any> {
   return parameters.filter(element => element !== undefined)
@@ -39,10 +44,10 @@ function filterParameters(parameters: Array<any>): Array<any> {
 type callParameters = string | number | boolean | undefined | Array<string>
 
 class GridcoinRPC {
-  private readonly client: any
+  private readonly client: JsonRPC
 
-  constructor(config: IConfig) {
-    this.client = new jayson.client.http(config)
+  constructor(config: IParameters) {
+    this.client = new JsonRPC(config)
   }
 
   /**
@@ -105,7 +110,7 @@ class GridcoinRPC {
    * @memberof GridcoinRPC
    */
   public backupWallet(destination?: string): Promise<IBackupWallet> {
-    return this.call('backupwallet')
+    return this.call('backupwallet', destination)
   }
 
   /**
@@ -208,8 +213,557 @@ class GridcoinRPC {
     return this.call('dumpwallet', filename)
   }
 
+  /**
+   * @todo later
+   *
+   * @param {string} walletPassPhrase
+   * @returns
+   * @memberof GridcoinRPC
+   */
   public encrypt(walletPassPhrase: string) {
     return this.call('encrypt', walletPassPhrase)
+  }
+
+  /**
+   * @todo later
+   *
+   * @param {string} walletPassPhrase
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public encryptWaller(walletPassPhrase: string) {
+    return this.call('encryptwaller', walletPassPhrase)
+  }
+
+  /**
+   * Returns the account associated with the given address.
+   *
+   * @param {string} gridcoinAddress
+   * @returns {Promise<string>} - an account name
+   * @memberof GridcoinRPC
+   */
+  public getAccount(gridcoinAddress: string): Promise<string> {
+    return this.call('getaccount', gridcoinAddress)
+  }
+
+  /**
+   * Returns the current Gridcoin address for receiving payments to this account.
+   * @description
+   * If <account> does not exist, it will be created along with an associated new address that will be returned.
+   *
+   * @param {string} account - an account name
+   * @returns {Promise<string>} - GRC address
+   * @memberof GridcoinRPC
+   */
+  public getAccountAddress(account: string): Promise<string> {
+    return this.call('getaccountaddress', account)
+  }
+
+  /**
+   * Returns the list of addresses for the given account.
+   *
+   * @param {string} account - the account name
+   * @returns {Promise<Array<string>>} - a list of addresses
+   * @memberof GridcoinRPC
+   */
+  public getAddressesByAccount(account: string): Promise<Array<string>> {
+    return this.call('getaddressesbyaccount', account)
+  }
+
+  /**
+   * If [account] is not specified, returns the server's total available balance.
+   * If [account] is specified, returns the balance in the account.
+   *
+   * @param {string} [account]
+   * @param {number} [minConf]
+   * @param {boolean} [includeWatchonly]
+   * @returns {Promise<number>}
+   * @memberof GridcoinRPC
+   */
+  public getBalance(
+    account?: string,
+    minConf?: number,
+    includeWatchonly?: boolean
+  ): Promise<number> {
+    return this.call('getbalance', account, minConf, includeWatchonly)
+  }
+
+  /**
+   * Returns a new Gridcoin address for receiving payments.
+   * @description
+   * If [account] is specified payments received with the address will be credited to [account].
+   *
+   * @param {string} [account]
+   * @returns {Promise<string>}
+   * @memberof GridcoinRPC
+   */
+  public getNewAddress(account?: string): Promise<string> {
+    return this.call('getnewaddress', account)
+  }
+
+  /**
+   * @todo clarify
+   *
+   * @param {string} [account]
+   * @returns {Promise<string>}
+   * @memberof GridcoinRPC
+   */
+  public getNewPubkey(account?: string): Promise<string> {
+    return this.call('getnewpubkey', account)
+  }
+
+  /**
+   * Returns raw transaction representation for given transaction id.
+   *
+   * @param {string} txid
+   * @param {boolean} [verbose=false]
+   * @returns {(Promise<string|ITransaction>)}
+   * @memberof GridcoinRPC
+   */
+  public getRawTransaction(txid: string, verbose: boolean = false): Promise<string | ITransaction> {
+    return this.call('getrawtransaction', txid, verbose)
+  }
+
+  /**
+   * Returns the total amount received by addresses with [account] in transactions with at least [minconf] confirmations.
+   * If [account] not provided return will include all transactions to all accounts.
+   *
+   * @param {string} account - the account name
+   * @param {number} [minconf=1] - the minimum number of confirmations
+   * @returns {Promise<number>} - the number of coins received
+   * @memberof GridcoinRPC
+   */
+  public getReceivedByAccount(account: string, minconf: number = 1): Promise<number> {
+    return this.call('getreceivedbyaccount', account, minconf)
+  }
+
+  /**
+   * Returns the amount received by <gridcoinaddress> in transactions with at least [minconf] confirmations.
+   * @description
+   * It correctly handles the case where someone has sent to the address in multiple transactions.
+   * Keep in mind that addresses are only ever used for receiving transactions.
+   * Works only for addresses in the local wallet, external addresses will always show 0.
+   *
+   * @param {string} gridcoinAddress - the address
+   * @param {number} [minconf=1] - the minimum number of confirmations
+   * @returns {Promise<number>} - the number of coins received
+   * @memberof GridcoinRPC
+   */
+  public getReceivedByAddress(gridcoinAddress: string, minconf: number = 1): Promise<number> {
+    return this.call('getreceivedbyaddress', gridcoinAddress, minconf)
+  }
+
+  /**
+   * Adds signatures to a raw transaction and returns the resulting raw transaction.
+   *
+   * @param {string} txid - transaction identifier (TXID)
+   * @returns {Promise<ITransaction>} - description of the transaction
+   * @memberof GridcoinRPC
+   */
+  public getTransaction(txid: string): Promise<ITransaction> {
+    return this.call('gettransaction', txid)
+  }
+
+  /**
+   * Returns useful information about current wallet state.
+   *
+   * @returns {Promise<IWallerInfo>}
+   * @memberof GridcoinRPC
+   */
+  public getWalletInfo(): Promise<IWalletInfo> {
+    return this.call('getwalletinfo')
+  }
+
+  /**
+   * @todo check
+   *
+   * @param {string} privKey
+   * @param {string} [label]
+   * @param {boolean} [rescan]
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public importPrivKey(privKey: string, label?: string, rescan?: boolean) {
+    return this.call('importprivkey', privKey, label, rescan)
+  }
+
+  /**
+   * @todo test
+   *
+   * @param {string} filename
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public importWallet(filename: string) {
+    return this.call('importwallet', filename)
+  }
+
+  /**
+   * @todo check
+   * Fills the keypool, requires wallet passphrase to be set.
+   *
+   * @param {*} newSize
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public keyPoolRefill(newSize: number) {
+    return this.call('keypoolrefill', newSize)
+  }
+
+  /**
+   * @todo check
+   *
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public listAccounts() {
+    return this.call('listaccounts')
+  }
+
+  /**
+   * Returns all addresses in the wallet and info used for coincontrol.
+   *
+   * @returns {(Promise<Array<Array<string|number>>>)}
+   * @memberof GridcoinRPC
+   */
+  public listAddressGroupings(): Promise<Array<Array<string | number>>> {
+    return this.call('listaddressgroupings')
+  }
+
+  /**
+   * @todo check
+   *
+   * @param {number} [minconf=1]
+   * @param {boolean} [includeEmpty=false]
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public listReceivedByAccount(minconf: number = 1, includeEmpty: boolean = false) {
+    return this.call('listreceivedbyaccount', minconf, includeEmpty)
+  }
+
+  /**
+   * Returns an array of objects containing: address, account, amount, confirmations.
+   * @description
+   * To get a list of accounts on the system, gridcoind listreceivedbyaddress 0 true.
+   *
+   * @param {number} [minConf=1] - The minimum number of confirmations before payments are included.
+   * @param {boolean} [includeEmpty=false] - Whether to include addresses that haven't received any payments.
+   * @returns {Promise<IReceivement>}
+   * @memberof GridcoinRPC
+   */
+  public listReceivedByAddress(
+    minConf: number = 1,
+    includeEmpty: boolean = false
+  ): Promise<IReceivement> {
+    return this.call('listreceivedbyaddress', minConf, includeEmpty)
+  }
+
+  /**
+   * Get all transactions in blocks since block [blockhash], or all transactions if omitted
+   *
+   * @param {string} [blockHash]
+   * @param {number} [targetConfirmations]
+   * @param {boolean} [includeWatchonly]
+   * @returns {Promise<IListSinceBlock>}
+   * @memberof GridcoinRPC
+   */
+  public listSinceBlock(
+    blockHash?: string,
+    targetConfirmations?: number,
+    includeWatchonly?: boolean
+  ): Promise<IListSinceBlock> {
+    return this.call('listsinceblock', blockHash, targetConfirmations, includeWatchonly)
+  }
+
+  /**
+   * returns the most recent transactions that affect the wallet
+   *
+   * @param {string} [account]
+   * @param {*} [count]
+   * @param {*} [from]
+   * @param {boolean} [includeWatchonly]
+   * @returns {Promise<ITransactionShort>}
+   * @memberof GridcoinRPC
+   */
+  public listTransactions(
+    account?: string,
+    count?: any,
+    from?: any,
+    includeWatchonly?: boolean
+  ): Promise<Array<ITransactionShort>> {
+    return this.call('listtransactions', account, count, from, includeWatchonly)
+  }
+
+  /**
+   *
+   *
+   * @param {number} [minConf]
+   * @param {number} [maxConf]
+   * @param {...Array<string>} addresses
+   * @returns {Promise<Array<ITransactionUnspent>>}
+   * @memberof GridcoinRPC
+   */
+  public listUnspent(
+    minConf?: number,
+    maxConf?: number,
+    ...addresses: Array<string>
+  ): Promise<Array<ITransactionUnspent>> {
+    return this.call('listunspent', minConf, maxConf, ...addresses)
+  }
+
+  /**
+   * Make a public/private key pair.
+   *
+   * @param {string} [prefix]
+   * @returns {Promise<IKeysPair>}
+   * @memberof GridcoinRPC
+   */
+  public makeKeyPair(prefix?: string): Promise<IKeysPair> {
+    return this.call('makekeypair', prefix)
+  }
+
+  /**
+   * @deprecated
+   *
+   * @param {number} fromAccount
+   * @param {number} toAccount
+   * @param {number} amount
+   * @param {number} [minConf]
+   * @param {string} [comment]
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public move(
+    fromAccount: number,
+    toAccount: number,
+    amount: number,
+    minConf?: number,
+    comment?: string
+  ) {
+    return this.call('move', fromAccount, toAccount, amount, minConf, comment)
+  }
+
+  /**
+   * @todo document
+   *
+   * @param {string} [burntemplate]
+   * @returns {Promise<IBurnAddress>}
+   * @memberof GridcoinRPC
+   */
+  public newBurnAddress(burntemplate?: string): Promise<IBurnAddress> {
+    return this.call('newburnaddress', burntemplate)
+  }
+
+  /**
+   * Rain on specific addresses with specific amounts.
+   * @todo: Failing
+   * Requires unlocked wallet
+   *
+   * @param {IRain} targets
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public rain(targets: IRain) {
+    return this.call('rain', JSON.stringify(targets))
+  }
+
+  /**
+   * Check wallet.dat for missing coins. If any are found, attempt recovery.
+   *
+   * @returns {Promise<Object>}
+   * @memberof GridcoinRPC
+   */
+  public repairWallet(): Promise<Object> {
+    return this.call('repairwallet')
+  }
+
+  /**
+   * Resend any failed or unsent transactions.
+   * Requires unlocked wallet
+   *
+   * @returns {Promise<null>}
+   * @memberof GridcoinRPC
+   */
+  public resendTx(): Promise<null> {
+    return this.call('resendtx')
+  }
+
+  /**
+   * Reserve an amount of coins that do not participate in staking.
+   *
+   * @param {boolean} reserve
+   * @param {number} [amount]
+   * @returns {Promise<IReserve>}
+   * @memberof GridcoinRPC
+   */
+  public reserveBalance(reserve: boolean, amount?: number): Promise<IReserve> {
+    return this.call('reservebalance', reserve, amount)
+  }
+
+  public sendFrom(
+    fromAccount: string,
+    toGridcoinaddress: string,
+    amount: number,
+    minConf?: number,
+    comment?: string,
+    commentTo?: string
+  ) {
+    return this.call(
+      'sendfrom',
+      fromAccount,
+      toGridcoinaddress,
+      amount,
+      minConf,
+      comment,
+      commentTo
+    )
+  }
+
+  // sendmany <fromaccount> {address:amount,...} [minconf=1] [comment]
+  public sendMany(fromAccount: string) {
+    return this.call('sendmany')
+  }
+
+  /**
+   * Submits raw transaction (serialized, hex-encoded) to local node and network.
+   *
+   * @param {string} hex - serialized transaction to broadcast
+   * @returns {Promise<string>} - TXID or error message
+   * @memberof GridcoinRPC
+   */
+  public sendRawTransaction(hex: string): Promise<string> {
+    return this.call('sendrawtransaction', hex)
+  }
+
+  /**
+   * Spend an amount to a given address.
+   * Requires unlocked wallet
+   *
+   * @param {string} gridcoinAddress - target gridcoin address
+   * @param {number} amount - amount to spend, real number and is rounded to 8 decimal places.
+   * @param {string} [comment] - comment
+   * @param {string} [commentTo] - comment about who the payment was sent to
+   * @returns {Promise<string>} - TXID of the sent transaction
+   * @memberof GridcoinRPC
+   */
+  public sendToAddress(
+    gridcoinAddress: string,
+    amount: number,
+    comment?: string,
+    commentTo?: string
+  ): Promise<string> {
+    return this.call('sendtoaddress', gridcoinAddress, amount, comment, commentTo)
+  }
+
+  /**
+   * Sets the account associated with the given address.
+   * Assigning address that is already assigned to the same account will create a new address associated with that account.
+   *
+   * @param {string} gridcoinAddress
+   * @param {string} account
+   * @returns {Promise<null>}
+   * @memberof GridcoinRPC
+   */
+  public setAccount(gridcoinAddress: string, account: string): Promise<null> {
+    return this.call('setaccount', gridcoinAddress, account)
+  }
+
+  // signrawtransaction <hex string> [{"txid":txid,"vout":n,"scriptPubKey":hex},...] [<privatekey1>,...] [sighashtype="ALL"]
+  // Adds signatures to a raw transaction and returns the resulting raw transaction.
+  /**
+   * @todo
+   *
+   * @param {string} hexString
+   * @returns
+   * @memberof GridcoinRPC
+   */
+  public signRawTransaction(hexString: string) {
+    return this.call('signrawtransaction')
+  }
+
+  /**
+   * Set the transaction fee per kilobyte paid by transactions created by this wallet.
+   *
+   * @param {number} amount - is a real and is rounded to the nearest 0.00000001
+   * @returns {Promise<boolean>}
+   * @memberof GridcoinRPC
+   */
+  public setTxFee(amount: number): Promise<boolean> {
+    return this.call('settxfee', amount)
+  }
+
+  /**
+   * Display a report on unspent coins in the wallet.
+   *
+   * @returns {Promise<Array<IUnspent>>}
+   * @memberof GridcoinRPC
+   */
+  public unspentReport(): Promise<Array<IUnspent>> {
+    return this.call('unspentreport')
+  }
+
+  /**
+   * Return information about <gridcoinaddress>.
+   * @description
+   * The validateaddress RPC accepts a block
+   * verifies it is a valid addition to the block chain
+   * and broadcasts it to the network.
+   *
+   * @param {string} gridcoinAddress
+   * @returns {Promise<IAddress>}
+   * @memberof GridcoinRPC
+   */
+  public validateAddress(gridcoinAddress: string): Promise<IAddress> {
+    return this.call('validateaddress', gridcoinAddress)
+  }
+
+  /**
+   * Return information about <gridcoinpubkey>.
+   *
+   * @param {string} gridcoinPubkey
+   * @returns {Promise<IAddress>}
+   * @memberof GridcoinRPC
+   */
+  public validatePubkey(gridcoinPubkey: string): Promise<IAddress> {
+    return this.call('validatepubkey', gridcoinPubkey)
+  }
+
+  /**
+   * Sign a message with the private key of an address.
+   * Requires unlocked wallet
+   *
+   * @param {string} gridcoinAddress - the address corresponding to the private key to sign with
+   * @param {string} message - the message to sign
+   * @returns {Promise<string>} - message signature
+   * @memberof GridcoinRPC
+   */
+  public signMessage(gridcoinAddress: string, message: string): Promise<string> {
+    return this.call('signmessage', gridcoinAddress, message)
+  }
+
+  /**
+   * Verify a signed message.
+   * @description
+   * The P2PKH address corresponding to the private key which made the signature.
+   * A P2PKH address is a hash of the public key corresponding to the private key which made the signature.
+   * When the ECDSA signature is checked, up to four possible ECDSA public keys will be reconstructed from the signature;
+   * each key will be hashed and compared against the P2PKH address provided to see if any of them match.
+   * If there are no matches, signature validation will fail.
+   *
+   * @param {string} gridcoinAddress - The gridcoin address to use for the signature.
+   * @param {string} signature - The signature provided by the signer in base 64 encoding.
+   * @param {string} message - The message that was signed.
+   * @returns {Promise<boolean>}
+   * @memberof GridcoinRPC
+   * @see signmessage
+   */
+  public verifyMessage(
+    gridcoinAddress: string,
+    signature: string,
+    message: string
+  ): Promise<boolean> {
+    return this.call('verifymessage', gridcoinAddress, signature, message)
   }
 
   /********************************************
@@ -243,6 +797,7 @@ class GridcoinRPC {
    * Requires unlocked wallet
    * @todo implement
    */
+  // tslint:disable-next-line
   public addPoll() {}
 
   /**
@@ -339,8 +894,8 @@ class GridcoinRPC {
    * @returns {Promise<IBlock>}
    * @memberof GridcoinRPC
    */
-  public getBlockByNumber(number: number, txinfo?: boolean): Promise<IBlock> {
-    return this.call('getblockbynumber', number, txinfo)
+  public getBlockByNumber(blockNumber: number, txinfo?: boolean): Promise<IBlock> {
+    return this.call('getblockbynumber', blockNumber, txinfo)
   }
 
   /**
@@ -828,4 +1383,4 @@ class GridcoinRPC {
   }
 }
 
-export default GridcoinRPC
+export { GridcoinRPC }

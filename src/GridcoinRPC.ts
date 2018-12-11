@@ -1,3 +1,4 @@
+import assert from 'assert'
 import JsonRPC, { IParameters } from './JsonRPC'
 import IDifficulty from './contracts/difficulty'
 import ICpid from './contracts/cpid'
@@ -58,6 +59,18 @@ class GridcoinRPC {
   private call(command: string, ...parameters: Array<callParameters>): Promise<any> {
     const filteredParameters: Array<any> = filterParameters(parameters)
     return this.client.request(command, filteredParameters).then((result: any) => result.result)
+  }
+
+  /**
+   * Test connection
+   *
+   * @throws {Error}
+   * @returns bool
+   * @memberof GridcoinRPC
+   */
+  public async testConnection() {
+    assert.strictEqual(null, await this.call('nonExistsTestConnectionCommand'))
+    return true
   }
 
   /**

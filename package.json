@@ -20,7 +20,7 @@
   "author": "Gridcat <gridcat@protonmail.com>",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/gridcat/gridcoin-rpc.git"
   },
   "license": "MIT",
   "engines": {
@@ -39,11 +39,10 @@
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
-    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged"
+    "semantic-release-prepare": "ts-node tools/semantic-release-prepare"
   },
   "lint-staged": {
-    "{src,test}/**/*.ts": [
+    "{src,test,tools}/**/*.ts": [
       "prettier --write",
       "git add"
     ]
@@ -86,9 +85,30 @@
       "@commitlint/config-conventional"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
+  },
   "devDependencies": {
     "@commitlint/cli": "^7.1.2",
     "@commitlint/config-conventional": "^7.1.2",
+    "@semantic-release/changelog": "^3.0.1",
+    "@semantic-release/commit-analyzer": "^6.1.0",
+    "@semantic-release/git": "^7.0.5",
+    "@semantic-release/github": "^5.2.6",
+    "@semantic-release/npm": "^5.1.2",
+    "@semantic-release/release-notes-generator": "^7.1.4",
     "@types/chai": "^4.1.7",
     "@types/jest": "^23.3.2",
     "@types/nock": "^9.3.0",

@@ -1,0 +1,77 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/grc
+  docker:
+    - image: circleci/node:8.9.1
+
+attach: &attach
+  - attach_workspace:
+      at: ~/grc
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+	        # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: npm install
+      - run: npm run build
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/grc
+          paths: .
+
+  test:
+    <<: *defaults
+    steps:
+      <<: *attach
+      - run:
+          name: Run tests
+          command: npm test
+
+  # deploy:
+  #   <<: *defaults
+  #   steps:
+  #     <<: *attach
+  #     - run:
+  #         name: Authenticate with registry
+  #         command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
+  #     - run:
+  #         name: Publish package
+  #         command: npm publish
+
+  deploy-docs:
+    <<: *defaults
+    spteps:
+      <<: *attach
+      - run:
+          name: Deploy docs
+          command: npm run deploy-docs
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - build
+      - test
+      - deploy-docs
+      # - test:
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      # - deploy:
+      #     requires:
+      #       - test
+      #     filters:
+      #       tags:
+      #         only: /^v.*/
+      #       branches:
+      #         ignore: /.*/

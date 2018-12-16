@@ -58,11 +58,20 @@ workflows:
   version: 2
   test-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+                ignore: dh-pages
       - test:
+          filters:
+            branches:
+                ignore: dh-pages
           requires:
             - build
       - deploy-docs:
+          filters:
+            branches:
+                ignore: dh-pages
           requires:
             - build
             - test

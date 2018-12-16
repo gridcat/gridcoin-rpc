@@ -59,8 +59,13 @@ workflows:
   test-deploy:
     jobs:
       - build
-      - test
+      - test:
+          requires:
+            - build
       - deploy-docs
+          requires:
+            - build
+            - test
       # - test:
       #     filters:
       #       tags:

@@ -62,7 +62,7 @@ workflows:
       - test:
           requires:
             - build
-      - deploy-docs
+      - deploy-docs:
           requires:
             - build
             - test

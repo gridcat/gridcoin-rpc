@@ -2,7 +2,7 @@
   "name": "gridcoin-rpc",
   "version": "0.0.0",
   "description": "",
-  "keywords": [],
+  "keywords": ["gridcoin", "jsonrpc", "cryptocurrency", "crypto", "cryptocoin"],
   "main": "dist/gridcoin-rpc.umd.js",
   "_module": "dist/gridcoin-rpc.es5.js",
   "_typings": "dist/types/gridcoin-rpc.d.ts",
@@ -74,10 +74,6 @@
     "collectCoverageFrom": [
       "src/*.{js,ts}"
     ]
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
   },
   "commitlint": {
     "extends": [

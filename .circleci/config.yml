@@ -47,7 +47,7 @@ jobs:
 
   deploy-docs:
     <<: *defaults
-    spteps:
+    steps:
       - attach_workspace:
           at: ~/grc
       - run:

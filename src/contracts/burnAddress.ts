@@ -1,4 +1,4 @@
 export default interface IBurnAddress {
-  CombinedHex: string
-  'Burn Address': string
+  CombinedHex: string;
+  'Burn Address': string;
 }

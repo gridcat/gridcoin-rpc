@@ -1,6 +1,6 @@
-import ITransactionShort from './transactionShort'
+import ITransactionShort from './transactionShort';
 
 export default interface IListSinceBlock {
-  transactions: Array<ITransactionShort>
-  lastBlock: string
+  transactions: Array<ITransactionShort>;
+  lastBlock: string;
 }

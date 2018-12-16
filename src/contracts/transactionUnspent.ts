@@ -5,41 +5,41 @@ export default interface ITransactionUnspent {
    * @type {string}
    * @memberof ITransactionShort
    */
-  txid: string
+  txid: string;
   /**
    * the vout value
    *
    * @type {number}
    * @memberof ITransactionUnspent
    */
-  vout: number
+  vout: number;
   /**
    * Address
    *
    * @type {string}
    * @memberof ITransactionShort
    */
-  address: string
-  label: string
+  address: string;
+  label: string;
   /**
    * the script key
    *
    * @type {number}
    * @memberof ITransactionUnspent
    */
-  scriptPubKey: string
+  scriptPubKey: string;
   /**
    * the transaction output amount in GRC
    *
    * @type {number}
    * @memberof ITransactionUnspent
    */
-  amount: number
+  amount: number;
   /**
    * The number of confirmations
    *
    * @type {number}
    * @memberof ITransactionUnspent
    */
-  confirmations: number
+  confirmations: number;
 }

@@ -1,6 +1,6 @@
-import http from 'http'
-import https from 'https'
-import AuthenticationError from './Errors/Authentication'
+import http from 'http';
+import https from 'https';
+import AuthenticationError from './Errors/Authentication';
 
 /**
  * Command interface
@@ -8,14 +8,14 @@ import AuthenticationError from './Errors/Authentication'
  * @interface IRequestJSON
  */
 interface IRequestJSON {
-  id: number
-  method: string
-  params: any
+  id: number;
+  method: string;
+  params: any;
 }
 
 interface IProviders {
-  http: any
-  https: any
+  http: any;
+  https: any;
 }
 
 /**
@@ -30,33 +30,33 @@ export interface IParameters {
    * @type {string}
    * @memberof IParameters
    */
-  host: string
+  host: string;
   /**
    *  Gridcoin RPC server (wallet) port
    *
    * @type {number}
    * @memberof IParameters
    */
-  port: number
-  path?: string
+  port: number;
+  path?: string;
   /**
    * Username (if specified)
    *
    * @type {string}
    * @memberof IParameters
    */
-  username?: string
+  username?: string;
   /**
    * Password (if specified)
    *
    * @type {string}
    * @memberof IParameters
    */
-  password?: string
-  ca?: string | Buffer | Array<string | Buffer>
-  ssl?: boolean
-  sslStrict?: boolean
-  providers?: IProviders
+  password?: string;
+  ca?: string | Buffer | Array<string | Buffer>;
+  ssl?: boolean;
+  sslStrict?: boolean;
+  providers?: IProviders;
 }
 
 /**
@@ -65,14 +65,14 @@ export interface IParameters {
  * @class JsonRPC
  */
 class JsonRPC {
-  private host: string
-  private port: number
-  private path: string
-  private auth?: string
-  private ssl: boolean
-  private sslStrict: boolean
-  private ca?: string | Buffer | Array<string | Buffer>
-  private provider: any
+  private host: string;
+  private port: number;
+  private path: string;
+  private auth?: string;
+  private ssl: boolean;
+  private sslStrict: boolean;
+  private ca?: string | Buffer | Array<string | Buffer>;
+  private provider: any;
 
   /**
    * Creates an instance of JsonRPC.
@@ -80,20 +80,20 @@ class JsonRPC {
    * @memberof JsonRPC
    */
   constructor(parameters: IParameters) {
-    this.host = parameters.host
-    this.path = parameters.path || '/'
-    this.port = parameters.port
+    this.host = parameters.host;
+    this.path = parameters.path || '/';
+    this.port = parameters.port;
     if (parameters.username && parameters.password) {
-      this.auth = `${parameters.username}:${parameters.password}`
+      this.auth = `${parameters.username}:${parameters.password}`;
     }
-    this.ca = parameters.ca
-    this.ssl = !!parameters.ssl
-    this.sslStrict = !parameters.sslStrict
-    const providers: IProviders = parameters.providers || { http, https }
+    this.ca = parameters.ca;
+    this.ssl = !!parameters.ssl;
+    this.sslStrict = !parameters.sslStrict;
+    const providers: IProviders = parameters.providers || { http, https };
     if (this.ssl) {
-      this.provider = providers.https.request
+      this.provider = providers.https.request;
     } else {
-      this.provider = providers.http.request
+      this.provider = providers.http.request;
     }
   }
 
@@ -109,9 +109,9 @@ class JsonRPC {
     const request: IRequestJSON = {
       id: Date.now(),
       method: command,
-      params: parameters
-    }
-    const strigifyRequest: string = JSON.stringify(request)
+      params: parameters,
+    };
+    const strigifyRequest: string = JSON.stringify(request);
 
     const requestOptions: http.ClientRequestArgs | https.RequestOptions = {
       host: this.host,
@@ -120,49 +120,49 @@ class JsonRPC {
       path: this.path,
       headers: {
         Host: this.host,
-        'Content-Length': strigifyRequest.length
+        'Content-Length': strigifyRequest.length,
       },
       agent: false,
-      rejectUnauthorized: this.ssl && this.sslStrict !== false
-    }
+      rejectUnauthorized: this.ssl && this.sslStrict !== false,
+    };
 
     if (this.auth) {
-      requestOptions.auth = this.auth
+      requestOptions.auth = this.auth;
     }
 
     if (this.ssl) {
-      requestOptions.ca = this.ca
+      requestOptions.ca = this.ca;
     }
 
     // Send request
     return new Promise<Object>((resolve: any, reject: any) => {
-      const request = this.provider(requestOptions)
+      const request = this.provider(requestOptions);
 
-      request.end(strigifyRequest)
+      request.end(strigifyRequest);
 
-      request.on('error', reject)
+      request.on('error', reject);
 
       request.on('response', (response: any) => {
-        let buffer: string = ''
+        let buffer: string = '';
         if (response.statusCode === 401) {
-          reject(new AuthenticationError())
-          return
+          reject(new AuthenticationError());
+          return;
         }
         // console.log(response.statusCode);
         response.on('data', (chunk: string) => {
-          buffer += chunk
-        })
+          buffer += chunk;
+        });
         response.on('end', () => {
           try {
-            const decoded: Object = JSON.parse(buffer)
-            resolve(decoded)
+            const decoded: Object = JSON.parse(buffer);
+            resolve(decoded);
           } catch (e) {
-            reject(e)
+            reject(e);
           }
-        })
-      })
-    })
+        });
+      });
+    });
   }
 }
 
-export default JsonRPC
+export default JsonRPC;

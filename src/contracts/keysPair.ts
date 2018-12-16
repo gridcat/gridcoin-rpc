@@ -1,4 +1,4 @@
 export default interface IKeysPair {
-  PrivateKey: string
-  PublicKey: string
+  PrivateKey: string;
+  PublicKey: string;
 }

@@ -13,8 +13,8 @@ export default class AuthenticationError extends Error {
    */
   constructor(message?: string) {
     if (!message) {
-      message = 'Authentication Error'
+      message = 'Authentication Error';
     }
-    super(message)
+    super(message);
   }
 }

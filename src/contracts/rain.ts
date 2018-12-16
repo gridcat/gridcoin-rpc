@@ -1,3 +1,3 @@
 export default interface IRain {
-  [key: string]: number
+  [key: string]: number;
 }

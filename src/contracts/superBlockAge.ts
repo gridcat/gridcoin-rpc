@@ -1,6 +1,6 @@
 export default interface ISuperBlockAge {
-  'Superblock Age': number
-  'Superblock Timestamp': string
-  'Superblock Block Number': string
-  'Pending Superblock Height': string
+  'Superblock Age': number;
+  'Superblock Timestamp': string;
+  'Superblock Block Number': string;
+  'Pending Superblock Height': string;
 }

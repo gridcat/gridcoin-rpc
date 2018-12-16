@@ -5,19 +5,19 @@ export default interface IInput {
    * @type {string}
    * @memberof IInput
    */
-  txid: string
+  txid: string;
   /**
    * The output number
    *
    * @type {number}
    * @memberof IInput
    */
-  vout: number
+  vout: number;
   /**
    * The sequence number
    *
    * @type {number}
    * @memberof IInput
    */
-  sequence?: number
+  sequence?: number;
 }

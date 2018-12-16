@@ -5,47 +5,47 @@ export default interface IAddress {
    * @type {boolean}
    * @memberof IAddress
    */
-  isvalid: boolean
+  isvalid: boolean;
   /**
    * The gridcoin address validated
    *
    * @type {string}
    * @memberof IAddress
    */
-  address?: string
+  address?: string;
   /**
    * If the address is yours or not
    *
    * @type {boolean}
    * @memberof IAddress
    */
-  ismine?: boolean
+  ismine?: boolean;
   /**
    * If the address is P2SH or P2WSH. Not included for unknown witness types.
    *
    * @type {boolean}
    * @memberof IAddress
    */
-  isscript?: boolean
+  isscript?: boolean;
   /**
    * The hex value of the raw public key, for single-key addresses (possibly embedded in P2SH or P2WSH)
    *
    * @type {string}
    * @memberof IAddress
    */
-  pubkey?: string
+  pubkey?: string;
   /**
    * If the address is compressed
    *
    * @type {boolean}
    * @memberof IAddress
    */
-  iscompressed?: boolean
+  iscompressed?: boolean;
   /**
    * The account associated with the address, "" is the default account
    * @deprecated
    * @type {string}
    * @memberof IAddress
    */
-  account?: string
+  account?: string;
 }

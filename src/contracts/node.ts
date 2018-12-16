@@ -5,14 +5,14 @@ export interface INodeAddress {
    * @type {string}
    * @memberof INodeAddress
    */
-  address: string
+  address: string;
   /**
    * connection, inbound or outbound
    *
    * @type {string}
    * @memberof INodeAddress
    */
-  connected: string
+  connected: string;
 }
 
 export default interface INode {
@@ -22,19 +22,19 @@ export default interface INode {
    * @type {string}
    * @memberof INode
    */
-  addednode: string
+  addednode: string;
   /**
    * If connected
    *
    * @type {boolean}
    * @memberof INode
    */
-  connected: boolean
+  connected: boolean;
   /**
    * Only when connected = true
    *
    * @type {Array<INodeAddress>}
    * @memberof INode
    */
-  addresses: Array<INodeAddress>
+  addresses: Array<INodeAddress>;
 }

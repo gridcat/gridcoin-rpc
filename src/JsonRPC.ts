@@ -101,7 +101,7 @@ class JsonRPC {
    * Make actual request
    *
    * @param {string} command
-   * @param {*} parameters
+   * @param {Array<*>} parameters
    * @returns {Promise<Object>}
    * @memberof JsonRPC
    */
@@ -137,18 +137,14 @@ class JsonRPC {
     // Send request
     return new Promise<Object>((resolve: any, reject: any) => {
       const request = this.provider(requestOptions);
-
       request.end(strigifyRequest);
-
       request.on('error', reject);
-
       request.on('response', (response: any) => {
         let buffer: string = '';
         if (response.statusCode === 401) {
           reject(new AuthenticationError());
           return;
         }
-        // console.log(response.statusCode);
         response.on('data', (chunk: string) => {
           buffer += chunk;
         });

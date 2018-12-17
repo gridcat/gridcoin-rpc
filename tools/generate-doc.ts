@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import rimraf from 'rimraf';
-import { mkdirSync, writeFileSync, copyFileSync } from 'fs';
+import { mkdirSync, copyFileSync } from 'fs';
 
 // Clean up directory
 rimraf.sync('docs');
@@ -12,6 +12,5 @@ execSync('typedoc --out docs --target es6 --theme minimal --mode file src');
 // Create file for the circleci so circleci will ignore it
 mkdirSync('docs/.circleci');
 
-// And create circleci file there
-const code: string = 'version: 2\n' + 'general:\n' + '  branches:\n' + '    ignore:\n' + '      - gh-pages\n';
-writeFileSync('docs/.circleci/config.yml', code);
+// And copy circleci file there
+copyFileSync('.circleci/config.yml', 'docs/.circleci/config.yml');

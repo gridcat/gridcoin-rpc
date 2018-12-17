@@ -61,17 +61,17 @@ workflows:
       - build:
           filters:
             branches:
-              ignore: dh-pages
+              ignore: gh-pages
       - test:
           filters:
             branches:
-              ignore: dh-pages
+              ignore: gh-pages
           requires:
             - build
       - deploy-docs:
           filters:
             branches:
-              ignore: dh-pages
+              ignore: gh-pages
           requires:
             - build
             - test

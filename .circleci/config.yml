@@ -52,7 +52,7 @@ jobs:
           at: ~/grc
       - run:
           name: Deploy docs
-          command: npm run deploy-docs
+          command: npm run deploy:docs
 
 workflows:
   version: 2
@@ -61,17 +61,17 @@ workflows:
       - build:
           filters:
             branches:
-                ignore: dh-pages
+              ignore: dh-pages
       - test:
           filters:
             branches:
-                ignore: dh-pages
+              ignore: dh-pages
           requires:
             - build
       - deploy-docs:
           filters:
             branches:
-                ignore: dh-pages
+              ignore: dh-pages
           requires:
             - build
             - test

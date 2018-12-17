@@ -13,5 +13,5 @@ execSync('typedoc --out docs --target es6 --theme minimal --mode file src');
 mkdirSync('docs/.circleci');
 
 // And create circleci file there
-const code: string = 'version: 2\n' + 'general:\n' + '\tbranches:\n' + '\t\tignore:\n' + '\t\t\t- gh-pages\n';
+const code: string = 'version: 2\n' + 'general:\n' + '  branches:\n' + '    ignore:\n' + '      - gh-pages\n';
 writeFileSync('docs/.circleci/config.yml', code);

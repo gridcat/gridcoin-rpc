@@ -12,5 +12,6 @@ execSync('typedoc --out docs --target es6 --theme minimal --mode file src');
 // Create file for the circleci so circleci will ignore it
 mkdirSync('docs/.circleci');
 
-// And copy main circleci file there
-copyFileSync('.circleci/config.yml', 'docs/.circleci/config.yml');
+// And create circleci file there
+const code: string = 'version: 2\n' + 'general:\n' + '\tbranches:\n' + '\t\tignore:\n' + '\t\t\t- gh-pages\n';
+writeFileSync('docs/.circleci/config.yml', code);

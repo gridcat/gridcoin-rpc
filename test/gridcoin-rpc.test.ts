@@ -1,14 +1,19 @@
-// import DummyClass from "../src/gridcoin-rpc"
+import { GridcoinRPC } from '../src/GridcoinRPC';
+import { IParameters, IJsonRPC } from '../src/JsonRPC';
 
-/**
- * Dummy test
- */
-describe('Dummy test', () => {
-  it('works if true is truthy', () => {
-    expect(true).toBeTruthy();
-  });
+const configMock: IParameters = {
+  host: 'localhost',
+  port: 1751,
+};
 
-  it.skip('DummyClass is instantiable', () => {
-    // expect(new DummyClass()).toBeInstanceOf(DummyClass)
+class JsonRPCMock implements IJsonRPC {
+  request(command: string, parameters: Array<any>): Promise<Object> {
+    return Promise.resolve({});
+  }
+}
+
+describe('GridcoinRPC', () => {
+  it('GridcoinRPC is instantiable', () => {
+    expect(new GridcoinRPC(configMock, JsonRPCMock)).toBeInstanceOf(GridcoinRPC);
   });
 });

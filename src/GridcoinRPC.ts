@@ -1,5 +1,5 @@
 import assert from 'assert';
-import JsonRPC, { IParameters } from './JsonRPC';
+import JsonRPC, { IParameters, IJsonRPC } from './JsonRPC';
 import IDifficulty from './contracts/difficulty';
 import ICpid from './contracts/cpid';
 import IBeaconStatus from './contracts/beaconStatus';
@@ -45,10 +45,20 @@ function filterParameters(parameters: Array<any>): Array<any> {
 type callParameters = string | number | boolean | undefined | Array<string>;
 
 class GridcoinRPC {
-  private readonly client: JsonRPC;
+  private readonly client: IJsonRPC;
 
-  constructor(config: IParameters) {
-    this.client = new JsonRPC(config);
+  /**
+   * Creates an instance of GridcoinRPC
+   * @param {IParameters} config -
+   * @param {IJsonRPC} [rpc] - Dependency injection for the client class
+   * @memberof GridcoinRPC
+   */
+  constructor(config: IParameters, rpc?: any) {
+    if (arguments[1]) {
+      this.client = new arguments[1](config);
+    } else {
+      this.client = new JsonRPC(config);
+    }
   }
 
   /**

@@ -1,13 +1,14 @@
 {
   "name": "gridcoin-rpc",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "keywords": [
     "gridcoin",
     "jsonrpc",
     "cryptocurrency",
     "crypto",
-    "cryptocoin"
+    "cryptocoin",
+    "api"
   ],
   "main": "dist/gridcoin-rpc.umd.js",
   "_module": "dist/gridcoin-rpc.es5.js",
@@ -35,8 +36,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
-    "build:docs": "ts-node tools/generate-doc.ts",
-    "deploy:docs": "ts-node tools/gh-pages-publish",
+    "build:docs": "ts-node --module commonjs tools/generate-doc.ts",
+    "deploy:docs": "ts-node --module commonjs tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",

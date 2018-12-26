@@ -59,12 +59,16 @@ export interface IParameters {
   providers?: IProviders;
 }
 
+export interface IJsonRPC {
+  request(command: string, parameters: Array<any>): Promise<Object>;
+}
+
 /**
  *
  *
  * @class JsonRPC
  */
-class JsonRPC {
+class JsonRPC implements IJsonRPC {
   private host: string;
   private port: number;
   private path: string;

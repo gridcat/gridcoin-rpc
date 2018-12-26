@@ -67,14 +67,15 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/test/"
+      "/test/",
+      "/src/GridcoinRPC.ts"
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 0.9,
-        "functions": 0.95,
-        "lines": 0.95,
-        "statements": 0.95
+        "branches": 50,
+        "functions": 90,
+        "lines": 75,
+        "statements": 75
       }
     },
     "collectCoverage": true,

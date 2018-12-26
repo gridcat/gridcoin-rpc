@@ -45,7 +45,7 @@ function filterParameters(parameters: Array<any>): Array<any> {
 type callParameters = string | number | boolean | undefined | Array<string>;
 
 class GridcoinRPC {
-  private readonly client: IJsonRPC;
+  public readonly client: IJsonRPC;
 
   /**
    * Creates an instance of GridcoinRPC

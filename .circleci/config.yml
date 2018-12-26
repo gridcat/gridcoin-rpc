@@ -71,6 +71,7 @@ workflows:
       - deploy-docs:
           filters:
             branches:
+              only: master
               ignore: gh-pages
           requires:
             - build

@@ -1,4 +1,4 @@
 export default interface IStakeTime {
-  GRCTime: number
-  CPIDTime: number
+  GRCTime: number;
+  CPIDTime: number;
 }

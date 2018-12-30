@@ -5,19 +5,19 @@ export default interface INetTotals {
    * @type {number}
    * @memberof INetTotals
    */
-  totalbytesrecv: number
+  totalbytesrecv: number;
   /**
    * Total bytes sent
    *
    * @type {number}
    * @memberof INetTotals
    */
-  totalbytessent: number
+  totalbytessent: number;
   /**
    * Current UNIX time in milliseconds
    *
    * @type {number}
    * @memberof INetTotals
    */
-  timemillis: number
+  timemillis: number;
 }

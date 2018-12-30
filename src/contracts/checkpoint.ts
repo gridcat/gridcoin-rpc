@@ -1,5 +1,5 @@
 export default interface ICheckpoint {
-  synccheckpoint: string
-  height: number
-  timestamp: string
+  synccheckpoint: string;
+  height: number;
+  timestamp: string;
 }

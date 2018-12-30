@@ -5,12 +5,12 @@ export default interface IOutput {
    * @type {(number|string)}
    * @memberof IOutput
    */
-  address: number | string
+  address: number | string;
   /**
    * The key is "data", the value is hex encoded data
    *
    * @type {"hex"}
    * @memberof IOutput
    */
-  data: string
+  data: string;
 }

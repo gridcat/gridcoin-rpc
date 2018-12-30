@@ -1,6 +1,6 @@
 export interface IScriptSig {
-  asm: string
-  hex: string
+  asm: string;
+  hex: string;
 }
 
 export interface IScriptPubKey extends IScriptSig {
@@ -11,21 +11,21 @@ export interface IScriptPubKey extends IScriptSig {
    * @type {string}
    * @memberof IScriptPubKey
    */
-  type: string
+  type: string;
   /**
    * The required sigs
    *
    * @type {number}
    * @memberof IScriptPubKey
    */
-  reqSigs?: number
+  reqSigs?: number;
   /**
    * List of GRC addresses
    *
    * @type {Array<string>}
    * @memberof IScriptPubKey
    */
-  addresses?: Array<string>
+  addresses?: Array<string>;
 }
 
 export interface IVin {
@@ -36,28 +36,28 @@ export interface IVin {
    * @type {string}
    * @memberof IVin
    */
-  txid: string
+  txid: string;
   /**
    * The output number
    *
    * @type {number}
    * @memberof IVin
    */
-  vout: number
+  vout: number;
   /**
    * The script
    *
    * @type {IScript}
    * @memberof IVin
    */
-  scriptSig: IScriptSig
+  scriptSig: IScriptSig;
   /**
    * The script sequence number
    *
    * @type {number}
    * @memberof IVin
    */
-  sequence: number
+  sequence: number;
 }
 
 export interface IVout {
@@ -67,15 +67,15 @@ export interface IVout {
    * @type {number}
    * @memberof IVout
    */
-  value: number
+  value: number;
   /**
    * Index
    *
    * @type {number}
    * @memberof IVout
    */
-  n: number
-  scriptPubKey: IScriptPubKey
+  n: number;
+  scriptPubKey: IScriptPubKey;
 }
 
 export default interface ITransaction {
@@ -85,23 +85,23 @@ export default interface ITransaction {
    * @type {string}
    * @memberof ITransaction
    */
-  txid: string
+  txid: string;
   /**
    * The version
    *
    * @type {number}
    * @memberof ITransaction
    */
-  version: number
-  time: number
+  version: number;
+  time: number;
   /**
    * The lock time
    *
    * @type {number}
    * @memberof ITransaction
    */
-  locktime: number
-  hashboinc: string
-  vin: Array<IVin>
-  vout: Array<IVout>
+  locktime: number;
+  hashboinc: string;
+  vin: Array<IVin>;
+  vout: Array<IVout>;
 }

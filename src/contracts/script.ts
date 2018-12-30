@@ -5,7 +5,7 @@ export default interface IScript {
    * @type {string}
    * @memberof IScript
    */
-  asm: string
-  type: string
-  p2sh: string
+  asm: string;
+  type: string;
+  p2sh: string;
 }

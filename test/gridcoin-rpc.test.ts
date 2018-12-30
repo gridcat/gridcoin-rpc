@@ -1,14 +1,29 @@
-import DummyClass from '../src/gridcoin-rpc'
+import { expect } from 'chai';
+import { GridcoinRPC } from '../src/GridcoinRPC';
+import { IParameters, IJsonRPC } from '../src/lib/JsonRPC';
 
-/**
- * Dummy test
- */
-describe('Dummy test', () => {
-  it('works if true is truthy', () => {
-    expect(true).toBeTruthy()
-  })
+const configMock: IParameters = {
+  host: 'localhost',
+  port: 1751,
+};
 
-  it('DummyClass is instantiable', () => {
-    expect(new DummyClass()).toBeInstanceOf(DummyClass)
-  })
-})
+class JsonRPCMock implements IJsonRPC {
+  public response: any = {};
+  request(command: string, parameters: Array<any>): Promise<Object> {
+    return Promise.resolve(this.response);
+  }
+}
+
+describe('GridcoinRPC', () => {
+  it('GridcoinRPC is instantiable', () => {
+    expect(new GridcoinRPC(configMock, JsonRPCMock)).to.be.instanceof(GridcoinRPC);
+  });
+  // I can not see any value of tests coverage of this class
+  // Functional tests against the real wallet instance might be more valuable
+  // describe('methods', () => {
+  //   let rpc: GridcoinRPC;
+  //   beforeEach(() => {
+  //     rpc = new GridcoinRPC(configMock, JsonRPCMock);
+  //   });
+  // });
+});

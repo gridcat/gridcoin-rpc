@@ -1,4 +1,4 @@
-import IDifficulty from './difficulty'
+import IDifficulty from './difficulty';
 
 export default interface IBlockChainInfo {
   /**
@@ -7,9 +7,9 @@ export default interface IBlockChainInfo {
    * @type {number}
    * @memberof IBlockChainInfo
    */
-  blocks: number
-  moneysupply: number
-  difficulty: IDifficulty
-  testnet: boolean
-  errors: string
+  blocks: number;
+  moneysupply: number;
+  difficulty: IDifficulty;
+  testnet: boolean;
+  errors: string;
 }

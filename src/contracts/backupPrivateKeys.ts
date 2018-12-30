@@ -5,12 +5,12 @@ export default interface IBackupPrivateKeys {
    * @type {string}
    * @memberof IBackupPrivateKeys
    */
-  location: string
+  location: string;
   /**
    * Result
    *
    * @type {boolean}
    * @memberof IBackupPrivateKeys
    */
-  result: boolean
+  result: boolean;
 }

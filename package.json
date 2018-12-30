@@ -1,6 +1,6 @@
 {
   "name": "gridcoin-rpc",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "",
   "keywords": [
     "gridcoin",
@@ -10,11 +10,9 @@
     "cryptocoin",
     "api"
   ],
-  "main": "dist/gridcoin-rpc.umd.js",
-  "_module": "dist/gridcoin-rpc.es5.js",
-  "_typings": "dist/types/gridcoin-rpc.d.ts",
   "module": "dist/GridcoinRPC.js",
-  "typings": "dist/GridcoinRPC.d.ts",
+  "main": "dist/GridcoinRPC.js",
+  "typings": "dist/types/GridcoinRPC.d.ts",
   "files": [
     "dist"
   ],
@@ -28,16 +26,16 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
+    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "_build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "_build": "tsc --module commonjs && rollup -c rollup.config.ts && npm run build:docs",
     "build": "tsc && npm run build:docs",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
-    "build:docs": "ts-node --module commonjs tools/generate-doc.ts",
-    "deploy:docs": "ts-node --module commonjs tools/gh-pages-publish",
+    "build:docs": "ts-node --project tools/tsconfig.json tools/generate-doc.ts",
+    "deploy:docs": "ts-node --project tools/tsconfig.json tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "semantic-release": "semantic-release",
@@ -53,35 +51,6 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/",
-      "/src/GridcoinRPC.ts"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 50,
-        "functions": 90,
-        "lines": 75,
-        "statements": 75
-      }
-    },
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "src/*.{js,ts}"
-    ]
   },
   "commitlint": {
     "extends": [
@@ -136,6 +105,8 @@
     "rollup": "^0.66.2",
     "rollup-plugin-commonjs": "^9.1.8",
     "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.17.0",

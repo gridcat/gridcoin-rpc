@@ -1,5 +1,5 @@
 import assert from 'assert';
-import JsonRPC, { IParameters, IJsonRPC } from './JsonRPC';
+import JsonRPC, { IParameters, IJsonRPC } from './lib/JsonRPC';
 import IDifficulty from './contracts/difficulty';
 import ICpid from './contracts/cpid';
 import IBeaconStatus from './contracts/beaconStatus';

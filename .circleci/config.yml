@@ -33,17 +33,14 @@ jobs:
           name: Run tests
           command: npm run test:prod
 
-  # deploy:
-  #   <<: *defaults
-  #   steps:
-  #    - attach_workspace:
-  #        at: ~/grc
-  #     - run:
-  #         name: Authenticate with registry
-  #         command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-  #     - run:
-  #         name: Publish package
-  #         command: npm publish
+  deploy-npm:
+    <<: *defaults
+    steps:
+     - attach_workspace:
+         at: ~/grc
+      - run:
+          name: Semantic release
+          command: npm run semantic-release
 
   deploy-docs:
     <<: *defaults
@@ -76,15 +73,11 @@ workflows:
           requires:
             - build
             - test
-      # - test:
-      #     filters:
-      #       tags:
-      #         only: /^v.*/
-      # - deploy:
-      #     requires:
-      #       - test
-      #     filters:
-      #       tags:
-      #         only: /^v.*/
-      #       branches:
-      #         ignore: /.*/
+      - deploy-npm:
+          filters:
+              branches:
+                only: master
+                ignore: gh-pages
+              requires:
+                - build
+                - test

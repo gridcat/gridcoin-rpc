@@ -1,6 +1,6 @@
 import http from 'http';
 import https from 'https';
-import AuthenticationError from './Errors/Authentication';
+import AuthenticationError from '../Errors/Authentication';
 
 /**
  * Command interface

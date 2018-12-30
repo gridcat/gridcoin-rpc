@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { GridcoinRPC } from '../src/GridcoinRPC';
-import { IParameters, IJsonRPC } from '../src/JsonRPC';
+import { IParameters, IJsonRPC } from '../src/lib/JsonRPC';
 
 const configMock: IParameters = {
   host: 'localhost',

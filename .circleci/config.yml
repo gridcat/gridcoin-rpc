@@ -78,6 +78,6 @@ workflows:
             branches:
               only: master
               ignore: gh-pages
-            requires:
-              - build
-              - test
+          requires:
+            - build
+            - test

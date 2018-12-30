@@ -75,9 +75,9 @@ workflows:
             - test
       - deploy-npm:
           filters:
-              branches:
-                only: master
-                ignore: gh-pages
-              requires:
-                - build
-                - test
+            branches:
+              only: master
+              ignore: gh-pages
+            requires:
+              - build
+              - test

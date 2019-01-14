@@ -849,7 +849,7 @@ class GridcoinRPC {
    * @returns {Promise<INode>}
    * @memberof GridcoinRPC
    */
-  public getaddednodeinfo(dns: boolean, node?: string): Promise<INode> {
+  public getAddedNodeInfo(dns: boolean, node?: string): Promise<INode> {
     return this.call('getaddednodeinfo', dns, node);
   }
 

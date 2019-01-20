@@ -2,9 +2,9 @@
 
 A JavaScript library for the interactions with gridcoin wallet
 
-![https://www.npmjs.com/package/gridcoin-rpc](https://img.shields.io/npm/v/gridcoin-rpc.svg?style=flat-square)
-![https://circleci.com/gh/gridcat/workflows/gridcoin-rpc/tree/master](https://img.shields.io/circleci/project/github/gridcat/gridcoin-rpc/master.svg?style=flat-square)
-![](https://img.shields.io/snyk/vulnerabilities/github/gridcat/gridcoin-rpc.svg?style=flat-square)
+  [![NPM Version][npm-image]][npm-url]
+  [![CI build][cci-image]][cci-url]
+  [![SNYK report][snyk-image]][snyk-url]
 
 ### Installation
 
@@ -53,3 +53,10 @@ rpc.getWalletInfo()
 
 - [tutorial](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
 - [boilerplate](https://github.com/alexjoverm/typescript-library-starter)
+
+[npm-image]: https://img.shields.io/npm/v/gridcoin-rpc.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/gridcoin-rpc
+[cci-image]: https://img.shields.io/circleci/project/github/gridcat/gridcoin-rpc/master.svg?style=flat-square
+[cci-url]: https://circleci.com/gh/gridcat/workflows/gridcoin-rpc/tree/master
+[snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/gridcat/gridcoin-rpc.svg?style=flat-square
+[snyk-url]: https://snyk.io/test/github/gridcat/gridcoin-rpc

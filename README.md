@@ -2,8 +2,9 @@
 
 A JavaScript library for the interactions with gridcoin wallet
 
-![](https://img.shields.io/npm/v/gridcoin-rpc.svg?style=flat-square)
-![](https://img.shields.io/circleci/project/github/gridcat/gridcoin-rpc/master.svg?style=flat-square)
+![https://www.npmjs.com/package/gridcoin-rpc](https://img.shields.io/npm/v/gridcoin-rpc.svg?style=flat-square)
+![https://circleci.com/gh/gridcat/workflows/gridcoin-rpc/tree/master](https://img.shields.io/circleci/project/github/gridcat/gridcoin-rpc/master.svg?style=flat-square)
+![](https://img.shields.io/snyk/vulnerabilities/github/gridcat/gridcoin-rpc.svg?style=flat-square)
 
 ### Installation
 

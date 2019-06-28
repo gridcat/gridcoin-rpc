@@ -49,6 +49,9 @@ rpc.getWalletInfo()
 ### Documentation
 [API documentation](https://gridcat.github.io/gridcoin-rpc/)
 
+### Donate
+*GRC*: SJVaQcJriv7N8Py8eWjNUtWPTPBtDZashD
+
 #### External links
 
 - [tutorial](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)

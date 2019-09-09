@@ -100,7 +100,10 @@ class GridcoinRPC {
   }
 
   /**
-   * @todo not clear
+   * @todo not clear, is this actually in use somewhere somehow?
+   * Add a P2SH address with a specified redeemScript to the wallet.
+   * If [account] is specified, assign address to [account].
+   * @see https://en.bitcoin.it/wiki/Pay_to_script_hash
    * @param redeemScript
    * @param account
    */
@@ -849,7 +852,7 @@ class GridcoinRPC {
    * @returns {Promise<INode>}
    * @memberof GridcoinRPC
    */
-  public getaddednodeinfo(dns: boolean, node?: string): Promise<INode> {
+  public getAddedNodeInfo(dns: boolean, node?: string): Promise<INode> {
     return this.call('getaddednodeinfo', dns, node);
   }
 

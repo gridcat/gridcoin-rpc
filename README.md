@@ -51,6 +51,12 @@ rpc.getWalletInfo()
 
 ### Donate
 *GRC*: SJVaQcJriv7N8Py8eWjNUtWPTPBtDZashD
+*BTC*: 12sUqF4mBiocqRPPPCyUsrTL6gf3AG2oTz
+*XLM*: GDGOYINLUKGWDKRGZDDWE3UZLXBDN23KVCPCOAHXO4RB2DR3V7PQ7ENP
+
+### Follow me
+[keybase](https://keybase.io/gridcat)
+[steemit](https://steemit.com/@gridcat/)
 
 #### External links
 

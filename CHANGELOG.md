@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v1.0.0...v2.0.0) (2019-09-09)
+
+
+### Bug Fixes
+
+* **dependencies:** fix security issues ([996d7e1](https://github.com/gridcat/gridcoin-rpc/commit/996d7e1))
+* **rpc:** change function name ([af869a0](https://github.com/gridcat/gridcoin-rpc/commit/af869a0))
+
+
+### BREAKING CHANGES
+
+* **rpc:** function name has been changed
+
 # 1.0.0 (2018-12-30)
 
 

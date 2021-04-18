@@ -8,7 +8,7 @@ rimraf.sync('docs');
 
 // Got no nice documentation how to run it from the code, keep failing
 // So I've decided to use easy way
-execSync('typedoc --out docs --target es6 --theme minimal --mode file src');
+execSync('typedoc --out docs --theme minimal src');
 
 // Create file for the circleci so circleci will ignore it
 mkdirSync('docs/.circleci');

@@ -1,4 +1,4 @@
-export default interface IInput {
+export interface IInput {
   /**
    * The transaction id
    *

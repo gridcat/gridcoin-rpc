@@ -1,12 +1,12 @@
 /**
  * @todo define vin, vout
  */
-export default interface ITx {
+export interface ITx {
   txid: string;
   version: number;
   time: number;
   locktime: number;
   hashboinc: string;
-  vin: Array<Object>;
-  vout: Array<Object>;
+  vin: Array<any>;
+  vout: Array<any>;
 }

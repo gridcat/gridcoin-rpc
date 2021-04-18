@@ -1,4 +1,4 @@
-interface ICpid extends Object {
+export interface ICpid extends Object {
   readonly Project: string;
   readonly CPID: string;
   readonly RAC: number;
@@ -7,5 +7,3 @@ interface ICpid extends Object {
   readonly 'Debug Info': string;
   readonly 'Project Settings Valid for Gridcoin': string;
 }
-
-export default ICpid;

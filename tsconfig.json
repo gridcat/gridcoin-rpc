@@ -1,13 +1,21 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
     "declaration": true,
+    "module": "commonjs",
     "outDir": "./dist",
-    "strict": true,
+    "allowJs": true,
+    "resolveJsonModule": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "noImplicitAny": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "exclude": [
+    "./node_modules/**/*",
+    "./config/**/*",
+    "./package.json",
+  ],
+  "include": [
+    "./src/**/*"
+  ]
 }

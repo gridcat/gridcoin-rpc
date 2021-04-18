@@ -1,6 +1,6 @@
-import IDifficulty from './difficulty';
+import { IDifficulty } from './difficulty';
 
-export default interface IBlockChainInfo {
+export interface IBlockChainInfo {
   /**
    * the current number of blocks processed in the server
    *

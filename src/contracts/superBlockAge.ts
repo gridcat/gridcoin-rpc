@@ -1,4 +1,4 @@
-export default interface ISuperBlockAge {
+export interface ISuperBlockAge {
   'Superblock Age': number;
   'Superblock Timestamp': string;
   'Superblock Block Number': string;

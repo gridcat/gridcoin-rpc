@@ -1,4 +1,4 @@
-export default interface ICheckpoint {
+export interface ICheckpoint {
   synccheckpoint: string;
   height: number;
   timestamp: string;

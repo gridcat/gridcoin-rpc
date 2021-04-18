@@ -1,4 +1,4 @@
-export default interface IScript {
+export interface IScript {
   /**
    * Decoded script asm
    *

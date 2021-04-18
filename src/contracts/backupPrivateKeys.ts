@@ -1,4 +1,4 @@
-export default interface IBackupPrivateKeys {
+export interface IBackupPrivateKeys {
   /**
    * Backup location
    *

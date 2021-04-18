@@ -60,7 +60,7 @@ export interface IParameters {
 }
 
 export interface IJsonRPC {
-  request(command: string, parameters: Array<any>): Promise<Object>;
+  request(command: string, parameters: Array<any>): Promise<any>;
 }
 
 /**
@@ -70,12 +70,19 @@ export interface IJsonRPC {
  */
 class JsonRPC implements IJsonRPC {
   private host: string;
+
   private port: number;
+
   private path: string;
+
   private auth?: string;
+
   private ssl: boolean;
+
   private sslStrict: boolean;
+
   private ca?: string | Buffer | Array<string | Buffer>;
+
   private provider: any;
 
   /**
@@ -109,7 +116,7 @@ class JsonRPC implements IJsonRPC {
    * @returns {Promise<Object>}
    * @memberof JsonRPC
    */
-  request(command: string, parameters: Array<any>): Promise<Object> {
+  request(command: string, parameters: Array<any>): Promise<any> {
     const request: IRequestJSON = {
       id: Date.now(),
       method: command,
@@ -139,12 +146,12 @@ class JsonRPC implements IJsonRPC {
     }
 
     // Send request
-    return new Promise<Object>((resolve: any, reject: any) => {
-      const request = this.provider(requestOptions);
-      request.end(strigifyRequest);
-      request.on('error', reject);
-      request.on('response', (response: any) => {
-        let buffer: string = '';
+    return new Promise<any>((resolve: any, reject: any) => {
+      const req = this.provider(requestOptions);
+      req.end(strigifyRequest);
+      req.on('error', reject);
+      req.on('response', (response: any) => {
+        let buffer = '';
         if (response.statusCode === 401) {
           reject(new AuthenticationError());
           return;
@@ -154,7 +161,7 @@ class JsonRPC implements IJsonRPC {
         });
         response.on('end', () => {
           try {
-            const decoded: Object = JSON.parse(buffer);
+            const decoded = JSON.parse(buffer);
             resolve(decoded);
           } catch (e) {
             reject(e);

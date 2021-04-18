@@ -1,4 +1,4 @@
-export default interface IOwnership {
+export interface IOwnership {
   'Boinc E-Mail': string;
   'Boinc Public Key': string;
   CPID: string;

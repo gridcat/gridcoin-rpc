@@ -1,4 +1,4 @@
-export default interface IWalletInfo {
+export interface IWalletInfo {
   /**
    * the wallet version
    *

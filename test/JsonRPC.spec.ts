@@ -25,8 +25,8 @@ describe('JsonRpc', () => {
     it('should return promise', () => {
       expect(jsonRPC.request('', [])).to.be.instanceof(Promise);
     });
-    it('should send request just fine and return proper', done => {
-      jsonRPC.request('', []).then(result => {
+    it('should send request just fine and return proper', (done) => {
+      jsonRPC.request('', []).then((result) => {
         expect(result).to.be.deep.equal(RESPONSE);
         done();
       });
@@ -36,7 +36,7 @@ describe('JsonRpc', () => {
     afterEach(() => {
       nock.cleanAll();
     });
-    it('should throw auth error if auth is failed', done => {
+    it('should throw auth error if auth is failed', (done) => {
       nock(`http://${HOST}`)
         .persist()
         .post('/')
@@ -45,12 +45,12 @@ describe('JsonRpc', () => {
         host: HOST,
         port: 80,
       });
-      jsonRPC.request('', []).catch(error => {
+      jsonRPC.request('', []).catch((error) => {
         expect(error).to.be.instanceof(AuthenticationError);
         done();
       });
     });
-    it('should throw an error if nov-valid JSON returned back', done => {
+    it('should throw an error if nov-valid JSON returned back', (done) => {
       nock(`http://${HOST}`)
         .persist()
         .post('/')
@@ -59,7 +59,7 @@ describe('JsonRpc', () => {
         host: HOST,
         port: 80,
       });
-      jsonRPC.request('', []).catch(error => {
+      jsonRPC.request('', []).catch((error) => {
         expect(error).to.be.instanceof(Error);
         done();
       });

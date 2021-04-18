@@ -1,4 +1,4 @@
-export default interface IMemoryPool {
+export interface IMemoryPool {
   'Excluded Tx': string;
   'Included Tx': string;
 }

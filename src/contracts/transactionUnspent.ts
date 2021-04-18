@@ -1,4 +1,4 @@
-export default interface ITransactionUnspent {
+export interface ITransactionUnspent {
   /**
    * The transaction id
    *

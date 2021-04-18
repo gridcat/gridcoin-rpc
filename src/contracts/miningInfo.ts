@@ -1,4 +1,4 @@
-import IDifficulty from './difficulty';
+import { IDifficulty } from './difficulty';
 
 export interface IStakeWeight {
   minimum: number;
@@ -8,7 +8,7 @@ export interface IStakeWeight {
   legacy: number;
 }
 
-export default interface IMiningInfo {
+export interface IMiningInfo {
   /**
    * The current block
    *

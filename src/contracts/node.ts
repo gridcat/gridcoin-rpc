@@ -15,7 +15,7 @@ export interface INodeAddress {
   connected: string;
 }
 
-export default interface INode {
+export interface INode {
   /**
    * The node IP address or name (as provided to addnode)
    *

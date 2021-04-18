@@ -1,4 +1,4 @@
-export default interface INetTotals {
+export interface INetTotals {
   /**
    * Total bytes received
    *

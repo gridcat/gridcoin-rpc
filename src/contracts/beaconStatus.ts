@@ -1,4 +1,4 @@
-export default interface IBeaconStatus {
+export interface IBeaconStatus {
   CPID: string;
   'Beacon Exists': string;
   'Beacon Timestamp': string;

@@ -1,4 +1,4 @@
-export default interface IPoll {
+export interface IPoll {
   title: string;
   pollnumber: number;
   question: string;

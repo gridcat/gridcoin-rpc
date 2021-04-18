@@ -1,8 +1,8 @@
-import IDifficulty from './difficulty';
-import INetworkInfo from './networkInfo';
-import IWallerInfo from './walletInfo';
+import { IDifficulty } from './difficulty';
+import { INetworkInfo } from './networkInfo';
+import { IWalletInfo } from './walletInfo';
 
-export default interface IInfo extends INetworkInfo, IWallerInfo {
+export interface IInfo extends INetworkInfo, IWalletInfo {
   moneysupply: number;
   difficulty: IDifficulty;
   testnet: boolean;

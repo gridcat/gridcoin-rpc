@@ -9,7 +9,8 @@ const configMock: IParameters = {
 
 class JsonRPCMock implements IJsonRPC {
   public response: any = {};
-  request(command: string, parameters: Array<any>): Promise<Object> {
+
+  request(command: string, parameters: Array<any>): Promise<any> {
     return Promise.resolve(this.response);
   }
 }

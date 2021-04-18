@@ -1,4 +1,4 @@
-export default interface IReceivement {
+export interface IReceivement {
   /**
    * Only returned if imported addresses were involved in transaction
    *
@@ -35,6 +35,7 @@ export default interface IReceivement {
    * @memberof IReceivement
    */
   confirmations: number;
+  // eslint-disable-next-line camelcase
   tx_count: number;
-  txids: Object;
+  txids: any;
 }

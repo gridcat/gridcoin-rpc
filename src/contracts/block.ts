@@ -1,6 +1,6 @@
-import ITx from './tx';
+import { ITx } from './tx';
 
-export default interface IBlock {
+export interface IBlock {
   /**
    * the block hash
    *

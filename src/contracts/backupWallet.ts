@@ -1,4 +1,4 @@
-export default interface IBackupWallet {
+export interface IBackupWallet {
   'Backup wallet success': boolean;
   'Backup config success': boolean;
 }

@@ -1,4 +1,4 @@
-export default interface ITime {
+export interface ITime {
   Unix: number;
   UTC: string;
 }

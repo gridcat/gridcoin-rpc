@@ -78,7 +78,7 @@ export interface IVout {
   scriptPubKey: IScriptPubKey;
 }
 
-export default interface ITransaction {
+export interface ITransaction {
   /**
    * The transaction id
    *

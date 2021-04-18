@@ -1,4 +1,4 @@
-export default interface IPeer {
+export interface IPeer {
   /**
    * The IP address and port of the peer
    * host:port

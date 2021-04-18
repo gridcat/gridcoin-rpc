@@ -1,4 +1,4 @@
-export default interface IOutput {
+export interface IOutput {
   /**
    * The key is the gridcoin address, the numeric value (can be string) is the GRC amount
    *

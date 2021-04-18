@@ -1,5 +1,6 @@
-export default interface INetworkInfo {
+export interface INetworkInfo {
   version: string;
+  // eslint-disable-next-line camelcase
   minor_version: number;
   /**
    * the protocol version

@@ -1,45 +1,45 @@
 import assert from 'assert';
 import JsonRPC, { IParameters, IJsonRPC } from './lib/JsonRPC';
-import IDifficulty from './contracts/difficulty';
-import ICpid from './contracts/cpid';
-import IBeaconStatus from './contracts/beaconStatus';
-import IMiningInfo from './contracts/miningInfo';
-import IOwnership from './contracts/ownership';
-import IRsaWeight from './contracts/rsaWeight';
-import IStakeTime from './contracts/stakeTime';
-import ISuperBlockAge from './contracts/superBlockAge';
-import ITime from './contracts/time';
-import IBlock from './contracts/block';
-import IBlockChainInfo from './contracts/blockChainInfo';
-import ICheckpoint from './contracts/checkpoint';
-import IInfo from './contracts/info';
-import INetTotals from './contracts/netTotals';
-import INetworkInfo from './contracts/networkInfo';
-import IPeer from './contracts/peer';
-import IPollDetails from './contracts/pollDetails';
-import IPoll from './contracts/poll';
-import IMemoryPool from './contracts/memoryPool';
-import INode from './contracts/node';
-import IBackupPrivateKeys from './contracts/backupPrivateKeys';
-import IBackupWallet from './contracts/backupWallet';
-import IInput from './contracts/input';
-import IOutput from './contracts/output';
-import ITransaction from './contracts/transaction';
-import IScript from './contracts/script';
-import IWalletInfo from './contracts/walletInfo';
-import IReceivement from './contracts/receivement';
-import IAddress from './contracts/address';
-import IUnspent from './contracts/unspent';
-import ITransactionShort from './contracts/transactionShort';
-import IListSinceBlock from './contracts/listSinceBolck';
-import ITransactionUnspent from './contracts/transactionUnspent';
-import IKeysPair from './contracts/keysPair';
-import IBurnAddress from './contracts/burnAddress';
-import IReserve from './contracts/reserve';
-import IRain from './contracts/rain';
+import { IDifficulty } from './contracts/difficulty';
+import { ICpid } from './contracts/cpid';
+import { IBeaconStatus } from './contracts/beaconStatus';
+import { IMiningInfo } from './contracts/miningInfo';
+import { IOwnership } from './contracts/ownership';
+import { IRsaWeight } from './contracts/rsaWeight';
+import { IStakeTime } from './contracts/stakeTime';
+import { ISuperBlockAge } from './contracts/superBlockAge';
+import { ITime } from './contracts/time';
+import { IBlock } from './contracts/block';
+import { IBlockChainInfo } from './contracts/blockChainInfo';
+import { ICheckpoint } from './contracts/checkpoint';
+import { IInfo } from './contracts/info';
+import { INetTotals } from './contracts/netTotals';
+import { INetworkInfo } from './contracts/networkInfo';
+import { IPeer } from './contracts/peer';
+import { IPollDetails } from './contracts/pollDetails';
+import { IPoll } from './contracts/poll';
+import { IMemoryPool } from './contracts/memoryPool';
+import { INode } from './contracts/node';
+import { IBackupPrivateKeys } from './contracts/backupPrivateKeys';
+import { IBackupWallet } from './contracts/backupWallet';
+import { IInput } from './contracts/input';
+import { IOutput } from './contracts/output';
+import { ITransaction } from './contracts/transaction';
+import { IScript } from './contracts/script';
+import { IWalletInfo } from './contracts/walletInfo';
+import { IReceivement } from './contracts/receivement';
+import { IAddress } from './contracts/address';
+import { IUnspent } from './contracts/unspent';
+import { ITransactionShort } from './contracts/transactionShort';
+import { IListSinceBlock } from './contracts/listSinceBolck';
+import { ITransactionUnspent } from './contracts/transactionUnspent';
+import { IKeysPair } from './contracts/keysPair';
+import { IBurnAddress } from './contracts/burnAddress';
+import { IReserve } from './contracts/reserve';
+import { IRain } from './contracts/rain';
 
 function filterParameters(parameters: Array<any>): Array<any> {
-  return parameters.filter(element => element !== undefined);
+  return parameters.filter((element) => element !== undefined);
 }
 
 type callParameters = string | number | boolean | undefined | Array<string>;
@@ -54,7 +54,9 @@ class GridcoinRPC {
    * @memberof GridcoinRPC
    */
   constructor(config: IParameters, rpc?: any) {
+    // eslint-disable-next-line prefer-rest-params
     if (arguments[1]) {
+      // eslint-disable-next-line prefer-rest-params
       this.client = new arguments[1](config);
     } else {
       this.client = new JsonRPC(config);
@@ -66,9 +68,13 @@ class GridcoinRPC {
    * @param command
    * @param parameters
    */
-  private call(command: string, ...parameters: Array<callParameters>): Promise<any> {
+  private call(
+    command: string,
+    ...parameters: Array<callParameters>
+  ): Promise<any> {
     const filteredParameters: Array<any> = filterParameters(parameters);
-    return this.client.request(command, filteredParameters).then((result: any) => result.result);
+    return this.client.request(command, filteredParameters)
+      .then((result: any) => result.result);
   }
 
   /**
@@ -78,7 +84,7 @@ class GridcoinRPC {
    * @returns bool
    * @memberof GridcoinRPC
    */
-  public async testConnection() {
+  public async testConnection(): Promise<boolean> {
     assert.strictEqual(null, await this.call('nonExistsTestConnectionCommand'));
     return true;
   }
@@ -95,7 +101,11 @@ class GridcoinRPC {
    * @returns
    * @memberof GridcoinRPC
    */
-  public addMultisigAddress(nrequired: number, keys: Array<string>, account?: string): Promise<string> {
+  public addMultisigAddress(
+    nrequired: number,
+    keys: Array<string>,
+    account?: string,
+  ): Promise<string> {
     return this.call('addmultisigaddress', nrequired, keys, account);
   }
 
@@ -107,7 +117,7 @@ class GridcoinRPC {
    * @param redeemScript
    * @param account
    */
-  public addRedeemScript(redeemScript: any, account?: string) {
+  public addRedeemScript(_redeemScript: any, _account?: string): Promise<any> {
     return this.call('addredeemscript');
   }
 
@@ -158,17 +168,22 @@ class GridcoinRPC {
    * @returns
    * @memberof GridcoinRPC
    */
-  public burn2(burnAddress: string, burnAmount: number, burnKey: any, burnDetail: any) {
+  public burn2(
+    burnAddress: string,
+    burnAmount: number,
+    burnKey: any,
+    burnDetail: any,
+  ): Promise<any> {
     return this.call('burn2', burnAddress, burnAmount, burnKey, burnDetail);
   }
 
   /**
    * Checks wallet.dat file to ensure it is not missing any coins.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public checkWallet(): Promise<Object> {
+  public checkWallet(): Promise<any> {
     return this.call('checkwallet');
   }
 
@@ -185,7 +200,10 @@ class GridcoinRPC {
    * @returns {Promise<string>} - hex string of the transaction
    * @memberof GridcoinRPC
    */
-  public createRawTransaction(inputs: Array<IInput>, output: IOutput): Promise<string> {
+  public createRawTransaction(
+    inputs: Array<IInput>,
+    output: IOutput,
+  ): Promise<string> {
     return this.call('createrawtransaction');
   }
 
@@ -302,7 +320,11 @@ class GridcoinRPC {
    * @returns {Promise<number>}
    * @memberof GridcoinRPC
    */
-  public getBalance(account?: string, minConf?: number, includeWatchonly?: boolean): Promise<number> {
+  public getBalance(
+    account?: string,
+    minConf?: number,
+    includeWatchonly?: boolean,
+  ): Promise<number> {
     return this.call('getbalance', account, minConf, includeWatchonly);
   }
 
@@ -338,7 +360,10 @@ class GridcoinRPC {
    * @returns {(Promise<string|ITransaction>)}
    * @memberof GridcoinRPC
    */
-  public getRawTransaction(txid: string, verbose: boolean = false): Promise<string | ITransaction> {
+  public getRawTransaction(
+    txid: string,
+    verbose = false,
+  ): Promise<string | ITransaction> {
     return this.call('getrawtransaction', txid, verbose);
   }
 
@@ -351,7 +376,7 @@ class GridcoinRPC {
    * @returns {Promise<number>} - the number of coins received
    * @memberof GridcoinRPC
    */
-  public getReceivedByAccount(account: string, minconf: number = 1): Promise<number> {
+  public getReceivedByAccount(account: string, minconf = 1): Promise<number> {
     return this.call('getreceivedbyaccount', account, minconf);
   }
 
@@ -367,7 +392,10 @@ class GridcoinRPC {
    * @returns {Promise<number>} - the number of coins received
    * @memberof GridcoinRPC
    */
-  public getReceivedByAddress(gridcoinAddress: string, minconf: number = 1): Promise<number> {
+  public getReceivedByAddress(
+    gridcoinAddress: string,
+    minconf = 1,
+  ): Promise<number> {
     return this.call('getreceivedbyaddress', gridcoinAddress, minconf);
   }
 
@@ -456,7 +484,7 @@ class GridcoinRPC {
    * @returns
    * @memberof GridcoinRPC
    */
-  public listReceivedByAccount(minconf: number = 1, includeEmpty: boolean = false) {
+  public listReceivedByAccount(minconf = 1, includeEmpty = false) {
     return this.call('listreceivedbyaccount', minconf, includeEmpty);
   }
 
@@ -470,7 +498,10 @@ class GridcoinRPC {
    * @returns {Promise<IReceivement>}
    * @memberof GridcoinRPC
    */
-  public listReceivedByAddress(minConf: number = 1, includeEmpty: boolean = false): Promise<IReceivement> {
+  public listReceivedByAddress(
+    minConf = 1,
+    includeEmpty = false,
+  ): Promise<IReceivement> {
     return this.call('listreceivedbyaddress', minConf, includeEmpty);
   }
 
@@ -488,7 +519,12 @@ class GridcoinRPC {
     targetConfirmations?: number,
     includeWatchonly?: boolean,
   ): Promise<IListSinceBlock> {
-    return this.call('listsinceblock', blockHash, targetConfirmations, includeWatchonly);
+    return this.call(
+      'listsinceblock',
+      blockHash,
+      targetConfirmations,
+      includeWatchonly,
+    );
   }
 
   /**
@@ -507,7 +543,13 @@ class GridcoinRPC {
     from?: any,
     includeWatchonly?: boolean,
   ): Promise<Array<ITransactionShort>> {
-    return this.call('listtransactions', account, count, from, includeWatchonly);
+    return this.call(
+      'listtransactions',
+      account,
+      count,
+      from,
+      includeWatchonly,
+    );
   }
 
   /**
@@ -549,7 +591,13 @@ class GridcoinRPC {
    * @returns
    * @memberof GridcoinRPC
    */
-  public move(fromAccount: number, toAccount: number, amount: number, minConf?: number, comment?: string) {
+  public move(
+    fromAccount: number,
+    toAccount: number,
+    amount: number,
+    minConf?: number,
+    comment?: string,
+  ) {
     return this.call('move', fromAccount, toAccount, amount, minConf, comment);
   }
 
@@ -580,10 +628,10 @@ class GridcoinRPC {
   /**
    * Check wallet.dat for missing coins. If any are found, attempt recovery.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public repairWallet(): Promise<Object> {
+  public repairWallet(): Promise<any> {
     return this.call('repairwallet');
   }
 
@@ -618,7 +666,15 @@ class GridcoinRPC {
     comment?: string,
     commentTo?: string,
   ) {
-    return this.call('sendfrom', fromAccount, toGridcoinaddress, amount, minConf, comment, commentTo);
+    return this.call(
+      'sendfrom',
+      fromAccount,
+      toGridcoinaddress,
+      amount,
+      minConf,
+      comment,
+      commentTo,
+    );
   }
 
   // sendmany <fromaccount> {address:amount,...} [minconf=1] [comment]
@@ -648,8 +704,19 @@ class GridcoinRPC {
    * @returns {Promise<string>} - TXID of the sent transaction
    * @memberof GridcoinRPC
    */
-  public sendToAddress(gridcoinAddress: string, amount: number, comment?: string, commentTo?: string): Promise<string> {
-    return this.call('sendtoaddress', gridcoinAddress, amount, comment, commentTo);
+  public sendToAddress(
+    gridcoinAddress: string,
+    amount: number,
+    comment?: string,
+    commentTo?: string,
+  ): Promise<string> {
+    return this.call(
+      'sendtoaddress',
+      gridcoinAddress,
+      amount,
+      comment,
+      commentTo,
+    );
   }
 
   /**
@@ -758,11 +825,11 @@ class GridcoinRPC {
     return this.call('verifymessage', gridcoinAddress, signature, message);
   }
 
-  /********************************************
+  /** ******************************************
    *
    *          NETWORK
    *
-   ********************************************/
+   ******************************************* */
 
   /**
    * Attempts add or remove <node> from the addnode list or try a connection to <node> once.
@@ -780,7 +847,7 @@ class GridcoinRPC {
    * @example
    * rpc.addNode('192.168.2.1', 'onetry').then(res => console.log(res));
    */
-  public addNode(node: string, action: 'add' | 'remove' | 'onetry'): Promise<Object> {
+  public addNode(node: string, action: 'add' | 'remove' | 'onetry'): Promise<any> {
     return this.call('addnode', node, action);
   }
 
@@ -789,16 +856,16 @@ class GridcoinRPC {
    * Requires unlocked wallet
    * @todo implement
    */
-  // tslint:disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public addPoll() {}
 
   /**
    * Force ask for outstandingblocks from network.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public askForOutstandingBlocks(): Promise<Object> {
+  public askForOutstandingBlocks(): Promise<any> {
     return this.call('askforoutstandingblocks');
   }
 
@@ -817,10 +884,10 @@ class GridcoinRPC {
    * @todo may introduce interface
    *
    * @param {string} phrase
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public decryptPhrase(phrase: string): Promise<Object> {
+  public decryptPhrase(phrase: string): Promise<any> {
     return this.call('decryptphrase', phrase);
   }
 
@@ -829,10 +896,10 @@ class GridcoinRPC {
    * @todo may introduce interface
    *
    * @param {string} phrase
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public encryptPhrase(phrase: string): Promise<Object> {
+  public encryptPhrase(phrase: string): Promise<any> {
     return this.call('encryptphrase', phrase);
   }
 
@@ -1068,10 +1135,10 @@ class GridcoinRPC {
   /**
    * Displays current network time.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public networkTime(): Promise<Object> {
+  public networkTime(): Promise<any> {
     return this.call('networktime');
   }
 
@@ -1117,10 +1184,10 @@ class GridcoinRPC {
    *
    * @param {string} title
    * @param {string} answers
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public vote(title: string, answers: string): Promise<Object> {
+  public vote(title: string, answers: string): Promise<any> {
     return this.call('vote', title, answers);
   }
 
@@ -1131,33 +1198,33 @@ class GridcoinRPC {
    * @returns {Promise<Array<Array<Object>>>}
    * @memberof GridcoinRPC
    */
-  public voteDetails(pollName: string): Promise<Array<Array<Object>>> {
+  public voteDetails(pollName: string): Promise<Array<Array<any>>> {
     return this.call('votedetails', pollName);
   }
 
-  /********************************************
+  /** ******************************************
    *
    *          MINING
    *
-   ********************************************/
+   ******************************************* */
 
   /**
    * Send a beacon to the Neural Network for your CPID to claim POR rewards.
    * Requires unlocked wallet
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public advertiseBeacon(): Promise<Object> {
+  public advertiseBeacon(): Promise<any> {
     return this.call('advertisebeacon');
   }
 
   /**
    * Displays beacons and associated addresses.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public beaconReport(): Promise<Object> {
+  public beaconReport(): Promise<any> {
     return this.call('beaconreport');
   }
 
@@ -1185,10 +1252,10 @@ class GridcoinRPC {
   /**
    * Displays current Neural Network contract hash.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public currentNeuralHash(): Promise<Object> {
+  public currentNeuralHash(): Promise<any> {
     return this.call('currentneuralhash');
   }
 
@@ -1198,7 +1265,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public currentNeuralReport(): Promise<Array<Object>> {
+  public currentNeuralReport(): Promise<Array<any>> {
     return this.call('currentneuralreport');
   }
 
@@ -1206,10 +1273,10 @@ class GridcoinRPC {
    * Request current information from the Neural Network about your magnitude by project.
    *
    * @param {boolean} [force]
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public explainMagnitude(force?: boolean): Promise<Object> {
+  public explainMagnitude(force?: boolean): Promise<any> {
     return this.call('explainmagnitude', force);
   }
 
@@ -1232,7 +1299,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public lifeTime(): Promise<Array<Object>> {
+  public lifeTime(): Promise<Array<any>> {
     return this.call('lifetime');
   }
 
@@ -1243,7 +1310,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public magnitude(cpid: string): Promise<Array<Object>> {
+  public magnitude(cpid: string): Promise<Array<any>> {
     return this.call('magnitude', cpid);
   }
 
@@ -1253,7 +1320,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public myMagnitude(): Promise<Array<Object>> {
+  public myMagnitude(): Promise<Array<any>> {
     return this.call('mymagnitude');
   }
 
@@ -1263,7 +1330,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public neuralReport(): Promise<Array<Object>> {
+  public neuralReport(): Promise<Array<any>> {
     return this.call('neuralreport');
   }
 
@@ -1283,10 +1350,10 @@ class GridcoinRPC {
    * If any new projects are detected, they will then be looked up in the Netsoft XML.
    * This happens automatically after about 25 minutes, but this can speed up the process.
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public resetCpids(): Promise<Object> {
+  public resetCpids(): Promise<any> {
     return this.call('resetcpids');
   }
 
@@ -1296,7 +1363,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public rsa(): Promise<Array<Object>> {
+  public rsa(): Promise<Array<any>> {
     return this.call('rsa');
   }
 
@@ -1337,17 +1404,17 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public superBlocks(cpid?: string): Promise<Array<Object>> {
+  public superBlocks(cpid?: string): Promise<Array<any>> {
     return this.call('superblocks', cpid);
   }
 
   /**
    * Synchronize with the neural network
    *
-   * @returns {Promise<Object>}
+   * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public syncDpor2(): Promise<Object> {
+  public syncDpor2(): Promise<any> {
     return this.call('syncdpor2');
   }
 
@@ -1357,7 +1424,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public upgradedBeaconReport(): Promise<Array<Object>> {
+  public upgradedBeaconReport(): Promise<Array<any>> {
     return this.call('upgradedbeaconreport');
   }
 
@@ -1367,7 +1434,7 @@ class GridcoinRPC {
    * @returns {Promise<Array<Object>>}
    * @memberof GridcoinRPC
    */
-  public validCpids(): Promise<Array<Object>> {
+  public validCpids(): Promise<Array<any>> {
     return this.call('validcpids');
   }
 }

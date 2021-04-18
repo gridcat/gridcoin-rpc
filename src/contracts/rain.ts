@@ -1,3 +1,3 @@
-export default interface IRain {
+export interface IRain {
   [key: string]: number;
 }

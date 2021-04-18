@@ -1,4 +1,4 @@
-export default interface IAddress {
+export interface IAddress {
   /**
    * If the address is valid or not. If not, this is the only property returned.
    *
@@ -28,7 +28,8 @@ export default interface IAddress {
    */
   isscript?: boolean;
   /**
-   * The hex value of the raw public key, for single-key addresses (possibly embedded in P2SH or P2WSH)
+   * The hex value of the raw public key, for single-key addresses
+   * (possibly embedded in P2SH or P2WSH)
    *
    * @type {string}
    * @memberof IAddress

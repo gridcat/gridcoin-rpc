@@ -27,7 +27,8 @@ module.exports = {
     'no-unused-expressions': 0,
     'chai-friendly/no-unused-expressions': 2,
     'max-len': ['error', { ignoreComments: true, code: 120 }],
-    'no-useless-constructor': 0,
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': ['error'],
   },
   overrides: [
     {

@@ -73,6 +73,14 @@ workflows:
           requires:
             - build
             - test
+      - deploy-beta:
+          filters:
+            branches:
+              only: beta
+              ignore: gh-pages
+          requires:
+            - build
+            - test
       - deploy-npm:
           filters:
             branches:

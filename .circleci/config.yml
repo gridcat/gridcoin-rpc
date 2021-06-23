@@ -42,6 +42,15 @@ jobs:
           name: Semantic release
           command: npm run semantic-release
 
+  deploy-beta:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Semantic release
+          command: npm run semantic-release
+
   deploy-docs:
     <<: *defaults
     steps:

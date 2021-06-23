@@ -283,8 +283,8 @@ export class GridcoinRPC extends RPCBase {
    * @returns {Promise<string>}
    * @memberof GridcoinRPC
    */
-  public getNewAddress(account?: string): Promise<Address> {
-    const address = this.call<string>('getnewaddress', account);
+  public async getNewAddress(account?: string): Promise<Address> {
+    const address = await this.call<string>('getnewaddress', account);
     return new Address(address);
   }
 

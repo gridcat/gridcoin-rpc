@@ -1,3 +1,15 @@
+# [2.1.0-beta.1](https://github.com/gridcat/gridcoin-rpc/compare/v2.0.0...v2.1.0-beta.1) (2021-06-23)
+
+
+### Bug Fixes
+
+* return promise on getNewAddress ([01460a5](https://github.com/gridcat/gridcoin-rpc/commit/01460a50cf03b6b09807d00931f2c28c0aedc128))
+
+
+### Features
+
+* introduce error object ([3e75f6f](https://github.com/gridcat/gridcoin-rpc/commit/3e75f6fc42e998351c931d52069342e5dba79ef1))
+
 # [2.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v1.0.0...v2.0.0) (2019-09-09)
 
 

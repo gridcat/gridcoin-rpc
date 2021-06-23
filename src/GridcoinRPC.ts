@@ -1,5 +1,4 @@
 import assert from 'assert';
-import JsonRPC, { IParameters, IJsonRPC } from './lib/JsonRPC';
 import { IDifficulty } from './contracts/difficulty';
 import { ICpid } from './contracts/cpid';
 import { IBeaconStatus } from './contracts/beaconStatus';
@@ -37,46 +36,12 @@ import { IKeysPair } from './contracts/keysPair';
 import { IBurnAddress } from './contracts/burnAddress';
 import { IReserve } from './contracts/reserve';
 import { IRain } from './contracts/rain';
+import { RPCBase } from './RPCBase';
+import { ICheckWallet } from './contracts/checkwallet';
+import { Address } from './Address';
+import { TX } from './TX';
 
-function filterParameters(parameters: Array<any>): Array<any> {
-  return parameters.filter((element) => element !== undefined);
-}
-
-type callParameters = string | number | boolean | undefined | Array<string>;
-
-class GridcoinRPC {
-  public readonly client: IJsonRPC;
-
-  /**
-   * Creates an instance of GridcoinRPC
-   * @param {IParameters} config -
-   * @param {IJsonRPC} [rpc] - Dependency injection for the client class
-   * @memberof GridcoinRPC
-   */
-  constructor(config: IParameters, rpc?: any) {
-    // eslint-disable-next-line prefer-rest-params
-    if (arguments[1]) {
-      // eslint-disable-next-line prefer-rest-params
-      this.client = new arguments[1](config);
-    } else {
-      this.client = new JsonRPC(config);
-    }
-  }
-
-  /**
-   * Send command to rpc server, get response
-   * @param command
-   * @param parameters
-   */
-  private call(
-    command: string,
-    ...parameters: Array<callParameters>
-  ): Promise<any> {
-    const filteredParameters: Array<any> = filterParameters(parameters);
-    return this.client.request(command, filteredParameters)
-      .then((result: any) => result.result);
-  }
-
+export class GridcoinRPC extends RPCBase {
   /**
    * Test connection
    *
@@ -101,49 +66,49 @@ class GridcoinRPC {
    * @returns
    * @memberof GridcoinRPC
    */
-  public addMultisigAddress(
+  public async addMultisigAddress(
     nrequired: number,
     keys: Array<string>,
     account?: string,
-  ): Promise<string> {
-    return this.call('addmultisigaddress', nrequired, keys, account);
+  ): Promise<Address> {
+    const result = await this.call<string>('addmultisigaddress', nrequired, keys, account);
+    return new Address(result);
   }
 
-  /**
-   * @todo not clear, is this actually in use somewhere somehow?
-   * Add a P2SH address with a specified redeemScript to the wallet.
-   * If [account] is specified, assign address to [account].
-   * @see https://en.bitcoin.it/wiki/Pay_to_script_hash
-   * @param redeemScript
-   * @param account
-   */
-  public addRedeemScript(_redeemScript: any, _account?: string): Promise<any> {
-    return this.call('addredeemscript');
-  }
+  // /**
+  //  * Add a P2SH address with a specified redeemScript to the wallet.
+  //  * If [account] is specified, assign address to [account].
+  //  * @see https://en.bitcoin.it/wiki/Pay_to_script_hash
+  //  * @param redeemScript
+  //  * @param account
+  //  */
+  // public addRedeemScript(_redeemScript: any, _account?: string): Promise<any> {
+  //   return this.call('addredeemscript');
+  // }
 
-  /**
-   * Backup wallet private keys to a file.
-   * Requires unlocked wallet
-   *
-   * @param {string} [destination] - Destination path
-   * @returns {Promise<IBackupPrivateKeys>}
-   * @memberof GridcoinRPC
-   */
-  public backupPrivateKeys(destination?: string): Promise<IBackupPrivateKeys> {
-    return this.call('backupprivatekeys', destination);
-  }
+  // /**
+  //  * Backup wallet private keys to a file.
+  //  * Requires unlocked wallet
+  //  *
+  //  * @param {string} [destination] - Destination path
+  //  * @returns {Promise<IBackupPrivateKeys>}
+  //  * @memberof GridcoinRPC
+  //  */
+  // public backupPrivateKeys(destination?: string): Promise<IBackupPrivateKeys> {
+  //   return this.call('backupprivatekeys', destination);
+  // }
 
-  /**
-   * Safely copies wallet.dat to destination, which can be a directory or a path with filename.
-   * Requires unlocked wallet
-   *
-   * @param {string} [destination] - Destination path for data backup
-   * @returns {Promise<IBackupWallet>}
-   * @memberof GridcoinRPC
-   */
-  public backupWallet(destination?: string): Promise<IBackupWallet> {
-    return this.call('backupwallet', destination);
-  }
+  // /**
+  //  * Safely copies wallet.dat to destination, which can be a directory or a path with filename.
+  //  * Requires unlocked wallet
+  //  *
+  //  * @param {string} [destination] - Destination path for data backup
+  //  * @returns {Promise<IBackupWallet>}
+  //  * @memberof GridcoinRPC
+  //  */
+  // public backupWallet(destination?: string): Promise<IBackupWallet> {
+  //   return this.call('backupwallet', destination);
+  // }
 
   /**
    * Burns coins to the network.
@@ -154,27 +119,10 @@ class GridcoinRPC {
    * @returns {Promise<string>}
    * @memberof GridcoinRPC
    */
-  public burn(amount: number, hexString?: string): Promise<string> {
-    return this.call('burn', amount, hexString);
-  }
-
-  /**
-   * @todo Unknown
-   *
-   * @param {string} burnAddress
-   * @param {number} burnAmount
-   * @param {*} burnKey
-   * @param {*} burnDetail
-   * @returns
-   * @memberof GridcoinRPC
-   */
-  public burn2(
-    burnAddress: string,
-    burnAmount: number,
-    burnKey: any,
-    burnDetail: any,
-  ): Promise<any> {
-    return this.call('burn2', burnAddress, burnAmount, burnKey, burnDetail);
+  public async burn(amount: number, hexString?: string): Promise<TX> {
+    const res = await this.call<string>('burn', amount, hexString);
+    const transaction = new TX(res);
+    return transaction;
   }
 
   /**
@@ -183,29 +131,29 @@ class GridcoinRPC {
    * @returns {Promise<any>}
    * @memberof GridcoinRPC
    */
-  public checkWallet(): Promise<any> {
-    return this.call('checkwallet');
+  public async checkWallet(): Promise<ICheckWallet> {
+    return this.call<ICheckWallet>('checkwallet');
   }
 
-  /**
-   * @todo Try this out
-   * Create a transaction spending the given inputs and creating new outputs.
-   * Outputs can be addresses or data.
-   * Returns hex-encoded raw transaction.
-   * Note that the transaction's inputs are not signed, and
-   * it is not stored in the wallet or transmitted to the network.
-   *
-   * @param {Array<IInput>} inputs - A json array of json objects
-   * @param {IOutput} output - a json object with outputs
-   * @returns {Promise<string>} - hex string of the transaction
-   * @memberof GridcoinRPC
-   */
-  public createRawTransaction(
-    inputs: Array<IInput>,
-    output: IOutput,
-  ): Promise<string> {
-    return this.call('createrawtransaction');
-  }
+  // /**
+  //  * @todo Try this out
+  //  * Create a transaction spending the given inputs and creating new outputs.
+  //  * Outputs can be addresses or data.
+  //  * Returns hex-encoded raw transaction.
+  //  * Note that the transaction's inputs are not signed, and
+  //  * it is not stored in the wallet or transmitted to the network.
+  //  *
+  //  * @param {Array<IInput>} inputs - A json array of json objects
+  //  * @param {IOutput} output - a json object with outputs
+  //  * @returns {Promise<string>} - hex string of the transaction
+  //  * @memberof GridcoinRPC
+  //  */
+  // public createRawTransaction(
+  //   inputs: Array<IInput>,
+  //   output: IOutput,
+  // ): Promise<string> {
+  //   return this.call('createrawtransaction');
+  // }
 
   /**
    * Produces a human-readable JSON object for a raw transaction.
@@ -214,8 +162,8 @@ class GridcoinRPC {
    * @returns {Promise<ITransaction>}
    * @memberof GridcoinRPC
    */
-  public decodeRawTransaction(hex: string): Promise<ITransaction> {
-    return this.call('decoderawtransaction', hex);
+  public async decodeRawTransaction(hex: string): Promise<ITransaction> {
+    return this.call<ITransaction>('decoderawtransaction', hex);
   }
 
   /**
@@ -225,107 +173,105 @@ class GridcoinRPC {
    * @returns {Promise<IScript>}
    * @memberof GridcoinRPC
    */
-  public decodeScript(hex: string): Promise<IScript> {
-    return this.call('decodescript', hex);
+  public async decodeScript(hex: string): Promise<IScript> {
+    return this.call<IScript>('decodescript', hex);
   }
 
-  /**
-   * Reveals the private key corresponding to 'address'.
-   * Then the importPrivKey can be used with this output
-   *
-   * @param {string} gridcoinAddress - The gridcoin address for the private key
-   * @returns {Promise<string>} The private key
-   * @memberof GridcoinRPC
-   */
-  public dumpPrivKey(gridcoinAddress: string): Promise<string> {
-    return this.call('dumpprivkey', gridcoinAddress);
-  }
+  // /**
+  //  * Reveals the private key corresponding to 'address'.
+  //  * Then the importPrivKey can be used with this output
+  //  *
+  //  * @param {string} gridcoinAddress - The gridcoin address for the private key
+  //  * @returns {Promise<string>} The private key
+  //  * @memberof GridcoinRPC
+  //  */
+  // public dumpPrivKey(gridcoinAddress: string): Promise<string> {
+  //   return this.call('dumpprivkey', gridcoinAddress);
+  // }
 
-  /**
-   * Dumps wallet to a specified filename.
-   * Requires unlocked wallet
-   *
-   * @param {string} filename
-   * @returns {Promise<null>}
-   * @memberof GridcoinRPC
-   */
-  public dumpWallet(filename: string): Promise<null> {
-    return this.call('dumpwallet', filename);
-  }
+  // /**
+  //  * Dumps wallet to a specified filename.
+  //  * Requires unlocked wallet
+  //  *
+  //  * @param {string} filename
+  //  * @returns {Promise<null>}
+  //  * @memberof GridcoinRPC
+  //  */
+  // public dumpWallet(filename: string): Promise<null> {
+  //   return this.call('dumpwallet', filename);
+  // }
 
-  /**
-   * @todo later
-   *
-   * @param {string} walletPassPhrase
-   * @returns
-   * @memberof GridcoinRPC
-   */
-  public encrypt(walletPassPhrase: string) {
-    return this.call('encrypt', walletPassPhrase);
-  }
+  // /**
+  //  * @todo later
+  //  *
+  //  * @param {string} walletPassPhrase
+  //  * @returns
+  //  * @memberof GridcoinRPC
+  //  */
+  // public encrypt(walletPassPhrase: string) {
+  //   return this.call('encrypt', walletPassPhrase);
+  // }
 
-  /**
-   * @todo later
-   *
-   * @param {string} walletPassPhrase
-   * @returns
-   * @memberof GridcoinRPC
-   */
-  public encryptWaller(walletPassPhrase: string) {
-    return this.call('encryptwaller', walletPassPhrase);
-  }
+  // /**
+  //  * @todo later
+  //  *
+  //  * @param {string} walletPassPhrase
+  //  * @returns
+  //  * @memberof GridcoinRPC
+  //  */
+  // public encryptWallet(walletPassPhrase: string) {
+  //   return this.call('encryptwaller', walletPassPhrase);
+  // }
 
-  /**
-   * Returns the account associated with the given address.
-   *
-   * @param {string} gridcoinAddress
-   * @returns {Promise<string>} - an account name
-   * @memberof GridcoinRPC
-   */
-  public getAccount(gridcoinAddress: string): Promise<string> {
-    return this.call('getaccount', gridcoinAddress);
-  }
+  // /**
+  //  * Returns the account associated with the given address.
+  //  *
+  //  * @param {string} gridcoinAddress
+  //  * @returns {Promise<string>} - an account name
+  //  * @memberof GridcoinRPC
+  //  */
+  // public getAccount(gridcoinAddress: string): Promise<string> {
+  //   return this.call('getaccount', gridcoinAddress);
+  // }
 
-  /**
-   * Returns the current Gridcoin address for receiving payments to this account.
-   * @description
-   * If <account> does not exist, it will be created along with an associated new address that will be returned.
-   *
-   * @param {string} account - an account name
-   * @returns {Promise<string>} - GRC address
-   * @memberof GridcoinRPC
-   */
-  public getAccountAddress(account: string): Promise<string> {
-    return this.call('getaccountaddress', account);
-  }
+  // /**
+  //  * Returns the current Gridcoin address for receiving payments to this account.
+  //  * @description
+  //  * If <account> does not exist, it will be created along with an associated new address that will be returned.
+  //  *
+  //  * @param {string} account - an account name
+  //  * @returns {Promise<string>} - GRC address
+  //  * @memberof GridcoinRPC
+  //  */
+  // public getAccountAddress(account: string): Promise<string> {
+  //   return this.call('getaccountaddress', account);
+  // }
 
-  /**
-   * Returns the list of addresses for the given account.
-   *
-   * @param {string} account - the account name
-   * @returns {Promise<Array<string>>} - a list of addresses
-   * @memberof GridcoinRPC
-   */
-  public getAddressesByAccount(account: string): Promise<Array<string>> {
-    return this.call('getaddressesbyaccount', account);
-  }
+  // /**
+  //  * Returns the list of addresses for the given account.
+  //  *
+  //  * @param {string} account - the account name
+  //  * @returns {Promise<Array<string>>} - a list of addresses
+  //  * @memberof GridcoinRPC
+  //  */
+  // public getAddressesByAccount(account: string): Promise<Array<string>> {
+  //   return this.call('getaddressesbyaccount', account);
+  // }
 
   /**
    * If [account] is not specified, returns the server's total available balance.
-   * If [account] is specified, returns the balance in the account.
    *
-   * @param {string} [account]
    * @param {number} [minConf]
    * @param {boolean} [includeWatchonly]
    * @returns {Promise<number>}
    * @memberof GridcoinRPC
    */
-  public getBalance(
-    account?: string,
+  public async getBalance(
+    account = '*',
     minConf?: number,
     includeWatchonly?: boolean,
   ): Promise<number> {
-    return this.call('getbalance', account, minConf, includeWatchonly);
+    return this.call<number>('getbalance', account, minConf, includeWatchonly);
   }
 
   /**
@@ -337,8 +283,9 @@ class GridcoinRPC {
    * @returns {Promise<string>}
    * @memberof GridcoinRPC
    */
-  public getNewAddress(account?: string): Promise<string> {
-    return this.call('getnewaddress', account);
+  public getNewAddress(account?: string): Promise<Address> {
+    const address = this.call<string>('getnewaddress', account);
+    return new Address(address);
   }
 
   /**
@@ -417,7 +364,7 @@ class GridcoinRPC {
    * @memberof GridcoinRPC
    */
   public getWalletInfo(): Promise<IWalletInfo> {
-    return this.call('getwalletinfo');
+    return this.call<IWalletInfo>('getwalletinfo');
   }
 
   /**
@@ -628,11 +575,11 @@ class GridcoinRPC {
   /**
    * Check wallet.dat for missing coins. If any are found, attempt recovery.
    *
-   * @returns {Promise<any>}
+   * @returns {Promise<Partial<ICheckWallet>>}
    * @memberof GridcoinRPC
    */
-  public repairWallet(): Promise<any> {
-    return this.call('repairwallet');
+  public async repairWallet(): Promise<Partial<ICheckWallet>> {
+    return this.call<Partial<ICheckWallet>>('repairwallet');
   }
 
   /**
@@ -1438,5 +1385,3 @@ class GridcoinRPC {
     return this.call('validcpids');
   }
 }
-
-export { GridcoinRPC };

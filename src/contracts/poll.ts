@@ -1,11 +1,14 @@
 export interface IPoll {
   title: string;
-  pollnumber: number;
+  id: string;
   question: string;
-  expiration: string;
-  /**
-   * Poll URL
-   */
   url: string;
+  // @todo: could be one of many
   sharetype: string;
+  weightType: number;
+  responseType: number;
+  durationDays: number;
+  expiration: string;
+  timestamp: string;
+  votes: number;
 }

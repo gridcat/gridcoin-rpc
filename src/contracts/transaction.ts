@@ -93,6 +93,13 @@ export interface ITransaction {
    * @memberof ITransaction
    */
   version: number;
+  size: number;
+  /**
+   * Transaction timestamp
+   *
+   * @type {number}
+   * @memberof ITransaction
+   */
   time: number;
   /**
    * The lock time
@@ -102,6 +109,7 @@ export interface ITransaction {
    */
   locktime: number;
   hashboinc: string;
+  contracts: Array<any>;
   vin: Array<IVin>;
   vout: Array<IVout>;
 }

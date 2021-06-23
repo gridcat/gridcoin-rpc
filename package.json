@@ -30,6 +30,8 @@
     "prebuild": "rimraf dist",
     "build": "tsc && npm run build:docs",
     "test": "jest",
+    "test:unit": "jest test/unit/*",
+    "test:regression": "jest ./test/regression",
     "test:watch": "jest --watch",
     "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
     "build:docs": "ts-node --project tools/tsconfig.json tools/generate-doc.ts",
@@ -41,7 +43,7 @@
   },
   "lint-staged": {
     "{src,test,tools}/**/*.ts": [
-      "prettier --write",
+      "eslint --fix",
       "git add"
     ]
   },
@@ -79,16 +81,20 @@
     "@semantic-release/github": "^7.2.1",
     "@semantic-release/npm": "^7.1.1",
     "@semantic-release/release-notes-generator": "^9.0.2",
+    "@types/bitcoinjs-lib": "^5.0.0",
     "@types/chai": "^4.2.16",
+    "@types/chai-string": "^1.4.2",
     "@types/jest": "^26.0.22",
     "@types/node": "^14.14.41",
     "@types/rimraf": "^3.0.0",
     "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "bitcoinjs-lib": "^5.2.0",
     "chai": "^4.3.4",
+    "chai-string": "^1.5.0",
     "colors": "^1.4.0",
-    "commitizen": "^4.2.3",
+    "commitizen": "^4.2.4",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
@@ -111,5 +117,7 @@
     "typedoc": "^0.20.35",
     "typescript": "^4.2.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "camelcase-keys": "^6.2.2"
+  }
 }

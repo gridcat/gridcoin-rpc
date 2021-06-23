@@ -8,7 +8,6 @@ module.exports = {
   testEnvironment: 'node',
   moduleFileExtensions: [
     'ts',
-    'tsx',
     'js',
   ],
   coveragePathIgnorePatterns: [

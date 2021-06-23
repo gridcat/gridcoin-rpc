@@ -1,7 +1,7 @@
 import nock from 'nock';
 import { expect } from 'chai';
-import JsonRpc from '../src/lib/JsonRPC';
-import AuthenticationError from '../src/Errors/Authentication';
+import JsonRpc from '../../src/lib/JsonRPC';
+import { AuthenticationError } from '../../src/Errors/Authentication';
 
 const HOST = 'i.am.grid.coin';
 const RESPONSE = { ok: true };

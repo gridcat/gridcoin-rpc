@@ -12,3 +12,4 @@ compiled
 docs
 .history
 index.js
+src/RPC/_Wallet.ts

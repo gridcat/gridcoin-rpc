@@ -1,4 +1,4 @@
-import { IDifficulty } from './difficulty';
+import { Difficulty } from './difficulty';
 
 export interface IBlockChainInfo {
   /**
@@ -9,7 +9,7 @@ export interface IBlockChainInfo {
    */
   blocks: number;
   moneysupply: number;
-  difficulty: IDifficulty;
+  difficulty: Difficulty;
   testnet: boolean;
   errors: string;
 }

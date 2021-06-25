@@ -17,7 +17,7 @@ const validAddresses = [
   '2NAQFNoQQvwFWhC4bEcJUf7XqrzBwzgujZw',
 ];
 
-describe('Wallet', () => {
+describe.skip('Wallet', () => {
   let inst: GridcoinRPC;
   beforeEach(async () => {
     inst = new GridcoinRPC({
@@ -29,14 +29,14 @@ describe('Wallet', () => {
     await inst.repairWallet();
   });
 
-  describe('checkwallet', () => {
+  describe.skip('checkwallet', () => {
     it('should check wallet', async () => {
       const res = await inst.checkWallet();
       expect(res.walletCheckPassed).to.be.true;
     });
   });
 
-  describe('burn', () => {
+  describe.skip('burn', () => {
     afterAll(async () => {
       // Somehow those bad transactions makes wallet broken
       await inst.repairWallet();
@@ -71,7 +71,7 @@ describe('Wallet', () => {
     // });
   });
 
-  describe('decodeRawTransaction', () => {
+  describe.skip('decodeRawTransaction', () => {
     it('should error if transaction string is wrong', async () => {
       try {
         await inst.decodeRawTransaction('123p[');
@@ -85,7 +85,7 @@ describe('Wallet', () => {
     });
   });
 
-  describe('decodeScript', () => {
+  describe.skip('decodeScript', () => {
     it('should throw if script is not valid hex', async () => {
       try {
         await inst.decodeScript('I am an arm');
@@ -107,14 +107,14 @@ describe('Wallet', () => {
     });
   });
 
-  describe('getBalance', () => {
+  describe.skip('getBalance', () => {
     it('should get balance', async () => {
       const res = await inst.getBalance();
       expect(res).to.be.a('number');
     });
   });
 
-  describe('getWalletInfo', () => {
+  describe.skip('getWalletInfo', () => {
     it('should get the wallet info', async () => {
       const res = await inst.getWalletInfo();
       expect(Object.keys(res).length).to.be.equal(8);
@@ -128,7 +128,7 @@ describe('Wallet', () => {
     });
   });
 
-  describe('multisig address', () => {
+  describe.skip('multisig address', () => {
     it('should create multisig ', async () => {
       const keyPair = bitcoin.ECPair.makeRandom();
       const res = await inst.addMultisigAddress(1, [keyPair.publicKey.toString('hex')]);

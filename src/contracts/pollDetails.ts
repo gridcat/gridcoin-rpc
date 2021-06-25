@@ -1,4 +1,4 @@
-import { IPoll } from './poll';
+import { Poll } from './poll';
 
 export interface IPollAnswer {
   answer: string;
@@ -6,7 +6,7 @@ export interface IPollAnswer {
   participants: number;
 }
 
-export interface IPollDetails extends IPoll {
+export interface IPollDetails extends Poll {
   // title: string,
   // pollnumber: number,
   // question: string,

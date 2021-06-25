@@ -14,6 +14,7 @@
     "./node_modules/**/*",
     "./config/**/*",
     "./package.json",
+    "./src/RPC/_Wallet.ts"
   ],
   "include": [
     "./src/**/*"

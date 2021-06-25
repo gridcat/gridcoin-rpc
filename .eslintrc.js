@@ -29,6 +29,8 @@ module.exports = {
     'max-len': ['error', { ignoreComments: true, code: 120 }],
     'no-useless-constructor': 'off',
     '@typescript-eslint/no-useless-constructor': ['error'],
+    'no-shadow': 0,
+    '@typescript-eslint/no-shadow': ['error'],
   },
   overrides: [
     {

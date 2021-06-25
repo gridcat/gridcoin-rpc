@@ -1,4 +1,7 @@
-export interface IBackupWallet {
-  'Backup wallet success': boolean;
-  'Backup config success': boolean;
+export interface BackupWallet {
+  backupWalletSuccess: boolean;
+  backupConfigSuccess: boolean;
+  maintainBackupFileRetentionSuccess: boolean;
+  numberOfFilesRemoved: number;
+  filesRemoved: string[];
 }

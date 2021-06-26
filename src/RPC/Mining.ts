@@ -1,10 +1,13 @@
 import { AdvertiseBeacon } from '../contracts/advertiseBeacon';
+import { Beacon, BeaconConvergence } from '../contracts/beaconConvergence';
+import { BeaconRevoke } from '../contracts/beacondRevoke';
 import { BeaconReport } from '../contracts/beaconReport';
 import { BeaconStatusCollection } from '../contracts/beaconStatus';
 import { ProjectMagnitude } from '../contracts/explainMagnitude';
 import { Lifetime } from '../contracts/lifetime';
 import { Magnitude } from '../contracts/magnitude';
 import { MiningInfo } from '../contracts/miningInfo';
+import { Stake } from '../contracts/stake';
 import { Superblock } from '../contracts/superblock';
 import { SuperblockAge } from '../contracts/superblockAge';
 import { RPCBase } from '../RPCBase';
@@ -23,7 +26,7 @@ export class Mining extends RPCBase {
    * @returns {(Promise<AdvertiseBeacon> | never)}
    * @memberof Mining
    */
-  public advertiseBeacon(force?: boolean): Promise<AdvertiseBeacon> | never {
+  public async advertiseBeacon(force?: boolean): Promise<AdvertiseBeacon> | never {
     return this.call<AdvertiseBeacon>('advertisebeacon', force);
   }
 
@@ -35,8 +38,31 @@ export class Mining extends RPCBase {
    * @returns {Promise<BeaconReport[]>}
    * @memberof Mining
    */
-  public beaconReport(activeOnly?: boolean): Promise<BeaconReport[]> {
+  public async beaconReport(activeOnly?: boolean): Promise<BeaconReport[]> {
     return this.call<BeaconReport[]>('beaconreport', activeOnly);
+  }
+
+  /**
+   * Displays verified and pending beacons from the scraper or subscriber viewpoint.
+   * @description
+   * There are three output sections:
+   * - verified_beacons_from_scraper_global:
+   *   Comes directly from the scraper global map for verified beacons. This is
+   *   for scraper monitoring of an individual scraper and will be empty if not
+   *   run on an actual scraper nod
+   * - verified_beacons_from_latest_convergence:
+   *   From the latest convergence formed from all of the scrapers. This list
+   *   is what will be activated in the next superblock.
+   * - pending_beacons_from_GetConsensusBeaconList:
+   *   This is a list of pending beacons. Note that it is subject to a one
+   *   hour ladder, so it will lag the information from the
+   *   pendingbeaconreport rpc call.
+   *
+   * @returns {Promise<BeaconConvergence>}
+   * @memberof Mining
+   */
+  public async beaconConvergence(): Promise<BeaconConvergence> {
+    return this.call<BeaconConvergence>('beaconconvergence');
   }
 
   /**
@@ -46,7 +72,7 @@ export class Mining extends RPCBase {
    * @returns {Promise<BeaconStatusCollection>}
    * @memberof Mining
    */
-  public beaconStatus(cpid?: CPID): Promise<BeaconStatusCollection> {
+  public async beaconStatus(cpid?: CPID): Promise<BeaconStatusCollection> {
     return this.call<BeaconStatusCollection>('beaconstatus', cpid);
   }
 
@@ -59,8 +85,18 @@ export class Mining extends RPCBase {
    * @returns {(Promise<ProjectMagnitude> | never)}
    * @memberof Mining
    */
-  public explainMagnitude(cpid?: CPID): Promise<ProjectMagnitude> | never {
+  public async explainMagnitude(cpid?: CPID): Promise<ProjectMagnitude> | never {
     return this.call<ProjectMagnitude>('explainmagnitude', cpid);
+  }
+
+  /**
+   * Fetch information about this wallet's last staked block.
+   *
+   * @returns {Promise<Stake>}
+   * @memberof Mining
+   */
+  public async getLastStake(): Promise<Stake> {
+    return this.call<Stake>('getlaststake');
   }
 
   /**
@@ -72,7 +108,7 @@ export class Mining extends RPCBase {
    * @returns {Promise<MiningInfo>}
    * @memberof GridcoinRPC
    */
-  public getMiningInfo(): Promise<MiningInfo> {
+  public async getMiningInfo(): Promise<MiningInfo> {
     return this.call<MiningInfo>('getmininginfo');
   }
 
@@ -83,7 +119,7 @@ export class Mining extends RPCBase {
    * @returns {Promise<Lifetime>}
    * @memberof Mining
    */
-  public lifetime(cpid: CPID): Promise<Lifetime> {
+  public async lifetime(cpid: CPID): Promise<Lifetime> {
     return this.call<Lifetime>('lifetime', cpid);
   }
 
@@ -94,8 +130,18 @@ export class Mining extends RPCBase {
    * @returns {Promise<Magnitude>}
    * @memberof Mining
    */
-  public magnitude(cpid: CPID): Promise<Magnitude> {
+  public async magnitude(cpid: CPID): Promise<Magnitude> {
     return this.call<Magnitude>('magnitude', cpid);
+  }
+
+  /**
+   * Displays pending beacons directly from the beacon registry.
+   *
+   * @returns {Promise<Beacon[]>}
+   * @memberof Mining
+   */
+  public async pendingBeaconReport(): Promise<Beacon[]> {
+    return this.call<Beacon[]>('pendingbeaconreport');
   }
 
   /**
@@ -104,8 +150,19 @@ export class Mining extends RPCBase {
    * @returns {Promise<{ reset: 1 }>}
    * @memberof Mining
    */
-  public resetCPIDs(): Promise<{ reset: 1 }> {
+  public async resetCPIDs(): Promise<{ reset: 1 }> {
     return this.call<{ reset: 1 }>('resetcpids');
+  }
+
+  /**
+   * Advertise a beacon (Requires wallet to be fully unlocked)
+   *
+   * @param {CPID} cpid - CPID associated with the beacon to revoke.
+   * @returns {Promise<BeaconRevoke>}
+   * @memberof Mining
+   */
+  public async revokeBeacon(cpid: CPID): Promise<BeaconRevoke> {
+    return this.call<BeaconRevoke>('revokebeacon', cpid);
   }
 
   /**
@@ -114,7 +171,7 @@ export class Mining extends RPCBase {
    * @returns {Promise<SuperblockAge>}
    * @memberof Mining
    */
-  public superblockAge(): Promise<SuperblockAge> {
+  public async superblockAge(): Promise<SuperblockAge> {
     return this.call<SuperblockAge>('superblockage');
   }
 
@@ -127,7 +184,7 @@ export class Mining extends RPCBase {
    * @returns {Promise<Superblock[]>}
    * @memberof Mining
    */
-  public superBlocks(
+  public async superBlocks(
     lookback?: number,
     displayContract?: boolean,
     cpid?: CPID,

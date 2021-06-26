@@ -1,96 +1,98 @@
-export interface IScriptSig {
+import { Address, TX } from '../types';
+
+export interface ScriptSig {
   asm: string;
   hex: string;
 }
 
-export interface IScriptPubKey extends IScriptSig {
+export interface ScriptPubKey extends ScriptSig {
   /**
    * The type
    * @example pubkeyhash
    *
    * @type {string}
-   * @memberof IScriptPubKey
+   * @memberof ScriptPubKey
    */
   type: string;
   /**
    * The required sigs
    *
    * @type {number}
-   * @memberof IScriptPubKey
+   * @memberof ScriptPubKey
    */
   reqSigs?: number;
   /**
    * List of GRC addresses
    *
-   * @type {Array<string>}
-   * @memberof IScriptPubKey
+   * @type {Array<Address>}
+   * @memberof ScriptPubKey
    */
-  addresses?: Array<string>;
+  addresses?: Array<Address>;
 }
 
-export interface IVin {
+export interface Vin {
   /**
    * The transaction id
    * @example 5c038a9789bf29c2bb79f836dee9fd1d4f0becfce7174d01d72dc3c869bd6ab6
    *
-   * @type {string}
-   * @memberof IVin
+   * @type {TX}
+   * @memberof Vin
    */
-  txid: string;
+  txid: TX;
   /**
    * The output number
    *
    * @type {number}
-   * @memberof IVin
+   * @memberof Vin
    */
   vout: number;
   /**
    * The script
    *
-   * @type {IScript}
-   * @memberof IVin
+   * @type {ScriptSig}
+   * @memberof Vin
    */
-  scriptSig: IScriptSig;
+  scriptSig: ScriptSig;
   /**
    * The script sequence number
    *
    * @type {number}
-   * @memberof IVin
+   * @memberof Vin
    */
   sequence: number;
 }
 
-export interface IVout {
+export interface Vout {
   /**
    * The value in GRC
    *
    * @type {number}
-   * @memberof IVout
+   * @memberof Vout
    */
   value: number;
   /**
    * Index
    *
    * @type {number}
-   * @memberof IVout
+   * @memberof Vout
    */
   n: number;
-  scriptPubKey: IScriptPubKey;
+  scriptPubKey: ScriptPubKey;
 }
 
-export interface ITransaction {
+export interface Transaction {
   /**
    * The transaction id
    *
-   * @type {string}
-   * @memberof ITransaction
+   * @type {TX}
+   * @memberof Transaction
    */
-  txid: string;
+  txid: TX;
   /**
    * The version
    *
    * @type {number}
-   * @memberof ITransaction
+   * @memberof Transaction
    */
   version: number;
   size: number;
@@ -98,18 +100,18 @@ export interface ITransaction {
    * Transaction timestamp
    *
    * @type {number}
-   * @memberof ITransaction
+   * @memberof Transaction
    */
   time: number;
   /**
    * The lock time
    *
    * @type {number}
-   * @memberof ITransaction
+   * @memberof Transaction
    */
   locktime: number;
   hashboinc: string;
   contracts: Array<any>;
-  vin: Array<IVin>;
-  vout: Array<IVout>;
+  vin: Array<Vin>;
+  vout: Array<Vout>;
 }

@@ -1,7 +1,10 @@
 import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
+import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
+import { Script } from '../contracts/script';
+import { Transaction } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import {
   Address,
@@ -164,4 +167,124 @@ export class Wallet extends RPCBase {
   }
 
   /** @todo: consolidatemsunspent */
+
+  /**
+   * Return a JSON object representing the serialized, hex-encoded transaction
+   *
+   * @param {string} rawTransaction - hex string
+   * @returns {Promise<Transaction>}
+   * @memberof Wallet
+   */
+  public async decodeRawTransaction(rawTransaction: string): Promise<Transaction> {
+    return this.call<Transaction>('decoderawtransaction', rawTransaction);
+  }
+
+  /**
+   * Decode a hex-encoded script
+   *
+   * @param {string} script - hex string
+   * @returns {Promise<Script>}
+   * @memberof Wallet
+   */
+  public async decodeScript(script: string): Promise<Script> {
+    return this.call<Script>('decodescript', script);
+  }
+
+  /** @todo: dumpprivkey */
+  /** @todo: dumpwallet */
+  /** @todo: encryptwallet */
+
+  /**
+   * Returns the account associated with the given address.
+   *
+   * @param {string} gridcoinAddress
+   * @returns {Promise<string>} - an account name
+   * @memberof GridcoinRPC
+   */
+  public async getAccount(gridcoinAddress: Address): Promise<string> {
+    return this.call<string>('getaccount', gridcoinAddress);
+  }
+
+  /**
+   * Returns the current Gridcoin address for receiving payments to this account.
+   * @description
+   * If <account> does not exist, it will be created along with an associated new address that will be returned.
+   *
+   * @param {string} account - an account name
+   * @returns {Promise<Address>} - GRC address
+   * @memberof GridcoinRPC
+   */
+  public async getAccountAddress(account: string): Promise<Address> {
+    return this.call<Address>('getaccountaddress', account);
+  }
+
+  /**
+   * Returns the list of addresses for the given account.
+   *
+   * @param {string} account - the account name
+   * @returns {Promise<Address[]>} - a list of addresses
+   * @memberof GridcoinRPC
+   */
+  public async getAddressesByAccount(account: string): Promise<Address[]> {
+    return this.call<Address[]>('getaddressesbyaccount', account);
+  }
+
+  /**
+   * Get current balance
+   * @description
+   * If account is not specified, returns the server's total available balance
+   * If account is specified, returns the balance in the account
+   * Note that the account "" is not the same as leaving the parameter out
+   * The server total may be different to the balance in the default "" account.
+   *
+   * @param {string} [account='*'] - The selected account, or "*" for entire wallet. It may be the default account using
+   * @param {number} [minConf=1] - Only include transactions confirmed at least this many times.
+   * @param {boolean} [includeWatchOnly=false] - Also include balance in watchonly addresses (@see importAddress)
+   * @returns {Promise<number>}
+   * @memberof Wallet
+   */
+  public async getBalance(
+    account = '*',
+    minConf = 1,
+    includeWatchOnly = false,
+  ): Promise<number> {
+    return this.call<number>('getbalance', account, minConf, includeWatchOnly);
+  }
+
+  /**
+   * Lists outputs similar to listtransactions that compose the entire balance
+   *
+   * @param {number} [minConf=1] - Only include transactions confirmed at least this many times
+   * @param {boolean} [includeWatchOnly=false] - Also include balance in watchonly addresses (@see importAddress)
+   * @returns {Promise<BalanceDetail>}
+   * @memberof Wallet
+   */
+  public async getBalanceDetail(
+    minConf = 1,
+    includeWatchOnly = false,
+  ): Promise<BalanceDetail> {
+    return this.call<BalanceDetail>('getbalancedetail', minConf, includeWatchOnly);
+  }
+
+  /**
+   * Returns a new Gridcoin address for receiving payments.
+   * @description
+   * If [account] is specified, it is added to the address book
+   * so payments received with the address will be credited to [account].
+   *
+   * @param {string} [account]
+   * @returns {Promise<string>}
+   * @memberof GridcoinRPC
+   */
+  public async getNewAddress(account?: string): Promise<Address> {
+    return this.call<Address>('getnewaddress', account);
+  }
+
+  public async getRawTransaction(txid: TX): Promise<string> {
+    return this.call<string>('getrawtransaction', txid);
+  }
+
+  public async getVerboseRawTransaction(txid: TX): Promise<string> {
+    return this.call<string>('getrawtransaction', txid, true);
+  }
 }

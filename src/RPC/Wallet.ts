@@ -1,6 +1,7 @@
 import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { CheckWallet } from '../contracts/checkwallet';
+import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { RPCBase } from '../RPCBase';
 import {
   Address,
@@ -123,4 +124,44 @@ export class Wallet extends RPCBase {
   public async checkWallet(): Promise<CheckWallet> {
     return this.call<CheckWallet>('checkwallet');
   }
+
+  /**
+   * Create a transaction spending the given inputs and creating new outputs.
+   *
+   * Outputs can be addresses or data.
+   * Returns hex-encoded raw transaction.
+   * Note that the transaction's inputs are not signed, and
+   * it is not stored in the wallet or transmitted to the network.
+   *
+   * @param {RawTransaction[]} transactions - A json array of json objects
+   * @example
+   * [
+   *   {
+   *     "txid":"id",    (string, required) The transaction id
+   *     "vout":n        (numeric, required) The output number
+   *   }
+   *   ,...
+   * ]
+   * @param {Output} outputs - a json object with outputs
+   * @example
+   *  {
+   *    "address": x.xxx   (numeric, required) The key is the bitcoin address, the value is the CURRENCY_UNIT amount
+   *    "data\": "hex",     (string, required) The key is "data", the value is hex encoded data
+   *    ...
+   *  }
+   * @returns {Promise<{ transaction: string }>}
+   * @memberof Wallet
+   */
+  public async createRawTransaction(
+    transactions: RawTransaction[],
+    outputs: Output,
+  ): Promise<{ transaction: string }> {
+    return this.call<{ transaction: string }>(
+      'createrawtransaction',
+      JSON.stringify(transactions),
+      JSON.stringify(outputs),
+    );
+  }
+
+  /** @todo: consolidatemsunspent */
 }

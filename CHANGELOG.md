@@ -1,3 +1,18 @@
+# [3.0.0-beta.1](https://github.com/gridcat/gridcoin-rpc/compare/v2.1.0-beta.1...v3.0.0-beta.1) (2021-06-26)
+
+
+### Features
+
+* add createRawTransaction ([8cb09b8](https://github.com/gridcat/gridcoin-rpc/commit/8cb09b8ba4da4ccd0dac1353c8374ef93bc67cd7))
+* add getNewAddress, getBalanceDetail, getBalance and address related calls ([829e830](https://github.com/gridcat/gridcoin-rpc/commit/829e830db91af40361a5d0048b2796ba4f1e79ff))
+* add network and voting ([fd1ecfa](https://github.com/gridcat/gridcoin-rpc/commit/fd1ecfa1b3924da78262be45ef6020902575bb03))
+* add networking commands ([871c413](https://github.com/gridcat/gridcoin-rpc/commit/871c413916637468ed4a766d387d97ae9bc06ab0))
+
+
+### BREAKING CHANGES
+
+* structure change, deprecation of some old rules
+
 # [2.1.0-beta.1](https://github.com/gridcat/gridcoin-rpc/compare/v2.0.0...v2.1.0-beta.1) (2021-06-23)
 
 

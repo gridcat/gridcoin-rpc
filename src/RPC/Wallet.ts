@@ -334,7 +334,7 @@ export class Wallet extends RPCBase {
    * @deprecated
    * @memberof Wallet
    */
-  public getReceivedByAccount(account: string, minconf = 1): Promise<number> {
+  public async getReceivedByAccount(account: string, minconf = 1): Promise<number> {
     return this.call<number>('getreceivedbyaccount', account, minconf);
   }
 
@@ -350,7 +350,7 @@ export class Wallet extends RPCBase {
    * @returns {Promise<number>} - the number of coins received
    * @memberof Wallet
    */
-  public getReceivedByAddress(
+  public async getReceivedByAddress(
     gridcoinAddress: string,
     minconf = 1,
   ): Promise<number> {
@@ -365,10 +365,20 @@ export class Wallet extends RPCBase {
    * @returns {Promise<Transaction>}
    * @memberof Wallet
    */
-  public getTransaction(
+  public async getTransaction(
     txid: TX,
     includeWatchOnly = false,
   ): Promise<Transaction> {
     return this.call<Transaction>('gettransaction', txid, includeWatchOnly);
+  }
+
+  /**
+   * returns the unconfirmed balance in the wallet
+   *
+   * @returns {Promise<number>}
+   * @memberof Wallet
+   */
+  public async getUnconfirmedBalance(): Promise<number> {
+    return this.call<number>('getunconfirmedbalance');
   }
 }

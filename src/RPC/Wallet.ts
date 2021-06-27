@@ -280,6 +280,17 @@ export class Wallet extends RPCBase {
     return this.call<Address>('getnewaddress', account);
   }
 
+  /**
+   * Returns new public key for coinbase generation.
+   *
+   * @param {string} [account]
+   * @returns {Promise<PublicKey>}
+   * @memberof Wallet
+   */
+  public async getNewPubkey(account?: string): Promise<PublicKey> {
+    return this.call<PublicKey>('getnewpubkey', account);
+  }
+
   public async getRawTransaction(txid: TX): Promise<string> {
     return this.call<string>('getrawtransaction', txid);
   }

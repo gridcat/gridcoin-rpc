@@ -1,5 +1,7 @@
 import { Address, TX } from '../types';
 
+export type TransactionCategory = 'send' | 'receive' | 'move';
+
 export interface TransactionShort {
   involvesWatchonly: boolean;
   /**
@@ -23,10 +25,10 @@ export interface TransactionShort {
    * 'send' and 'receive' transactions are associated with an address,
    * transaction id and block details
    *
-   * @type {string}
+   * @type {TransactionCategory}
    * @memberof TransactionShort
    */
-  category: string;
+  category: TransactionCategory;
   /**
    * The amount of the fee in GRC. This is negative and only available
    * for the 'send' category of transactions.
@@ -98,4 +100,34 @@ export interface TransactionShort {
    * @memberof TransactionShort
    */
   timereceived: number;
+  /**
+   * Ids of transactions, including equivalent clones, that re-spend a txid input.
+   *
+   * @type {TX[]}
+   * @memberof TransactionShort
+   */
+  walletconflicts: TX[];
+  /**
+   * Ids of transactions, NOT equivalent clones, that re-spend a txid input. "Double-spends."
+   *
+   * @type {TX[]}
+   * @memberof TransactionShort
+   */
+  respendsobserved: TX[];
+  /**
+   * If a comment is associated with the transaction.
+   *
+   * @type {string}
+   * @memberof TransactionShort
+   */
+  comment?: string;
+  /**
+   * For the 'move' category of transactions, the account the funds came from
+   * for receiving funds, positive amounts), or went to
+   * (for sending funds, negative amounts)
+   *
+   * @type {string}
+   * @memberof TransactionShort
+   */
+  otheraccount?: string;
 }

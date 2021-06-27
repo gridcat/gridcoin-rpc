@@ -8,6 +8,7 @@ import { Receivement } from '../contracts/receivement';
 import { Script } from '../contracts/script';
 import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
+import { TransactionShort } from '../contracts/transactionShort';
 import { WalletInfo } from '../contracts/walletInfo';
 import { RPCBase } from '../RPCBase';
 import {
@@ -492,5 +493,30 @@ export class Wallet extends RPCBase {
    */
   public async listStakes(count = 10): Promise<StakeListing[]> {
     return this.call<StakeListing[]>('liststakes', count);
+  }
+
+  /**
+   * Returns up to 'count' most recent transactions skipping the first 'from' transactions for account 'account'.
+   *
+   * @param {string} [account] - The account name. If not included, it will list all transactions for all accounts.
+   * @param {number} [count=10] - The number of transactions to return
+   * @param {number} [from=0] - The number of transactions to skip
+   * @param {boolean} [includeWatchonly=false] - Include transactions to watchonly addresses (@see importaddress) If is set true, it will list sent transactions as well
+   * @returns {Promise<ITransactionShort>}
+   * @memberof Wallet
+   */
+  public async listTransactions(
+    account?: string,
+    count = 10,
+    from = 0,
+    includeWatchonly = false,
+  ): Promise<TransactionShort[]> {
+    return this.call<TransactionShort[]>(
+      'listtransactions',
+      account,
+      count,
+      from,
+      includeWatchonly,
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
-import { CheckWallet } from '../contracts/checkwallet';
+import { WalletFailStatus, WalletSuccessStatus } from '../contracts/checkwallet';
 import { KeysPair } from '../contracts/keysPair';
 import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { RainByMagnitude } from '../contracts/rainByMagnitude';
@@ -132,8 +132,8 @@ export class Wallet extends RPCBase {
    * @returns {Promise<any>}
    * @memberof Wallet
    */
-  public async checkWallet(): Promise<CheckWallet> {
-    return this.call<CheckWallet>('checkwallet');
+  public async checkWallet(): Promise<WalletFailStatus | WalletSuccessStatus> {
+    return this.call<WalletFailStatus | WalletSuccessStatus>('checkwallet');
   }
 
   /**
@@ -573,5 +573,15 @@ export class Wallet extends RPCBase {
     message?: string,
   ): Promise<RainByMagnitude> {
     return this.call<RainByMagnitude>('rainbymagnitude', project, amount, message);
+  }
+
+  /**
+   * Repair wallet if checkwallet reports any problem.
+   *
+   * @returns {Promise<RepairWallet>}
+   * @memberof Wallet
+   */
+  public async repairWallet(): Promise<WalletSuccessStatus | WalletFailStatus> {
+    return this.call<WalletSuccessStatus | WalletFailStatus>('repairwallet');
   }
 }

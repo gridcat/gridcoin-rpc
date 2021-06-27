@@ -1,5 +1,7 @@
-export interface CheckWallet {
+export interface WalletSuccessStatus {
   walletCheckPassed: boolean;
+}
+export interface WalletFailStatus {
   /**
    * The number of transactions missed
    *
@@ -15,3 +17,5 @@ export interface CheckWallet {
    */
   amountInQuestion: number;
 }
+
+// CheckWallet

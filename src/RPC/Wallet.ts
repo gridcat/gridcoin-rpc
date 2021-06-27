@@ -312,4 +312,15 @@ export class Wallet extends RPCBase {
   public async getRawTransactionVerbose(txid: TX): Promise<Transaction> {
     return this.call<Transaction>('getrawtransaction', txid, true);
   }
+
+  /**
+   * Get a string that is serialized, hex-encoded data for <txid> from the wallet.
+   *
+   * @param {TX} txid
+   * @returns {Promise<string>}
+   * @memberof Wallet
+   */
+  public async getRawWalletTransaction(txid: TX): Promise<string> {
+    return this.call<string>('getrawwallettransaction', txid);
+  }
 }

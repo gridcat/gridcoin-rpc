@@ -2,6 +2,7 @@ import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
+import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
 import { Script } from '../contracts/script';
@@ -456,6 +457,28 @@ export class Wallet extends RPCBase {
       minConf,
       includeEmpty,
       includeWatchOnly,
+    );
+  }
+
+  /**
+   * Get all transactions in blocks since block [blockhash], or all transactions if omitted
+   *
+   * @param {string} [blockHash] - The block hash to list transactions since
+   * @param {number} [targetConfirmations] - The confirmations required, must be 1 or more
+   * @param {boolean} [includeWatchonly] - Include transactions to watchonly addresses (@see importaddress)
+   * @returns {Promise<ListSinceBlock>}
+   * @memberof GridcoinRPC
+   */
+  public async listSinceBlock(
+    blockHash?: string,
+    targetConfirmations?: number,
+    includeWatchonly?: boolean,
+  ): Promise<ListSinceBlock> {
+    return this.call<ListSinceBlock>(
+      'listsinceblock',
+      blockHash,
+      targetConfirmations,
+      includeWatchonly,
     );
   }
 }

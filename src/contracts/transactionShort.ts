@@ -1,20 +1,22 @@
-export interface ITransactionShort {
+import { Address, TX } from '../types';
+
+export interface TransactionShort {
   involvesWatchonly: boolean;
   /**
    * The account name associated with the transaction.
    * It will be "" for the default account.
    * @deprecated
    * @type {string}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   account: string;
   /**
    * Address
    *
-   * @type {string}
-   * @memberof ITransactionShort
+   * @type {Address}
+   * @memberof TransactionShort
    */
-  address: string;
+  address: Address;
   /**
    * The transaction category. 'move' is a local (off blockchain) transaction between accounts,
    * and not associated with an address, transaction id or block.
@@ -22,7 +24,7 @@ export interface ITransactionShort {
    * transaction id and block details
    *
    * @type {string}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   category: string;
   /**
@@ -30,7 +32,7 @@ export interface ITransactionShort {
    * for the 'send' category of transactions.
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   fee: number;
   /**
@@ -39,7 +41,7 @@ export interface ITransactionShort {
    * It is positive for the 'receive' category, and for the 'move' category for inbound funds.
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   amount: number;
   /**
@@ -48,7 +50,7 @@ export interface ITransactionShort {
    * Negative confirmations indicate the transaction conflicts with the block chain
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   confirmations: number;
   /**
@@ -56,7 +58,7 @@ export interface ITransactionShort {
    * Available for 'send' and 'receive' category of transactions.
    *
    * @type {string}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   blockhash: string;
   /**
@@ -64,28 +66,28 @@ export interface ITransactionShort {
    * Available for 'send' and 'receive' category of transactions.
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   blockindex: number;
   /**
    * The block time in seconds since epoch (1 Jan 1970 GMT).
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   blocktime: number;
   /**
    * The transaction id. Available for 'send' and 'receive' category of transactions.
    *
-   * @type {string}
-   * @memberof ITransactionShort
+   * @type {TX}
+   * @memberof TransactionShort
    */
-  txid: string;
+  txid: TX;
   /**
    * The transaction time in seconds since epoch (midnight Jan 1 1970 GMT).
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   time: number;
   /**
@@ -93,7 +95,7 @@ export interface ITransactionShort {
    * Available for 'send' and 'receive' category of transactions.
    *
    * @type {number}
-   * @memberof ITransactionShort
+   * @memberof TransactionShort
    */
   timereceived: number;
 }

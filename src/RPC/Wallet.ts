@@ -6,6 +6,7 @@ import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
 import { Script } from '../contracts/script';
+import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
 import { WalletInfo } from '../contracts/walletInfo';
 import { RPCBase } from '../RPCBase';
@@ -480,5 +481,16 @@ export class Wallet extends RPCBase {
       targetConfirmations,
       includeWatchonly,
     );
+  }
+
+  /**
+   * Returns count most recent stakes.
+   *
+   * @param {number} [count=10]
+   * @returns {Promise<StakeListing[]>}
+   * @memberof Wallet
+   */
+  public async listStakes(count = 10): Promise<StakeListing[]> {
+    return this.call<StakeListing[]>('liststakes', count);
   }
 }

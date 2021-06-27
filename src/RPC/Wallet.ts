@@ -5,6 +5,7 @@ import { CheckWallet } from '../contracts/checkwallet';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Script } from '../contracts/script';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
+import { WalletInfo } from '../contracts/walletInfo';
 import { RPCBase } from '../RPCBase';
 import {
   Address,
@@ -380,5 +381,15 @@ export class Wallet extends RPCBase {
    */
   public async getUnconfirmedBalance(): Promise<number> {
     return this.call<number>('getunconfirmedbalance');
+  }
+
+  /**
+   * Returns useful information about current wallet state.
+   *
+   * @returns {Promise<WalletInfo>}
+   * @memberof Wallet
+   */
+  public async getWalletInfo(): Promise<WalletInfo> {
+    return this.call<WalletInfo>('getwalletinfo');
   }
 }

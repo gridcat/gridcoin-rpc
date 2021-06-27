@@ -406,4 +406,20 @@ export class Wallet extends RPCBase {
   public async keyPoolRefill(newSize: number): Promise<null> {
     return this.call('keypoolrefill', newSize);
   }
+
+  /**
+   * Returns UniValue that has account names as keys, account balances as values.
+   *
+   * @deprecated
+   * @param {number} [minConf=1] - Only include transactions with at least this many confirmations
+   * @param {boolean} [includeWatchOnly=false] Include balances in watchonly addresses (@see importaddress)
+   * @returns {Promise<{ [key: string]: number }>} - The property name is the account name, and the value is the total balance for the account
+   * @memberof Wallet
+   */
+  public async listAccounts(
+    minConf = 1,
+    includeWatchOnly = false,
+  ): Promise<{ [key: string]: number }> {
+    return this.call('listaccounts', minConf, includeWatchOnly);
+  }
 }

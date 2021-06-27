@@ -7,6 +7,7 @@ import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { RainByMagnitude } from '../contracts/rainByMagnitude';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
+import { Reserve } from '../contracts/reserve';
 import { Script } from '../contracts/script';
 import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
@@ -594,5 +595,19 @@ export class Wallet extends RPCBase {
    */
   public async resendTx(): Promise<null> {
     return this.call('resendtx');
+  }
+
+  /**
+   * Reserved amount secures a balance in wallet that can be spendable at anytime.
+   * However reserve will secure utxo(s) of any size to respect this setting.
+   * If no parameters provided current setting is printed
+   *
+   * @param {boolean} [reserve] - is true or false to turn balance reserve on or off.
+   * @param {number} [amount] - is a real and rounded to cent
+   * @returns {Promise<Reserve>}
+   * @memberof Wallet
+   */
+  public async reserveBalance(reserve?: boolean, amount?: number): Promise<Reserve> {
+    return this.call<Reserve>('reservebalance', reserve, amount);
   }
 }

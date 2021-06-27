@@ -337,4 +337,23 @@ export class Wallet extends RPCBase {
   public getReceivedByAccount(account: string, minconf = 1): Promise<number> {
     return this.call<number>('getreceivedbyaccount', account, minconf);
   }
+
+  /**
+   * Returns the amount received by <gridcoinaddress> in transactions with at least [minconf] confirmations.
+   * @description
+   * It correctly handles the case where someone has sent to the address in multiple transactions.
+   * Keep in mind that addresses are only ever used for receiving transactions.
+   * Works only for addresses in the local wallet, external addresses will always show 0.
+   *
+   * @param {string} gridcoinAddress - the address
+   * @param {number} [minconf=1] - the minimum number of confirmations
+   * @returns {Promise<number>} - the number of coins received
+   * @memberof GridcoinRPC
+   */
+  public getReceivedByAddress(
+    gridcoinAddress: string,
+    minconf = 1,
+  ): Promise<number> {
+    return this.call<number>('getreceivedbyaddress', gridcoinAddress, minconf);
+  }
 }

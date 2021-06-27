@@ -3,6 +3,7 @@ import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
+import { Receivement } from '../contracts/receivement';
 import { Script } from '../contracts/script';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
 import { WalletInfo } from '../contracts/walletInfo';
@@ -432,5 +433,29 @@ export class Wallet extends RPCBase {
    */
   public async listAddressGroupings(): Promise<[string, number][][]> {
     return this.call('listaddressgroupings');
+  }
+
+  /** @todo: listreceivedbyaccount */
+
+  /**
+   * List balances by receiving address.
+   *
+   * @param {number} [minConf=1] - The minimum number of confirmations before payments are included.
+   * @param {boolean} [includeEmpty=false] - Whether to include addresses that haven't received any payments.
+   * @param {boolean} [includeWatchOnly=false] - Whether to include watchonly addresses (see 'importaddress').
+   * @returns {Promise<Receivement[]>}
+   * @memberof Wallet
+   */
+  public listReceivedByAddress(
+    minConf = 1,
+    includeEmpty = false,
+    includeWatchOnly = false,
+  ): Promise<Receivement[]> {
+    return this.call<Receivement[]>(
+      'listreceivedbyaddress',
+      minConf,
+      includeEmpty,
+      includeWatchOnly,
+    );
   }
 }

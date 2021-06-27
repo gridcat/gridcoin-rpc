@@ -1,41 +1,41 @@
-export interface IReceivement {
+import { Address, TX } from '../types';
+
+export interface Receivement {
   /**
    * Only returned if imported addresses were involved in transaction
    *
    * @type {boolean}
-   * @memberof IReceivement
+   * @memberof Receivement
    */
-  involvesWatchonly: boolean;
+   involvesWatchonly: boolean;
   /**
    * The receiving address
    *
-   * @type {string}
-   * @memberof IReceivement
+   * @type {Address}
+   * @memberof Receivement
    */
-  address: string;
+  address: Address;
   /**
    * The account of the receiving address. The default account is "".
    *
    * @deprecated
    * @type {string}
-   * @memberof IReceivement
+   * @memberof Receivement
    */
   account: string;
   /**
    * The total amount in GRC received by the address
    *
    * @type {number}
-   * @memberof IReceivement
+   * @memberof Receivement
    */
   amount: number;
   /**
    * The number of confirmations of the most recent transaction included
    *
    * @type {number}
-   * @memberof IReceivement
+   * @memberof Receivement
    */
   confirmations: number;
-  // eslint-disable-next-line camelcase
-  tx_count: number;
-  txids: any;
+  txids: TX[];
 }

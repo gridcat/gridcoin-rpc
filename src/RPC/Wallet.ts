@@ -422,4 +422,15 @@ export class Wallet extends RPCBase {
   ): Promise<{ [key: string]: number }> {
     return this.call('listaccounts', minConf, includeWatchOnly);
   }
+
+  /**
+   * Lists groups of addresses which have had their common ownership
+   * made public by common use as inputs or as the resulting change in past transactions
+   *
+   * @returns {Promise<[string, number][][]>}
+   * @memberof Wallet
+   */
+  public async listAddressGroupings(): Promise<[string, number][][]> {
+    return this.call('listaddressgroupings');
+  }
 }

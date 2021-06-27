@@ -13,6 +13,7 @@ import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
 import { TransactionShort } from '../contracts/transactionShort';
 import { TransactionUnspent } from '../contracts/transactionUnspent';
+import { UnspentReport, UTXO } from '../contracts/utxo';
 import { WalletInfo } from '../contracts/walletInfo';
 import { RPCBase } from '../RPCBase';
 import {
@@ -609,5 +610,35 @@ export class Wallet extends RPCBase {
    */
   public async reserveBalance(reserve?: boolean, amount?: number): Promise<Reserve> {
     return this.call<Reserve>('reservebalance', reserve, amount);
+  }
+
+  /**
+   * Searches a block range for a specified address with unspent utxos
+   * and displays them in a json response with the option of exporting
+   * to file
+   *
+   * @param {Address} address - Multi-signature address
+   * @param {number} blockStart - Block number to start search from
+   * @param {number} blockEnd - Block number to end search on
+   * @param {string} [exports] - Exports to a file in backup-dir/rpc in format of multisigaddress-datetime.type
+   * @param {boolean} [type] - Export to a file with file type (xml, txt or json -- Required if export true)
+   * @returns {Promise<[UTXO[], UnspentReport]>}
+   * @memberof Wallet
+   */
+  public async scanForUnspent(
+    address: Address,
+    blockStart: number,
+    blockEnd: number,
+    exports?: boolean,
+    type?: string,
+  ): Promise<[UTXO[], UnspentReport]> {
+    return this.call(
+      'scanforunspent',
+      address,
+      blockStart,
+      blockEnd,
+      exports,
+      type,
+    );
   }
 }

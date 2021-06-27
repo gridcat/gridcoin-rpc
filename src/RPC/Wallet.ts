@@ -4,7 +4,7 @@ import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Script } from '../contracts/script';
-import { Transaction } from '../contracts/transaction';
+import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import {
   Address,
@@ -105,7 +105,7 @@ export class Wallet extends RPCBase {
    * @param {number} amount - Amount to be burned down
    * @param {string} [hexString]
    * @returns {Promise<string>}
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async burn(amount: number, hexString?: Hex): Promise<TX> {
     return this.call<TX>('burn', amount, hexString);
@@ -122,7 +122,7 @@ export class Wallet extends RPCBase {
    * and nBalanceInQuestion showing the amount involved in those transactions (absolute value, does not subtract)
    *
    * @returns {Promise<any>}
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async checkWallet(): Promise<CheckWallet> {
     return this.call<CheckWallet>('checkwallet');
@@ -199,7 +199,7 @@ export class Wallet extends RPCBase {
    *
    * @param {string} gridcoinAddress
    * @returns {Promise<string>} - an account name
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async getAccount(gridcoinAddress: Address): Promise<string> {
     return this.call<string>('getaccount', gridcoinAddress);
@@ -212,7 +212,7 @@ export class Wallet extends RPCBase {
    *
    * @param {string} account - an account name
    * @returns {Promise<Address>} - GRC address
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async getAccountAddress(account: string): Promise<Address> {
     return this.call<Address>('getaccountaddress', account);
@@ -223,7 +223,7 @@ export class Wallet extends RPCBase {
    *
    * @param {string} account - the account name
    * @returns {Promise<Address[]>} - a list of addresses
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async getAddressesByAccount(account: string): Promise<Address[]> {
     return this.call<Address[]>('getaddressesbyaccount', account);
@@ -274,7 +274,7 @@ export class Wallet extends RPCBase {
    *
    * @param {string} [account]
    * @returns {Promise<string>}
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public async getNewAddress(account?: string): Promise<Address> {
     return this.call<Address>('getnewaddress', account);
@@ -306,11 +306,11 @@ export class Wallet extends RPCBase {
    * returns an Object with information about txid
    *
    * @param {TX} txid
-   * @returns {Promise<Transaction>}
+   * @returns {Promise<DetailedRawTransaction>}
    * @memberof Wallet
    */
-  public async getRawTransactionVerbose(txid: TX): Promise<Transaction> {
-    return this.call<Transaction>('getrawtransaction', txid, true);
+  public async getRawTransactionVerbose(txid: TX): Promise<DetailedRawTransaction> {
+    return this.call<DetailedRawTransaction>('getrawtransaction', txid, true);
   }
 
   /**
@@ -332,7 +332,7 @@ export class Wallet extends RPCBase {
    * @param {number} [minconf=1] - the minimum number of confirmations
    * @returns {Promise<number>} - the number of coins received
    * @deprecated
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public getReceivedByAccount(account: string, minconf = 1): Promise<number> {
     return this.call<number>('getreceivedbyaccount', account, minconf);
@@ -348,12 +348,27 @@ export class Wallet extends RPCBase {
    * @param {string} gridcoinAddress - the address
    * @param {number} [minconf=1] - the minimum number of confirmations
    * @returns {Promise<number>} - the number of coins received
-   * @memberof GridcoinRPC
+   * @memberof Wallet
    */
   public getReceivedByAddress(
     gridcoinAddress: string,
     minconf = 1,
   ): Promise<number> {
     return this.call<number>('getreceivedbyaddress', gridcoinAddress, minconf);
+  }
+
+  /**
+   * Get detailed information about in-wallet transaction <txid>
+   *
+   * @param {TX} txid - The transaction id
+   * @param {boolean} [includeWatchOnly=false] - Whether to include watchonly addresses in balance calculation and details
+   * @returns {Promise<Transaction>}
+   * @memberof Wallet
+   */
+  public getTransaction(
+    txid: TX,
+    includeWatchOnly = false,
+  ): Promise<Transaction> {
+    return this.call<Transaction>('gettransaction', txid, includeWatchOnly);
   }
 }

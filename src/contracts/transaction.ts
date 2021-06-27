@@ -103,7 +103,6 @@ export interface Vout {
 }
 
 export interface Transaction {
-  hex?: string;
   /**
    * The transaction id
    *
@@ -137,4 +136,10 @@ export interface Transaction {
   contracts: Contract[];
   vin: Vin[];
   vout: Vout[];
+  blockhash: string;
+  confirmations: number;
+}
+
+export interface DetailedRawTransaction extends Transaction {
+  hex: string;
 }

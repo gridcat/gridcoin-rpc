@@ -584,4 +584,15 @@ export class Wallet extends RPCBase {
   public async repairWallet(): Promise<WalletSuccessStatus | WalletFailStatus> {
     return this.call<WalletSuccessStatus | WalletFailStatus>('repairwallet');
   }
+
+  /**
+   * Resend any failed or unsent transactions.
+   * Requires unlocked wallet
+   *
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async resendTx(): Promise<null> {
+    return this.call('resendtx');
+  }
 }

@@ -2,6 +2,7 @@ import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
+import { KeysPair } from '../contracts/keysPair';
 import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
@@ -539,5 +540,18 @@ export class Wallet extends RPCBase {
     ...addresses: Address[]
   ): Promise<TransactionUnspent[]> {
     return this.call<TransactionUnspent[]>('listunspent', minConf, maxConf, ...addresses);
+  }
+
+  /** @todo: consolidateunspent */
+
+  /**
+   * Make a public/private key pair.
+   *
+   * @param {string} [prefix] - is optional preferred prefix for the public key
+   * @returns {Promise<KeysPair>}
+   * @memberof Wallet
+   */
+  public async makeKeyPair(prefix?: string): Promise<KeysPair> {
+    return this.call<KeysPair>('makekeypair', prefix);
   }
 }

@@ -9,6 +9,7 @@ import { Script } from '../contracts/script';
 import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
 import { TransactionShort } from '../contracts/transactionShort';
+import { TransactionUnspent } from '../contracts/transactionUnspent';
 import { WalletInfo } from '../contracts/walletInfo';
 import { RPCBase } from '../RPCBase';
 import {
@@ -498,7 +499,7 @@ export class Wallet extends RPCBase {
   /**
    * Returns up to 'count' most recent transactions skipping the first 'from' transactions for account 'account'.
    *
-   * @param {string} [account] - The account name. If not included, it will list all transactions for all accounts.
+   * @param {string} [account='*'] - The account name. If not included, it will list all transactions for all accounts.
    * @param {number} [count=10] - The number of transactions to return
    * @param {number} [from=0] - The number of transactions to skip
    * @param {boolean} [includeWatchonly=false] - Include transactions to watchonly addresses (@see importaddress) If is set true, it will list sent transactions as well
@@ -506,7 +507,7 @@ export class Wallet extends RPCBase {
    * @memberof Wallet
    */
   public async listTransactions(
-    account?: string,
+    account = '*',
     count = 10,
     from = 0,
     includeWatchonly = false,
@@ -518,5 +519,25 @@ export class Wallet extends RPCBase {
       from,
       includeWatchonly,
     );
+  }
+
+  /**
+   * Returns array of unspent transaction outputs with between minconf and maxconf (inclusive) confirmations
+   * Optionally filtered to only include txouts paid to specified addresses
+   * Results are an array of Objects, each of which has
+   * {txid, vout, scriptPubKey, amount, confirmations}
+   *
+   * @param {number} [minConf]
+   * @param {number} [maxConf]
+   * @param {...Address[]} addresses
+   * @returns {Promise<TransactionUnspent[]>}
+   * @memberof Wallet
+   */
+  public async listUnspent(
+    minConf?: number,
+    maxConf?: number,
+    ...addresses: Address[]
+  ): Promise<TransactionUnspent[]> {
+    return this.call<TransactionUnspent[]>('listunspent', minConf, maxConf, ...addresses);
   }
 }

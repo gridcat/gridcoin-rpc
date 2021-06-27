@@ -641,4 +641,38 @@ export class Wallet extends RPCBase {
       type,
     );
   }
+
+  /**
+   * Sends <amount> of Gridcoin from <account> to <gridcoinaddress>.
+   *
+   * @param {string} account - Account FROM
+   * @param {Address} address - Address TO
+   * @param {number} amount - Amount to send
+   * @param {number} [minConf] - is the minimum number of confirmations for a UTXO to be used.
+   * @param {string} [comment] - is a personal comment about what the transaction is for (doesn’t go into the transaction, it is only stored locally).
+   * @param {string} [commentTo] - is also a personal comment about who you are sending to (also only local).
+   * @param {string} [message] - is a message/comment that is sent publicly on the transaction.
+   * @returns {Promise<TX>}
+   * @memberof Wallet
+   */
+  public async sendFrom(
+    account: string,
+    address: Address,
+    amount: number,
+    minConf?: number,
+    comment?: string,
+    commentTo?: string,
+    message?: string,
+  ): Promise<TX> {
+    return this.call<TX>(
+      'sendfrom',
+      account,
+      address,
+      amount,
+      minConf,
+      comment,
+      commentTo,
+      message,
+    );
+  }
 }

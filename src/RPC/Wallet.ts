@@ -323,4 +323,18 @@ export class Wallet extends RPCBase {
   public async getRawWalletTransaction(txid: TX): Promise<string> {
     return this.call<string>('getrawwallettransaction', txid);
   }
+
+  /**
+   * Returns the total amount received by addresses with [account] in transactions with at least [minconf] confirmations.
+   * If [account] not provided return will include all transactions to all accounts.
+   *
+   * @param {string} account - the account name
+   * @param {number} [minconf=1] - the minimum number of confirmations
+   * @returns {Promise<number>} - the number of coins received
+   * @deprecated
+   * @memberof GridcoinRPC
+   */
+  public getReceivedByAccount(account: string, minconf = 1): Promise<number> {
+    return this.call<number>('getreceivedbyaccount', account, minconf);
+  }
 }

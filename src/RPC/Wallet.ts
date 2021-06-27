@@ -392,4 +392,18 @@ export class Wallet extends RPCBase {
   public async getWalletInfo(): Promise<WalletInfo> {
     return this.call<WalletInfo>('getwalletinfo');
   }
+
+  /** @todo: importprivkey */
+  /** @todo: importwallet */
+
+  /**
+   * Fills the keypool.
+   *
+   * @param {number} newSize
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async keyPoolRefill(newSize: number): Promise<null> {
+    return this.call('keypoolrefill', newSize);
+  }
 }

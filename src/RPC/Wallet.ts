@@ -4,6 +4,7 @@ import { BalanceDetail } from '../contracts/balanceDetail';
 import { CheckWallet } from '../contracts/checkwallet';
 import { KeysPair } from '../contracts/keysPair';
 import { ListSinceBlock } from '../contracts/listSinceBolck';
+import { RainByMagnitude } from '../contracts/rainByMagnitude';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
 import { Script } from '../contracts/script';
@@ -553,5 +554,24 @@ export class Wallet extends RPCBase {
    */
   public async makeKeyPair(prefix?: string): Promise<KeysPair> {
     return this.call<KeysPair>('makekeypair', prefix);
+  }
+
+  /** @todo: maintainbackups */
+
+  /**
+   * rain coins by magnitude on network
+   *
+   * @param {string} project - Required: If a project is specified, rain will be limited to that project. Use * for network-wide.
+   * @param {number} amount - Required: Specify amount of coins to be rained in double precision float
+   * @param {string} [message] - Optional: Provide a message rained to all rainees
+   * @returns {Promise<RainByMagnitude>}
+   * @memberof Wallet
+   */
+  public async rainByMagnitude(
+    project: string,
+    amount: number,
+    message?: string,
+  ): Promise<RainByMagnitude> {
+    return this.call<RainByMagnitude>('rainbymagnitude', project, amount, message);
   }
 }

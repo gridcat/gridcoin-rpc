@@ -1,3 +1,18 @@
+# [3.0.0-beta.3](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2021-06-27)
+
+
+### Features
+
+* add listaddressgroupings ([2cd3e3d](https://github.com/gridcat/gridcoin-rpc/commit/2cd3e3d445c58d5e6903bf2e67d11c2a1dcdbd3f))
+* add listreceivedbyaddress ([0ffe63f](https://github.com/gridcat/gridcoin-rpc/commit/0ffe63fb8be388c4c0d511552781ac4df6205805))
+* add listsinceblock ([f501a7b](https://github.com/gridcat/gridcoin-rpc/commit/f501a7b63ec706a6a5231ae5fd62832b6ba3720c))
+* add liststakes ([9b4282d](https://github.com/gridcat/gridcoin-rpc/commit/9b4282d3717ba2f2e3b018074dc299581777736e))
+* add listtransactions ([3f6a014](https://github.com/gridcat/gridcoin-rpc/commit/3f6a014aef67ac97a5176949a0a934f43d69382b))
+* add listunspent ([d2777c5](https://github.com/gridcat/gridcoin-rpc/commit/d2777c5b97dc6ef9f8b5abcb9fe450a9a6d5087a))
+* add makekeypair ([ef60508](https://github.com/gridcat/gridcoin-rpc/commit/ef605087773a14d8fec32411aeb12f654ef5f253))
+* add rainbymagnitude ([8a315ba](https://github.com/gridcat/gridcoin-rpc/commit/8a315ba7840bd780c87246911bbed53f090d6100))
+* add repairwallet ([da530b0](https://github.com/gridcat/gridcoin-rpc/commit/da530b0c856ad8443d24e9baac30a2129990871d))
+
 # [3.0.0-beta.2](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.1...v3.0.0-beta.2) (2021-06-27)
 
 

@@ -291,11 +291,25 @@ export class Wallet extends RPCBase {
     return this.call<PublicKey>('getnewpubkey', account);
   }
 
+  /**
+   * returns a string that is serialized, hex-encoded data for txid
+   *
+   * @param {TX} txid
+   * @returns {Promise<string>}
+   * @memberof Wallet
+   */
   public async getRawTransaction(txid: TX): Promise<string> {
     return this.call<string>('getrawtransaction', txid);
   }
 
-  public async getVerboseRawTransaction(txid: TX): Promise<string> {
-    return this.call<string>('getrawtransaction', txid, true);
+  /**
+   * returns an Object with information about txid
+   *
+   * @param {TX} txid
+   * @returns {Promise<Transaction>}
+   * @memberof Wallet
+   */
+  public async getRawTransactionVerbose(txid: TX): Promise<Transaction> {
+    return this.call<Transaction>('getrawtransaction', txid, true);
   }
 }

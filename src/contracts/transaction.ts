@@ -1,5 +1,26 @@
 import { Address, TX } from '../types';
 
+export interface ContractBody {
+  version: number;
+  miningId: string;
+  clientVersion: string;
+  organization: string;
+  blockSubsidy: number;
+  researchSubsidy: number;
+  magnitude: number;
+  magnitudeUnit: number;
+  signature: string;
+  quorumHash: string;
+  quorumAddress: string;
+}
+
+export interface Contract {
+  version: number;
+  type: string;
+  action: string;
+  body: ContractBody;
+}
+
 export interface ScriptSig {
   asm: string;
   hex: string;
@@ -38,21 +59,21 @@ export interface Vin {
    * @type {TX}
    * @memberof Vin
    */
-  txid: TX;
+  txid?: TX;
   /**
    * The output number
    *
    * @type {number}
    * @memberof Vin
    */
-  vout: number;
+  vout?: number;
   /**
    * The script
    *
    * @type {ScriptSig}
    * @memberof Vin
    */
-  scriptSig: ScriptSig;
+  scriptSig?: ScriptSig;
   /**
    * The script sequence number
    *
@@ -60,6 +81,7 @@ export interface Vin {
    * @memberof Vin
    */
   sequence: number;
+  coinbase?: string;
 }
 
 export interface Vout {
@@ -81,6 +103,7 @@ export interface Vout {
 }
 
 export interface Transaction {
+  hex?: string;
   /**
    * The transaction id
    *
@@ -111,7 +134,7 @@ export interface Transaction {
    */
   locktime: number;
   hashboinc: string;
-  contracts: Array<any>;
-  vin: Array<Vin>;
-  vout: Array<Vout>;
+  contracts: Contract[];
+  vin: Vin[];
+  vout: Vout[];
 }

@@ -1,3 +1,17 @@
+# [3.0.0-beta.5](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2021-06-28)
+
+
+### Bug Fixes
+
+* fix types to allow the objects ([0da4130](https://github.com/gridcat/gridcoin-rpc/commit/0da41303f9238c6434390b202fdb4ecbc52e91b0))
+
+
+### Features
+
+* add sendmany ([0af3517](https://github.com/gridcat/gridcoin-rpc/commit/0af3517861277745fb0bc1d67d3d7fb62113f85d))
+* add sendrawtransaction ([7190743](https://github.com/gridcat/gridcoin-rpc/commit/7190743698630cbdd66aa1ff6ec392535e960c56))
+* add sendtoaddress ([0ccf308](https://github.com/gridcat/gridcoin-rpc/commit/0ccf30864a93584fbeba6f19ff08cf3f931f8f1d))
+
 # [3.0.0-beta.4](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2021-06-27)
 
 

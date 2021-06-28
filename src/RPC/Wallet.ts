@@ -701,4 +701,15 @@ export class Wallet extends RPCBase {
       comment,
     );
   }
+
+  /**
+   * Submits raw transaction (serialized, hex-encoded) to local node and network
+   *
+   * @param {string} rawTransaction - raw transaction (serialized, hex-encoded)
+   * @returns {Promise<TX>}
+   * @memberof Wallet
+   */
+  public async sendRawTransaction(rawTransaction: string): Promise<TX> {
+    return this.call<TX>('sendrawtransaction', rawTransaction);
+  }
 }

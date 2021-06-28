@@ -753,4 +753,15 @@ export class Wallet extends RPCBase {
   public async setAccount(address: Address, account: string): Promise<null> {
     return this.call('setaccount', address, account);
   }
+
+  /**
+   * Set the transaction fee per kilobyte paid by transactions created by this wallet.
+   *
+   * @param {number} amount - TX fee, rounds to 0.00000001 GRC
+   * @returns {Promise<boolean>}
+   * @memberof Wallet
+   */
+  public async setTXfee(amount: number): Promise<boolean> {
+    return this.call('settxfee', amount);
+  }
 }

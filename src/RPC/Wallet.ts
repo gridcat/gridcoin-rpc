@@ -740,4 +740,17 @@ export class Wallet extends RPCBase {
       message,
     );
   }
+
+  /**
+   * Sets the account associated with the given address.
+   * Assigning address that is already assigned to the same account will create a new address associated with that account.
+   *
+   * @param {Address} address
+   * @param {string} account
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async setAccount(address: Address, account: string): Promise<null> {
+    return this.call('setaccount', address, account);
+  }
 }

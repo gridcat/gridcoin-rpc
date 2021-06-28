@@ -712,4 +712,32 @@ export class Wallet extends RPCBase {
   public async sendRawTransaction(rawTransaction: string): Promise<TX> {
     return this.call<TX>('sendrawtransaction', rawTransaction);
   }
+
+  /**
+   * Sends <amount> of Gridcoin to <gridcoinaddress>.
+   *
+   * @param {Address} address - Recipient address
+   * @param {number} amount - is a real and is rounded to the nearest 0.000001
+   * @param {string} [comment] - a comment used to store what the transaction is for. This is not part of the transaction, just kept in your wallet.
+   * @param {string} [commentTo] - a comment to store the name of the person or organization to which you're sending the transaction. This is not part of the transaction, just kept in your wallet
+   * @param {string} [message] - Optional message to add to the receiver.
+   * @returns {Promise<TX>}
+   * @memberof Wallet
+   */
+  public async sendToAddress(
+    address: Address,
+    amount: number,
+    comment?: string,
+    commentTo?: string,
+    message?: string,
+  ): Promise<TX> {
+    return this.call<TX>(
+      'sendtoaddress',
+      address,
+      amount,
+      comment,
+      commentTo,
+      message,
+    );
+  }
 }

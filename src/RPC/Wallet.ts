@@ -171,8 +171,8 @@ export class Wallet extends RPCBase {
   ): Promise<{ transaction: string }> {
     return this.call<{ transaction: string }>(
       'createrawtransaction',
-      JSON.stringify(transactions),
-      JSON.stringify(outputs),
+      transactions as any,
+      outputs,
     );
   }
 
@@ -673,6 +673,32 @@ export class Wallet extends RPCBase {
       comment,
       commentTo,
       message,
+    );
+  }
+
+  /**
+   * Send from <fromaccount> to a list of addresses.
+   * Use '' if you don’t want to limit to one account label. Addresses should be listed in JSON format.
+   *
+   * @param {string} account -  - Account FROM
+   * @param {{ [key: string]: number }} recipients - { Address1: amount1, Address2: amount2, ... }
+   * @param {number} [minConf=1] - is the minimum number of confirmations for a UTXO to be used.
+   * @param {string} [comment] - is a personal comment about what the transaction is for (doesn’t go into the transaction, it is only stored locally).
+   * @returns {Promise<any>}
+   * @memberof Wallet
+   */
+  public async sendMany(
+    account: string,
+    recipients: { [key: string]: number },
+    minConf = 1,
+    comment?: string,
+  ): Promise<TX> {
+    return this.call<TX>(
+      'sendmany',
+      account,
+      recipients,
+      minConf,
+      comment,
     );
   }
 }

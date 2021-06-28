@@ -3,8 +3,21 @@ import camelcaseKeys from 'camelcase-keys';
 import { RPCError } from './Errors/RpcError';
 import JsonRPC, { IJsonRPC, IParameters } from './lib/JsonRPC';
 
-export type callParameters = string | number | boolean | undefined | Array<string>;
-type filteredCallParameters = string | number | boolean | undefined | Array<string>;
+export type callParameters =
+  string
+  | number
+  | boolean
+  | undefined
+  | string[]
+  | Record<string, unknown>
+  | Record<string, unknown>[];
+type filteredCallParameters =
+  string
+  | number
+  | boolean
+  | string[]
+  | Record<string, unknown>
+  | Record<string, unknown>[];
 
 interface RPCResponse {
   result: any;

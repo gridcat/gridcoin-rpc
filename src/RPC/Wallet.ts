@@ -764,4 +764,19 @@ export class Wallet extends RPCBase {
   public async setTXfee(amount: number): Promise<boolean> {
     return this.call('settxfee', amount);
   }
+
+  /**
+   * Returns a signed a message using the private key from <Gridcoinaddress>.
+   * Lets you prove that this message came from the owner of an address.
+   * You can verify a signed message with the verify message command.
+   * (It will not send this message anywhere. You have to do that)
+   *
+   * @param {Address} address
+   * @param {string} message
+   * @returns {Promise<string>} - Base64 signature
+   * @memberof Wallet
+   */
+  public async signMessage(address: Address, message: string): Promise<string> {
+    return this.call('signmessage', address, message);
+  }
 }

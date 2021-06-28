@@ -1,3 +1,13 @@
+# [3.0.0-beta.4](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.3...v3.0.0-beta.4) (2021-06-27)
+
+
+### Features
+
+* add resendtx ([4fe51ce](https://github.com/gridcat/gridcoin-rpc/commit/4fe51ce878b034ace41376e844f19015b49aff4b))
+* add reservebalance ([4214d9f](https://github.com/gridcat/gridcoin-rpc/commit/4214d9f88d38e0ed780d885b3a14057232d65304))
+* add scanforunspent ([2947b2e](https://github.com/gridcat/gridcoin-rpc/commit/2947b2e14b6bff7c560a27c1321620dfb538bf67))
+* add sendfrom ([151a2c3](https://github.com/gridcat/gridcoin-rpc/commit/151a2c3c1bb4d9fc6d3a932d25f325e7374315c3))
+
 # [3.0.0-beta.3](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.2...v3.0.0-beta.3) (2021-06-27)
 
 

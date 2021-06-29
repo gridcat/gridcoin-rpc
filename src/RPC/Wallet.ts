@@ -11,6 +11,7 @@ import { Reserve } from '../contracts/reserve';
 import { Script } from '../contracts/script';
 import { StakeListing } from '../contracts/stake';
 import { DetailedRawTransaction, Transaction } from '../contracts/transaction';
+import { SigHashType, TransactionDependencies, TransactionSigned } from '../contracts/transactionRaw';
 import { TransactionShort } from '../contracts/transactionShort';
 import { TransactionUnspent } from '../contracts/transactionUnspent';
 import { UnspentReport, UTXO } from '../contracts/utxo';
@@ -778,5 +779,31 @@ export class Wallet extends RPCBase {
    */
   public async signMessage(address: Address, message: string): Promise<string> {
     return this.call('signmessage', address, message);
+  }
+
+  /**
+   * Sign inputs for raw transaction (serialized, hex-encoded).
+   *
+   *
+   * @param {string} rawTransaction - raw transaction (serialized, hex-encoded)
+   * @param {TransactionDependencies[]|null} transactionDependencies - is an array of previous transaction outputs that this transaction depends on but may not yet be in the blockchain.
+   * @param {string[]|null} privateKeys - is an array of base58-encoded private keys that, if given, will be the only keys used to sign the transaction
+   * @param {SigHashType} sigHashType - is a string that is one of six values; ALL, NONE, SINGLE or ALL|ANYONECANPAY, NONE|ANYONECANPAY, SINGLE|ANYONECANPAY.
+   * @returns {Promise<TransactionSigned>}
+   * @memberof Wallet
+   */
+  public async signRawTransaction(
+    rawTransaction: string,
+    transactionDependencies: TransactionDependencies[] | null,
+    privateKeys: string[] | null,
+    sigHashType: SigHashType,
+  ): Promise<TransactionSigned> {
+    return this.call<TransactionSigned>(
+      'signrawtransaction',
+      rawTransaction,
+      transactionDependencies as any,
+      privateKeys,
+      sigHashType,
+    );
   }
 }

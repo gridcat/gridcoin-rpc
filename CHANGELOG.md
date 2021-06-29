@@ -1,3 +1,13 @@
+# [3.0.0-beta.6](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2021-06-29)
+
+
+### Features
+
+* add setaccount ([eb26234](https://github.com/gridcat/gridcoin-rpc/commit/eb2623452a1d9d7f6aec42fc2ae4451aeade1eb6))
+* add settxfee ([cdedb34](https://github.com/gridcat/gridcoin-rpc/commit/cdedb3499df3af1c5ddfb56dd29c77615f0fba0d))
+* add signmessage ([33e3741](https://github.com/gridcat/gridcoin-rpc/commit/33e3741e5c45c66688766e4593ae5fd59a0829b5))
+* add signrawtransaction ([d532d40](https://github.com/gridcat/gridcoin-rpc/commit/d532d4000cf35e444559fd51d4d3ca8c1a598f49))
+
 # [3.0.0-beta.5](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.4...v3.0.0-beta.5) (2021-06-28)
 
 

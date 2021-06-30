@@ -1,3 +1,4 @@
+import { Block, BlockWithTX } from '../contracts/block';
 import { CurrentTime } from '../contracts/currentTime';
 import { RPCBase } from '../RPCBase';
 
@@ -77,5 +78,27 @@ export class Network extends RPCBase {
    */
   public async getBestBlockhash(): Promise<string> {
     return this.call('getbestblockhash');
+  }
+
+  /**
+   *  Returns information about the block with the given hash.
+   *
+   * @param {string} hash
+   * @param {boolean} [txinfo]
+   * @returns {Promise<IBlock>}
+   * @memberof GridcoinRPC
+   */
+  public async getBlock(hash: string): Promise<Block>;
+
+  /**
+   * Returns information about the block with the given hash.
+   *
+   * @param {string} hash
+   * @param {boolean} [txinfo]
+   * @returns {(Promise<Block | BlockWithTX>)}
+   * @memberof Network
+   */
+  public async getBlock(hash: string, txinfo?: boolean): Promise<Block | BlockWithTX> {
+    return this.call('getblock', hash, txinfo);
   }
 }

@@ -1,62 +1,87 @@
-import { ITx } from './tx';
+import { TX } from '../types';
+import { Vin, Vout } from './transaction';
 
-export interface IBlock {
+export interface BlockTX {
+  txid: string;
+  version: number;
+  time: number;
+  locktime: number;
+  hashboinc: string;
+  vin: Vin[];
+  vout: Vout[];
+}
+
+export interface Claim {
+  version: number;
+  miningId: string;
+  clientVersion: string;
+  organization: string;
+  blockSubsidy: number;
+  researchSubsidy: number;
+  magnitude: number;
+  magnitudeUnit: number;
+  signature: string;
+  quorumHash: string;
+  quorumAddress: string;
+}
+
+export interface Block {
   /**
    * the block hash
    *
    * @type {string}
-   * @memberof IBlock
+   * @memberof Block
    */
   hash: string;
   /**
    * The number of confirmations, or -1 if the block is not on the main chain
    *
    * @type {Number}
-   * @memberof IBlock
+   * @memberof Block
    */
   confirmations: number;
   /**
    * The block size
    *
    * @type {number}
-   * @memberof IBlock
+   * @memberof Block
    */
   size: number;
   /**
    * The block height or index
    *
    * @type {number}
-   * @memberof IBlock
+   * @memberof Block
    */
   height: number;
   /**
    * The block version
    *
    * @type {number}
-   * @memberof IBlock
+   * @memberof Block
    */
   version: number;
   /**
    * The merkle root
    *
    * @type {string}
-   * @memberof IBlock
+   * @memberof Block
    */
   merkleroot: string;
   mint: number;
-  MoneySupply: number;
+  moneySupply: number;
   /**
    * The block time in seconds since epoch (Jan 1 1970 GMT)
    *
    * @type {number}
-   * @memberof IBlock
+   * @memberof Block
    */
   time: number;
   /**
    * The nonce
    *
    * @type {number}
-   * @memberof IBlock
+   * @memberof Block
    */
   nonce: number;
   /**
@@ -64,7 +89,7 @@ export interface IBlock {
    * @example 1d00ffff
    *
    * @type {string}
-   * @memberof IBlock
+   * @memberof Block
    */
   bits: string;
   difficulty: number;
@@ -74,36 +99,28 @@ export interface IBlock {
    * The hash of the previous block
    *
    * @type {string}
-   * @memberof IBlock
+   * @memberof Block
    */
   previousblockhash: string;
   /**
    * The hash of the next block
    *
    * @type {string}
-   * @memberof IBlock
+   * @memberof Block
    */
   nextblockhash: string;
   flags: string;
   proofhash: string;
   entropybit: number;
   modifier: string;
-  modifierchecksum: string;
-  tx: Array<string | ITx>;
+  tx: TX[];
   signature: string;
-  CPID: string;
-  Magnitude: number;
-  LastPaymentTime: string;
-  ResearchSubsidy: number;
-  ResearchAge: number;
-  ResearchMagnitudeUnit: number;
-  ResearchAverageMagnitude: number;
-  LastPORBlockHash: string;
-  Interest: number;
-  GRCAddress: string;
-  ClientVersion: string;
-  CPIDValid: boolean;
-  NeuralHash: string;
-  IsSuperBlock: number;
-  IsContract: number;
+  claim: Claim;
+  feesCollected: number;
+  isSuperBlock: boolean;
+  isContract: boolean;
+}
+
+export interface BlockWithTX extends Omit<Block, 'tx'> {
+  tx: BlockTX[];
 }

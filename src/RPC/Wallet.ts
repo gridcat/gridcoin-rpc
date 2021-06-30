@@ -853,4 +853,16 @@ export class Wallet extends RPCBase {
   public async verifyMessage(gridcoinAddress: Address, signature: string, message: string): Promise<boolean> {
     return this.call('verifymessage', gridcoinAddress, signature, message);
   }
+
+  /**
+   * Removes the wallet encryption key from memory, locking the wallet.
+   * After calling this method, you will need to call @see walletPassPhrase again
+   * before being able to call any methods which require the wallet to be unlocked.
+   *
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async walletLock(): Promise<null> {
+    return this.call('walletlock');
+  }
 }

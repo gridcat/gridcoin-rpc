@@ -81,24 +81,32 @@ export class Network extends RPCBase {
   }
 
   /**
-   *  Returns information about the block with the given hash.
-   *
-   * @param {string} hash
-   * @param {boolean} [txinfo]
-   * @returns {Promise<IBlock>}
-   * @memberof GridcoinRPC
-   */
-  public async getBlock(hash: string): Promise<Block>;
-
-  /**
    * Returns information about the block with the given hash.
    *
+   * @template Type
    * @param {string} hash
-   * @param {boolean} [txinfo]
-   * @returns {(Promise<Block | BlockWithTX>)}
+   * @param {boolean} [txinfo] - optional to print more detailed tx info
+   * @returns {Promise<Type extends true ? BlockWithTX : Block>}
    * @memberof Network
    */
-  public async getBlock(hash: string, txinfo?: boolean): Promise<Block | BlockWithTX> {
+  public async getBlock<Type extends boolean>(
+    hash: string, txinfo: Type,
+  ): Promise<Type extends true ? BlockWithTX : Block> {
     return this.call('getblock', hash, txinfo);
+  }
+
+  /**
+   * Returns details of a block with given block-number
+   *
+   * @template Type
+   * @param {number} number
+   * @param {Type} txinfo - optional to print more detailed tx info
+   * @returns {Promise<Type extends true ? BlockWithTX : Block>}
+   * @memberof Network
+   */
+  public async getBlockByNumber<Type extends boolean>(
+    number: number, txinfo: Type,
+  ): Promise<Type extends true ? BlockWithTX : Block> {
+    return this.call('getblockbynumber', number, txinfo);
   }
 }

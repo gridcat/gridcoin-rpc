@@ -1,3 +1,18 @@
+# [3.0.0-beta.8](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2021-06-30)
+
+
+### Bug Fixes
+
+* **camelcase:** add deep flag so it transfor nested objects too ([ddeaadd](https://github.com/gridcat/gridcoin-rpc/commit/ddeaadd9639900bce76cf810db401dd158dde13c))
+
+
+### Features
+
+* add getbestblockhash ([90619f2](https://github.com/gridcat/gridcoin-rpc/commit/90619f2f0a11f910b7060515361c7bc4e3e8cd43))
+* add getblock ([f340db5](https://github.com/gridcat/gridcoin-rpc/commit/f340db580f11d763bac355aacd2725fb99a310ce))
+* add getblockbynumber ([9991c67](https://github.com/gridcat/gridcoin-rpc/commit/9991c67a42160493b08536f6b19e1ceac9bdfbce))
+* add getblockchaininfo ([8891fb7](https://github.com/gridcat/gridcoin-rpc/commit/8891fb7bd8c69d2231ebdab85295c6223cdcbbc1))
+
 # [3.0.0-beta.7](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2021-06-30)
 
 

@@ -1,4 +1,4 @@
-import { AddressValidation } from '../contracts/addressValidation';
+import { AddressValidation, PubKeyValidation } from '../contracts/validation';
 import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
@@ -821,5 +821,16 @@ export class Wallet extends RPCBase {
    */
   public async validateAddress(gridcoinAddress: Address): Promise<AddressValidation> {
     return this.call<AddressValidation>('validateaddress', gridcoinAddress);
+  }
+
+  /**
+   * Return information about <gridcoinpubkey>.
+   *
+   * @param {PublicKey} gridcoinPubkey
+   * @returns {Promise<IAddress>}
+   * @memberof GridcoinRPC
+   */
+  public validatePubkey(gridcoinPubkey: PublicKey): Promise<PubKeyValidation> {
+    return this.call<PubKeyValidation>('validatepubkey', gridcoinPubkey);
   }
 }

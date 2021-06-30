@@ -30,3 +30,13 @@ export interface AddressValidation {
    */
   account?: string;
 }
+
+export interface PubKeyValidation extends AddressValidation {
+  /**
+   * if the public key is it’s compressed form
+   *
+   * @type {boolean}
+   * @memberof PubKeyValidation
+   */
+  iscompressed: boolean;
+}

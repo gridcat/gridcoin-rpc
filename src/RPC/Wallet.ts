@@ -1,3 +1,4 @@
+import { AddressValidation } from '../contracts/addressValidation';
 import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
@@ -805,5 +806,20 @@ export class Wallet extends RPCBase {
       privateKeys,
       sigHashType,
     );
+  }
+
+  /**
+   * Return information about <gridcoinaddress>.
+   * @description
+   * The validateaddress RPC accepts a block
+   * verifies it is a valid addition to the block chain
+   * and broadcasts it to the network.
+   *
+   * @param {Address} gridcoinAddress
+   * @returns {Promise<AddressValidation>}
+   * @memberof GridcoinRPC
+   */
+  public async validateAddress(gridcoinAddress: Address): Promise<AddressValidation> {
+    return this.call<AddressValidation>('validateaddress', gridcoinAddress);
   }
 }

@@ -1,4 +1,5 @@
 import { Block, BlockWithTX } from '../contracts/block';
+import { BlockchainInfo } from '../contracts/blockchainInfo';
 import { CurrentTime } from '../contracts/currentTime';
 import { RPCBase } from '../RPCBase';
 
@@ -108,5 +109,15 @@ export class Network extends RPCBase {
     number: number, txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
     return this.call('getblockbynumber', number, txinfo);
+  }
+
+  /**
+   * Displays data on current blockchain
+   *
+   * @returns {Promise<BlockchainInfo>}
+   * @memberof Network
+   */
+  public async getBlockchainInfo(): Promise<BlockchainInfo> {
+    return this.call('getblockchaininfo');
   }
 }

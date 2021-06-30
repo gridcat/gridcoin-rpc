@@ -68,4 +68,14 @@ export class Network extends RPCBase {
   ): Promise<{ addednode: string }> {
     return this.call<{ addednode: string }>('getaddednodeinfo', dns, node);
   }
+
+  /**
+   * Returns the hash of the best block in the longest block chain
+   *
+   * @returns {Promise<string>}
+   * @memberof Network
+   */
+  public async getBestBlockhash(): Promise<string> {
+    return this.call('getbestblockhash');
+  }
 }

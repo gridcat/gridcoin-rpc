@@ -830,7 +830,27 @@ export class Wallet extends RPCBase {
    * @returns {Promise<IAddress>}
    * @memberof GridcoinRPC
    */
-  public validatePubkey(gridcoinPubkey: PublicKey): Promise<PubKeyValidation> {
+  public async validatePubkey(gridcoinPubkey: PublicKey): Promise<PubKeyValidation> {
     return this.call<PubKeyValidation>('validatepubkey', gridcoinPubkey);
+  }
+
+  /**
+   * Verify a signed message.
+   * @description
+   * The P2PKH address corresponding to the private key which made the signature.
+   * A P2PKH address is a hash of the public key corresponding to the private key which made the signature.
+   * When the ECDSA signature is checked, up to four possible ECDSA public keys will be reconstructed from the signature;
+   * each key will be hashed and compared against the P2PKH address provided to see if any of them match.
+   * If there are no matches, signature validation will fail.
+   *
+   * @param {Address} gridcoinAddress - The gridcoin address to use for the signature.
+   * @param {string} signature - The signature provided by the signer in base 64 encoding.
+   * @param {string} message - The message that was signed.
+   * @returns {Promise<boolean>}
+   * @memberof GridcoinRPC
+   * @see signmessage
+   */
+  public async verifyMessage(gridcoinAddress: Address, signature: string, message: string): Promise<boolean> {
+    return this.call('verifymessage', gridcoinAddress, signature, message);
   }
 }

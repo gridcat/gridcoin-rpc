@@ -304,23 +304,17 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * returns a string that is serialized, hex-encoded data for txid
+   *  returns an Object with information about txid
    *
+   * @template Type
    * @param {TX} txid
-   * @returns {Promise<string>}
+   * @param {Type} verbose
+   * @returns {Promise<Type extends true ? DetailedRawTransaction : string>}
    * @memberof Wallet
    */
-  public async getRawTransaction(txid: TX): Promise<string>;
-
-  /**
-   * returns an Object with information about txid
-   *
-   * @param {TX} txid
-   * @param {boolean} verbose
-   * @returns {(Promise<string | DetailedRawTransaction>)}
-   * @memberof Wallet
-   */
-  public async getRawTransaction(txid: TX, verbose?: boolean): Promise<string | DetailedRawTransaction> {
+  public async getRawTransaction<Type extends boolean>(
+    txid: TX, verbose: Type,
+  ): Promise<Type extends true ? DetailedRawTransaction : string> {
     return this.call('getrawtransaction', txid, verbose);
   }
 

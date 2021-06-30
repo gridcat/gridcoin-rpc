@@ -1,3 +1,15 @@
+# [3.0.0-beta.7](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.6...v3.0.0-beta.7) (2021-06-30)
+
+
+### Features
+
+* add validateaddress ([25a9147](https://github.com/gridcat/gridcoin-rpc/commit/25a91473213c236ca4e6fa82fba2bf4ac085f209))
+* add validatepubkey ([c5beabc](https://github.com/gridcat/gridcoin-rpc/commit/c5beabc9e0c4e39c6ef44b97e0a4dcfae72f52b4))
+* add verifymessage ([331c9fb](https://github.com/gridcat/gridcoin-rpc/commit/331c9fb9a3eb3675502476332db3d1fe5b9d035c))
+* add walletlock ([77be1a0](https://github.com/gridcat/gridcoin-rpc/commit/77be1a0b358c2023a12848487c2b6cadcdf93cad))
+* add walletpassphrase ([8e540a8](https://github.com/gridcat/gridcoin-rpc/commit/8e540a86920f5a0c3d2c74d313786000eba5a2d2))
+* add walletpassphrasechange ([5cfc84c](https://github.com/gridcat/gridcoin-rpc/commit/5cfc84c268f593fc126fd1841c099c8a6edbe641))
+
 # [3.0.0-beta.6](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.5...v3.0.0-beta.6) (2021-06-29)
 
 

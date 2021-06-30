@@ -73,6 +73,7 @@ export class RPCBase {
       result.result,
       {
         exclude: ['p2sh'],
+        deep: true,
       },
     );
   }

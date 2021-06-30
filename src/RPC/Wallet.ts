@@ -879,4 +879,16 @@ export class Wallet extends RPCBase {
   public async walletPassPhrase(passphrase: string, timeout: number, isStakingOnly: boolean): Promise<null> {
     return this.call('walletpassphrase', passphrase, timeout, isStakingOnly);
   }
+
+  /**
+   * Changes the wallet passphrase from <oldpassphrase> to <newpassphrase>
+   *
+   * @param {string} oldPassphrase
+   * @param {string} newPassphrase
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async walletPassPhraseChange(oldPassphrase: string, newPassphrase: string): Promise<null> {
+    return this.call('walletpassphrasechange', oldPassphrase, newPassphrase);
+  }
 }

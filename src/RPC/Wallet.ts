@@ -310,19 +310,18 @@ export class Wallet extends RPCBase {
    * @returns {Promise<string>}
    * @memberof Wallet
    */
-  public async getRawTransaction(txid: TX): Promise<string> {
-    return this.call<string>('getrawtransaction', txid);
-  }
+  public async getRawTransaction(txid: TX): Promise<string>;
 
   /**
    * returns an Object with information about txid
    *
    * @param {TX} txid
-   * @returns {Promise<DetailedRawTransaction>}
+   * @param {boolean} verbose
+   * @returns {(Promise<string | DetailedRawTransaction>)}
    * @memberof Wallet
    */
-  public async getRawTransactionVerbose(txid: TX): Promise<DetailedRawTransaction> {
-    return this.call<DetailedRawTransaction>('getrawtransaction', txid, true);
+  public async getRawTransaction(txid: TX, verbose?: boolean): Promise<string | DetailedRawTransaction> {
+    return this.call('getrawtransaction', txid, verbose);
   }
 
   /**

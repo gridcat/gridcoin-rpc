@@ -865,4 +865,18 @@ export class Wallet extends RPCBase {
   public async walletLock(): Promise<null> {
     return this.call('walletlock');
   }
+
+  /**
+   * Stores the wallet decryption key in memory for <timeout> seconds.
+   * if [stakingonly] is true sending functions are disabled.
+   *
+   * @param {string} passphrase
+   * @param {number} timeout
+   * @param {boolean} isStakingOnly
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async walletPassPhrase(passphrase: string, timeout: number, isStakingOnly: boolean): Promise<null> {
+    return this.call('walletpassphrase', passphrase, timeout, isStakingOnly);
+  }
 }

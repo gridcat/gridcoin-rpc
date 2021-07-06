@@ -259,4 +259,14 @@ export class Network extends RPCBase {
   public async memoryPool(): Promise<MemoryPool> {
     return this.call('memorypool');
   }
+
+  /**
+   * Displays current network time
+   *
+   * @returns {Promise<{ networkTime: number }>}
+   * @memberof Network
+   */
+  public async networkTime(): Promise<{ networkTime: number }> {
+    return this.call('networktime');
+  }
 }

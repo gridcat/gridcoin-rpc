@@ -1,6 +1,7 @@
 import { Block, BlockWithTX } from '../contracts/block';
 import { BlockchainInfo } from '../contracts/blockchainInfo';
 import { BurnReport } from '../contracts/burnReport';
+import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
 import { RPCBase } from '../RPCBase';
 
@@ -151,5 +152,15 @@ export class Network extends RPCBase {
    */
   public async getBurnReport(): Promise<BurnReport> {
     return this.call('getburnreport');
+  }
+
+  /**
+   * Show info of synchronized checkpoint.
+   *
+   * @returns {Promise<Checkpoint>}
+   * @memberof Network
+   */
+  public async getCheckpoint(): Promise<Checkpoint> {
+    return this.call('getcheckpoint');
   }
 }

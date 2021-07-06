@@ -1,3 +1,26 @@
+# [3.0.0-beta.9](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2021-07-06)
+
+
+### Features
+
+* add getblockcount ([e04a65c](https://github.com/gridcat/gridcoin-rpc/commit/e04a65c506d0dc11ae81a203d95317814e45bddc))
+* add getblockhash ([6c4f010](https://github.com/gridcat/gridcoin-rpc/commit/6c4f010ea123c10030a47478f2852b0798e34ffd))
+* add getburnreport ([e105996](https://github.com/gridcat/gridcoin-rpc/commit/e1059964ad63d4f9c2fe3a81bb9b711c537020aa))
+* add getcheckpoint ([342a3ea](https://github.com/gridcat/gridcoin-rpc/commit/342a3ea2c542c8aec8e8804652eaba6f38d2cb1c))
+* add getconnectioncount ([b97a942](https://github.com/gridcat/gridcoin-rpc/commit/b97a942a66c50ce5c83ff178d0a88650adc8bff5))
+* add getdifficulty ([70eba29](https://github.com/gridcat/gridcoin-rpc/commit/70eba29c3050201fdf552889f39bc2b935db8137))
+* add getinfo ([be474a1](https://github.com/gridcat/gridcoin-rpc/commit/be474a132452237634a79495e2a67444f1f86efd))
+* add getnettotals ([9ab6dad](https://github.com/gridcat/gridcoin-rpc/commit/9ab6dad7d4afb0fb2b87e26707838e7480cfafe3))
+* add getnetworkinfo ([6fd7c77](https://github.com/gridcat/gridcoin-rpc/commit/6fd7c77c389f5654c4d4965028438df1c6cb11b3))
+* add getpeerinfo ([2cc8ab2](https://github.com/gridcat/gridcoin-rpc/commit/2cc8ab2354a07e5d1dec3230b515feb01a801cce))
+* add getrawmempool ([da8ce00](https://github.com/gridcat/gridcoin-rpc/commit/da8ce00e1c162f8d49dbc51ea166b0308c72a09d))
+* add listbanned ([95dd7d4](https://github.com/gridcat/gridcoin-rpc/commit/95dd7d46f23e00ffbac74461d311c884eb75ff65))
+* add memorypool ([83c4c5a](https://github.com/gridcat/gridcoin-rpc/commit/83c4c5a43bcfde4febb37b33e31180bf0044e48f))
+* add networktime ([fec8647](https://github.com/gridcat/gridcoin-rpc/commit/fec864744cf5c9146807e41306c1b812de3f9c22))
+* add ping ([03fefbf](https://github.com/gridcat/gridcoin-rpc/commit/03fefbf673e51bce58dcdecae2adc1707d29033d))
+* add setban ([3b54fc1](https://github.com/gridcat/gridcoin-rpc/commit/3b54fc1af070a72c760370adb20ad9dd6dd682d9))
+* add showblock ([f203276](https://github.com/gridcat/gridcoin-rpc/commit/f2032765cff40ac35a5c0df9489ede49747249d0))
+
 # [3.0.0-beta.8](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.7...v3.0.0-beta.8) (2021-06-30)
 
 

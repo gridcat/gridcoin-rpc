@@ -5,6 +5,7 @@ import { BurnReport } from '../contracts/burnReport';
 import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
 import { Info } from '../contracts/info';
+import { MemoryPool } from '../contracts/memoryPool';
 import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
 import { Peer } from '../contracts/peer';
@@ -235,7 +236,7 @@ export class Network extends RPCBase {
    * @returns {Promise<string[]>}
    * @memberof Network
    */
-  public async getRawMempool(): Promise<string[]> {
+  public async getRawMemPool(): Promise<string[]> {
     return this.call('getrawmempool');
   }
 
@@ -247,5 +248,15 @@ export class Network extends RPCBase {
    */
   public async listBanned(): Promise<Banned> {
     return this.call('listbanned');
+  }
+
+  /**
+   * Displays included and excluded memory pool txs
+   *
+   * @returns {Promise<MemoryPool>}
+   * @memberof Network
+   */
+  public async memoryPool(): Promise<MemoryPool> {
+    return this.call('memorypool');
   }
 }

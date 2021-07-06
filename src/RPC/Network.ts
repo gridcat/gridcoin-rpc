@@ -304,6 +304,10 @@ export class Network extends RPCBase {
     return this.call('getsupervotes', mode, superBlock);
   }
 
+  /** @todo: implement exportstats1 */
+
+  /** @todo: implement getrecentblocks */
+
   /**
    * add or remove an IP/Subnet from the banned list.
    *

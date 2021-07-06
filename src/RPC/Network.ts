@@ -1,5 +1,5 @@
 import { Block, BlockWithTX } from '../contracts/block';
-import { BlockchainInfo } from '../contracts/blockchainInfo';
+import { BlockchainDifficulty, BlockchainInfo } from '../contracts/blockchainInfo';
 import { BurnReport } from '../contracts/burnReport';
 import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
@@ -172,5 +172,15 @@ export class Network extends RPCBase {
    */
   public async getConnectionCount(): Promise<number> {
     return this.call('getconnectioncount');
+  }
+
+  /**
+   * Returns the difficulty as a multiple of the minimum difficulty
+   *
+   * @returns {Promise<BlockchainDifficulty>}
+   * @memberof Network
+   */
+  public async getDifficulty(): Promise<BlockchainDifficulty> {
+    return this.call('getdifficulty');
   }
 }

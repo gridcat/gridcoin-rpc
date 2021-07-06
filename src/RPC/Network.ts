@@ -120,4 +120,14 @@ export class Network extends RPCBase {
   public async getBlockchainInfo(): Promise<BlockchainInfo> {
     return this.call('getblockchaininfo');
   }
+
+  /**
+   * Returns the number of blocks in the longest block chain
+   *
+   * @returns {Promise<number>}
+   * @memberof Network
+   */
+  public async getBlockCount(): Promise<number> {
+    return this.call('getblockcount');
+  }
 }

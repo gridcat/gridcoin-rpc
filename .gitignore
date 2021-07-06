@@ -12,4 +12,5 @@ compiled
 docs
 .history
 index.js
+index.ts
 src/RPC/_Wallet.ts

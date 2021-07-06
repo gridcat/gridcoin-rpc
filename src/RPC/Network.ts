@@ -1,5 +1,6 @@
 import { Block, BlockWithTX } from '../contracts/block';
 import { BlockchainInfo } from '../contracts/blockchainInfo';
+import { BurnReport } from '../contracts/burnReport';
 import { CurrentTime } from '../contracts/currentTime';
 import { RPCBase } from '../RPCBase';
 
@@ -140,5 +141,15 @@ export class Network extends RPCBase {
    */
   public async getBlockHash(index: number): Promise<string> {
     return this.call('getblockhash', index);
+  }
+
+  /**
+   * Scan for and aggregate network-wide amounts for provably-destroyed outputs.
+   *
+   * @returns {Promise<BurnReport>}
+   * @memberof Network
+   */
+  public async getBurnReport(): Promise<BurnReport> {
+    return this.call('getburnreport');
   }
 }

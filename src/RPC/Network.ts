@@ -4,6 +4,7 @@ import { BurnReport } from '../contracts/burnReport';
 import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
 import { Info } from '../contracts/info';
+import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
 import { RPCBase } from '../RPCBase';
 
@@ -194,6 +195,16 @@ export class Network extends RPCBase {
    */
   public async getInfo(): Promise<Info> {
     return this.call('getinfo');
+  }
+
+  /**
+   * Returns information about network traffic, including bytes in, bytes out and current time
+   *
+   * @returns {Promise<NetTotals>}
+   * @memberof Network
+   */
+  public async getNetTotals(): Promise<NetTotals> {
+    return this.call('getnettotals');
   }
 
   /**

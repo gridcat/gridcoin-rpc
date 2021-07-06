@@ -9,6 +9,7 @@ import { MemoryPool } from '../contracts/memoryPool';
 import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
 import { Peer } from '../contracts/peer';
+import { SuperVotesModeJson1, SuperVotesModeJson2, SuperVotesModeText } from '../contracts/superVotes';
 import { RPCBase } from '../RPCBase';
 
 type addNodeCommand = 'add' | 'remove' | 'onetry';
@@ -280,6 +281,27 @@ export class Network extends RPCBase {
    */
   public async ping(): Promise<null> {
     return this.call('ping');
+  }
+
+  public async getSuperVotes(mode: 0, superBlock: string): Promise<SuperVotesModeText>;
+
+  public async getSuperVotes(mode: 1, superBlock: string): Promise<SuperVotesModeJson1>;
+
+  public async getSuperVotes(mode: 2, superBlock: string): Promise<SuperVotesModeJson2>;
+
+  /**
+   * Report votes for specified superblock.
+   *
+   * @param {(0 | 1 | 2)} mode - mode: 0=text, 1,2=json
+   * @param {string} superBlock - block hash or last= currently active, now= ongoing sb votes.
+   * @returns {(Promise<SuperVotesModeText | SuperVotesModeJson1 | SuperVotesModeJson2>)}
+   * @memberof Network
+   */
+  public async getSuperVotes(
+    mode: 0 | 1 | 2,
+    superBlock: string,
+  ): Promise<SuperVotesModeText | SuperVotesModeJson1 | SuperVotesModeJson2> {
+    return this.call('getsupervotes', mode, superBlock);
   }
 
   /**

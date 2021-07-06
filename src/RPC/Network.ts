@@ -130,4 +130,15 @@ export class Network extends RPCBase {
   public async getBlockCount(): Promise<number> {
     return this.call('getblockcount');
   }
+
+  /**
+   * Returns hash of block in best-block-chain at <index>
+   *
+   * @param {index} block - Block number for requested hash
+   * @returns {Promise<string>}
+   * @memberof Network
+   */
+  public async getBlockHash(index: number): Promise<string> {
+    return this.call('getblockhash', index);
+  }
 }

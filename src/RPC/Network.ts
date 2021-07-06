@@ -163,4 +163,14 @@ export class Network extends RPCBase {
   public async getCheckpoint(): Promise<Checkpoint> {
     return this.call('getcheckpoint');
   }
+
+  /**
+   * Returns the number of connections to other node
+   *
+   * @returns {Promise<number>}
+   * @memberof Network
+   */
+  public async getConnectionCount(): Promise<number> {
+    return this.call('getconnectioncount');
+  }
 }

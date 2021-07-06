@@ -301,4 +301,15 @@ export class Network extends RPCBase {
   ): Promise<null> {
     return this.call('setban', subnet, command, banTime, absolute);
   }
+
+  /**
+   * Returns all information about the block at <index>
+   *
+   * @param {number} index - Block number
+   * @returns {Promise<Block>}
+   * @memberof Network
+   */
+  public async showBlock(index: number): Promise<Block> {
+    return this.call('showblock', index);
+  }
 }

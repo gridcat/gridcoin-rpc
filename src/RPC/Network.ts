@@ -1,3 +1,4 @@
+import { Banned } from '../contracts/banned';
 import { Block, BlockWithTX } from '../contracts/block';
 import { BlockchainDifficulty, BlockchainInfo } from '../contracts/blockchainInfo';
 import { BurnReport } from '../contracts/burnReport';
@@ -236,5 +237,15 @@ export class Network extends RPCBase {
    */
   public async getRawMempool(): Promise<string[]> {
     return this.call('getrawmempool');
+  }
+
+  /**
+   * List all banned IPs/subnets.
+   *
+   * @returns {Promise<Banned>}
+   * @memberof Network
+   */
+  public async listBanned(): Promise<Banned> {
+    return this.call('listbanned');
   }
 }

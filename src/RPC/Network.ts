@@ -3,6 +3,7 @@ import { BlockchainDifficulty, BlockchainInfo } from '../contracts/blockchainInf
 import { BurnReport } from '../contracts/burnReport';
 import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
+import { Info } from '../contracts/info';
 import { NetworkInfo } from '../contracts/networkInfo';
 import { RPCBase } from '../RPCBase';
 
@@ -183,6 +184,16 @@ export class Network extends RPCBase {
    */
   public async getDifficulty(): Promise<BlockchainDifficulty> {
     return this.call('getdifficulty');
+  }
+
+  /**
+   * Returns an object containing various state info.
+   *
+   * @returns {Promise<Info>}
+   * @memberof Network
+   */
+  public async getInfo(): Promise<Info> {
+    return this.call('getinfo');
   }
 
   /**

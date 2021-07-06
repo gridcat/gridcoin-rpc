@@ -269,4 +269,16 @@ export class Network extends RPCBase {
   public async networkTime(): Promise<{ networkTime: number }> {
     return this.call('networktime');
   }
+
+  /**
+   * Requests that a ping be sent to all other nodes, to measure ping time.
+   * Results provided in getpeerinfo, pingtime and pingwait fields are decimal seconds.
+   * Ping command is handled in queue with all other commands, so it measures processing backlog, not just network ping.
+   *
+   * @returns {Promise<null>}
+   * @memberof Network
+   */
+  public async ping(): Promise<null> {
+    return this.call('ping');
+  }
 }

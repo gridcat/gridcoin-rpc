@@ -6,6 +6,7 @@ import { CurrentTime } from '../contracts/currentTime';
 import { Info } from '../contracts/info';
 import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
+import { Peer } from '../contracts/peer';
 import { RPCBase } from '../RPCBase';
 
 type addNodeCommand = 'add' | 'remove' | 'onetry';
@@ -215,5 +216,15 @@ export class Network extends RPCBase {
    */
   public async getNetworkInfo(): Promise<NetworkInfo> {
     return this.call('getnetworkinfo');
+  }
+
+  /**
+   * Returns data about each connected network node.
+   *
+   * @returns {Promise<Peer[]>}
+   * @memberof Network
+   */
+  public async getPeerInfo(): Promise<Peer[]> {
+    return this.call('getpeerinfo');
   }
 }

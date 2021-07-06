@@ -227,4 +227,14 @@ export class Network extends RPCBase {
   public async getPeerInfo(): Promise<Peer[]> {
     return this.call('getpeerinfo');
   }
+
+  /**
+   * Returns all transaction ids in memory pool
+   *
+   * @returns {Promise<string[]>}
+   * @memberof Network
+   */
+  public async getRawMempool(): Promise<string[]> {
+    return this.call('getrawmempool');
+  }
 }

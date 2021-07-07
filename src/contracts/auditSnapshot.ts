@@ -1,3 +1,5 @@
+import { CPID } from '../types';
+
 interface Audit {
   boundary: string;
   lowTime: number;
@@ -17,7 +19,7 @@ interface BeaconTimestamp {
 }
 
 export interface AuditSnapshot {
-  cpid: string;
+  cpid: CPID;
   accrualAccountExists: boolean;
   latestBeaconTimestamp: BeaconTimestamp;
   originalBeaconTimestamp: BeaconTimestamp;
@@ -31,4 +33,29 @@ export interface AuditSnapshot {
 export interface AuditSnapshotDetailed extends AuditSnapshot {
   beaconChain: BeaconTimestamp[];
   audit: Audit[];
+}
+
+interface AccuralMismatchDetails {
+  cpid: CPID;
+  match: {
+    cpid: CPID;
+    accrualAccountExists: true,
+    latestBeaconTimestamp: BeaconTimestamp;
+    originalBeaconTimestamp: BeaconTimestamp;
+    renewals: number;
+    accrualByAudit: number;
+    accrualByGetAccrual: number;
+    newbieCorrection: number;
+    accrualLastPeriod: number;
+  }
+}
+
+export interface AuditSnapshotAccurals {
+  numberOfCpids: number;
+  numberOfMatches: number;
+  numberOfMismatches: number;
+  numberOfMismatchesLastPeriodOnly: number;
+  numberAccrualAccountsNotPresent: number;
+  numberNotPresent: number;
+  accrualMismatchDetails: AccuralMismatchDetails[];
 }

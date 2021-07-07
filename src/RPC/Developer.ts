@@ -8,6 +8,7 @@ import { Manifests, ManifestsDetailed } from '../contracts/manifest';
 import { NetworkHealth } from '../contracts/networkHealth';
 import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
+import { ScrapeReport } from '../contracts/scrapeReport';
 import { SuperblockAverage } from '../contracts/superblockAverage';
 import { Contract } from '../contracts/transaction';
 import { Version } from '../contracts/version';
@@ -283,5 +284,19 @@ export class Developer extends RPCBase {
    */
   public async archiveLog(log: 'debug' | 'scraper'): Promise<boolean> {
     return this.call('archivelog', log);
+  }
+
+  /** @todo: implement testnewsb */
+
+  /** @todo: implement convergencereport */
+
+  /**
+   * Report containing various statistics about the scraper.
+   *
+   * @returns {Promise<ScrapeReport>}
+   * @memberof Developer
+   */
+  public async scrapeReport(): Promise<ScrapeReport> {
+    return this.call('scraperreport');
   }
 }

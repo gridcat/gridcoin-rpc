@@ -1,3 +1,28 @@
+# [3.0.0-beta.10](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.9...v3.0.0-beta.10) (2021-07-07)
+
+
+### Features
+
+* add addkey ([51f95ae](https://github.com/gridcat/gridcoin-rpc/commit/51f95ae7ef0b9067745de46b982802c54d9c6426))
+* add archivelog ([b948dc2](https://github.com/gridcat/gridcoin-rpc/commit/b948dc20208b99c628f22c40e90d121ed3c12408))
+* add auditsnapshotaccrual ([046c4c9](https://github.com/gridcat/gridcoin-rpc/commit/046c4c946c7cb1bf2be341789a4c50b70f4c171a))
+* add auditsnapshotaccruals ([8834777](https://github.com/gridcat/gridcoin-rpc/commit/8834777a76cb05363dfa05bfb0ff419bf048e02d))
+* add comparesnapshotaccrual ([e904d7e](https://github.com/gridcat/gridcoin-rpc/commit/e904d7e0cbf7cb3df7d58f72d46031946621a269))
+* add currentcontractaverage ([9d02f40](https://github.com/gridcat/gridcoin-rpc/commit/9d02f40d126d2beeb932f0491e58b109d8e80d93))
+* add debug ([615255c](https://github.com/gridcat/gridcoin-rpc/commit/615255c7d924bb185f4159f9731d52308a39f3b1))
+* add getblockstats ([336db25](https://github.com/gridcat/gridcoin-rpc/commit/336db25424d384ad7ffee47a8253742bee4bb28f))
+* add getsupervotes ([9a58ef7](https://github.com/gridcat/gridcoin-rpc/commit/9a58ef7d9c611eb66e80a3aafacbc15d861c4e34))
+* add listmanifests ([8c3da81](https://github.com/gridcat/gridcoin-rpc/commit/8c3da810b1a19aad511a642f4bb3cdec7a12c6a5))
+* add listprojects ([e2c44ce](https://github.com/gridcat/gridcoin-rpc/commit/e2c44cee296bfa85378eb4f57af15282c95d1aa3))
+* add listresearcheraccounts ([159f886](https://github.com/gridcat/gridcoin-rpc/commit/159f88608fc8bdb59dcd641a10ae9ebffcfbcd48))
+* add logging ([e6b0a9a](https://github.com/gridcat/gridcoin-rpc/commit/e6b0a9a50c93eb5ebc0d991703165ccef67334f5))
+* add network ([8204a17](https://github.com/gridcat/gridcoin-rpc/commit/8204a17ab6052addd12e4901dd8ffde612d4af94))
+* add projects ([ed3b7c6](https://github.com/gridcat/gridcoin-rpc/commit/ed3b7c658f653043537fe5b1aa39b2d70e95b409))
+* add readconfig ([5a25d69](https://github.com/gridcat/gridcoin-rpc/commit/5a25d695ce4be82c2afcee2b2d276ff5d42e52cd))
+* add scraperreport ([d097ffb](https://github.com/gridcat/gridcoin-rpc/commit/d097ffb1d28ad27588b7347d4550479e0d05616b))
+* add superblockaverage ([e170d40](https://github.com/gridcat/gridcoin-rpc/commit/e170d40c72346d9a499d4d55ae4e55e28e963d75))
+* add versionreport ([5ffdce4](https://github.com/gridcat/gridcoin-rpc/commit/5ffdce4d1f911cba414a3081beeca120bb57b925))
+
 # [3.0.0-beta.9](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0-beta.8...v3.0.0-beta.9) (2021-07-06)
 
 

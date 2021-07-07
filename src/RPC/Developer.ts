@@ -202,4 +202,14 @@ export class Developer extends RPCBase {
   public async projects(): Promise<LocalProject[]> {
     return this.call('projects');
   }
+
+  /**
+   * Re-reads config file; Does not overwrite pre-existing loaded values
+   *
+   * @returns {Promise<{ readconfig: 1 }>}
+   * @memberof Developer
+   */
+  public async readConfig(): Promise<{ readconfig: 1 }> {
+    return this.call('readconfig');
+  }
 }

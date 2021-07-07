@@ -6,7 +6,7 @@ export interface BeaconStatus {
    * if it’s currently active and not expired
    *
    * @type {boolean}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   active: boolean;
   pending: boolean;
@@ -18,7 +18,7 @@ export interface BeaconStatus {
    * if the beacon is old enough to be renewed
    *
    * @type {boolean}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   renewable: boolean;
   /**
@@ -26,21 +26,21 @@ export interface BeaconStatus {
    * @example "11-26-2020 06:45:54"
    *
    * @type {string}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   timestamp: string;
   /**
    * the address that send the beacon transaction
    *
    * @type {Address}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   address: Address;
   /**
    * the public key of the beacon
    *
    * @type {PublicKey}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   publicKey: PublicKey;
   privateKeyAvailable: boolean;
@@ -48,7 +48,7 @@ export interface BeaconStatus {
    * magnitude corresponding with the beacon
    *
    * @type {number}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   magnitude: number;
   verificationCode: string;
@@ -56,7 +56,7 @@ export interface BeaconStatus {
    * if this is about your beacon or not
    *
    * @type {boolean}
-   * @memberof IBeaconStatus
+   * @memberof BeaconStatus
    */
   isMine: boolean;
   // pending: Array<any>;

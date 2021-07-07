@@ -7,6 +7,7 @@ import { LoggingCategories } from '../contracts/logging';
 import { NetworkHealth } from '../contracts/networkHealth';
 import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
+import { SuperblockAverage } from '../contracts/superblockAverage';
 import { Contract } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
@@ -211,5 +212,25 @@ export class Developer extends RPCBase {
    */
   public async readConfig(): Promise<{ readconfig: 1 }> {
     return this.call('readconfig');
+  }
+
+  /** @todo: implement readdata */
+
+  /** @todo: implement reorganize */
+
+  /** @todo: implement sendalert */
+
+  /** @todo: implement sendalert2 */
+
+  /** @todo: implement sendblock */
+
+  /**
+   * Displays average information for current superblock
+   *
+   * @returns {Promise<SuperblockAverage>}
+   * @memberof Developer
+   */
+  public async superblockAverage(): Promise<SuperblockAverage> {
+    return this.call('superblockaverage');
   }
 }

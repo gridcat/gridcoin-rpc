@@ -1,4 +1,5 @@
 import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../contracts/auditSnapshot';
+import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { Contract } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
@@ -63,5 +64,15 @@ export class Developer extends RPCBase {
     keyValue: string | number | boolean,
   ): Promise<{ contract: Contract, txid: TX }> {
     return this.call('addkey', action, keyType, keyName, keyValue);
+  }
+
+  /**
+   * Compare snapshot and legacy accrual for active CPIDs.
+   *
+   * @returns {Promise<CompareSnapshotAccural>}
+   * @memberof Developer
+   */
+  public async compareSnapshotAccrual(): Promise<CompareSnapshotAccural> {
+    return this.call('comparesnapshotaccrual');
   }
 }

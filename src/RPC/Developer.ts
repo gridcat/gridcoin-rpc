@@ -2,6 +2,7 @@ import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../
 import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
+import { LoggingCategories } from '../contracts/logging';
 import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
 import { Contract } from '../contracts/transaction';
@@ -93,6 +94,7 @@ export class Developer extends RPCBase {
   /**
    * Enable or disable VERBOSE logging category (aka old debug) on the fly
    * @deprecated
+   * @see logging
    *
    * @param {boolean} enable
    * @returns {Promise<{ 'Logging category VERBOSE (aka old debug) ': boolean }>}
@@ -144,5 +146,34 @@ export class Developer extends RPCBase {
    */
   public async listResearcherAccounts(): Promise<ResearcherAccounts> {
     return this.call('listresearcheraccounts');
+  }
+
+  /**
+   * logging [json array category adds] [json array category removes]
+   * Gets and sets the logging configuration.
+   * When called without an argument, returns the list of categories with status that are currently being debug logged or not.
+   * When called with arguments, adds or removes categories from debug logging and return the lists above.
+   * The arguments are evaluated in order "include", "exclude".
+   * If an item is both included and excluded, it will thus end up being excluded.
+   * The valid logging categories are: " + ListLogCategories() + ".
+   * In addition, the following are available as category names with special meanings:
+   * all or 1: represent all logging categories.
+   * none or 0: even if other logging categories are specified, ignore all of them.
+   * @example
+   * logging all net: enables all and disables net.
+   * logging "" all: disables all.
+   * Note that unlike Bitcoin, we don't process JSON arrays correctly as arguments yet for the command line,
+   * so, for the rpc cli, it is limited to one enable and/or one disable category. Using CURL works with the full arrays.
+   *
+   * @param {(keyof LoggingCategories | 'all' | '')} [enable]
+   * @param {(keyof LoggingCategories | 'all')} [disable]
+   * @returns {Promise<LoggingCategories>}
+   * @memberof Developer
+   */
+  public async logging(
+    enable?: keyof LoggingCategories | 'all' | '',
+    disable?: keyof LoggingCategories | 'all',
+  ): Promise<LoggingCategories> {
+    return this.call('logging', enable, disable);
   }
 }

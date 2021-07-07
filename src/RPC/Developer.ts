@@ -9,6 +9,7 @@ import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
 import { SuperblockAverage } from '../contracts/superblockAverage';
 import { Contract } from '../contracts/transaction';
+import { Version } from '../contracts/version';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
 
@@ -232,5 +233,17 @@ export class Developer extends RPCBase {
    */
   public async superblockAverage(): Promise<SuperblockAverage> {
     return this.call('superblockaverage');
+  }
+
+  /**
+   * Display the software versions of nodes that recently staked.
+   *
+   * @param {number} [lookBack] - Number of blocks to tally from the chain head
+   * @param {boolean} [full] - Classify by commit suffix (default: false)
+   * @returns {Promise<Version[]>}
+   * @memberof Developer
+   */
+  public async versionReport(lookBack?: number, full?: boolean): Promise<Version[]> {
+    return this.call('versionreport', lookBack, full);
   }
 }

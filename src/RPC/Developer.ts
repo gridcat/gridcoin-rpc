@@ -86,4 +86,16 @@ export class Developer extends RPCBase {
   public async currentContractAverage(): Promise<ContractAverage> {
     return this.call('currentcontractaverage');
   }
+
+  /**
+   * Enable or disable VERBOSE logging category (aka old debug) on the fly
+   * @deprecated
+   *
+   * @param {boolean} enable
+   * @returns {Promise<{ 'Logging category VERBOSE (aka old debug) ': boolean }>}
+   * @memberof Developer
+   */
+  public async debug(enable: boolean): Promise<{ 'Logging category VERBOSE (aka old debug) ': boolean }> {
+    return this.call('debug', enable);
+  }
 }

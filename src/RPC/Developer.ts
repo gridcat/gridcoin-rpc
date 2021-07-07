@@ -2,6 +2,7 @@ import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../
 import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
+import { Projects } from '../contracts/project';
 import { Contract } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
@@ -116,5 +117,21 @@ export class Developer extends RPCBase {
    */
   public async getBlockStats(mode: 0 | 1, startHeight?: number, endHeight?: number): Promise<BlockStats> {
     return this.call('getblockstats', mode, startHeight, endHeight);
+  }
+
+  /** @todo: implement getlistof */
+
+  /** @todo: implement inspectaccrualsnapshot */
+
+  /** @todo: implement listdata */
+
+  /**
+   * Displays information about whitelisted projects.
+   *
+   * @returns {Promise<Projects>}
+   * @memberof Developer
+   */
+  public async listProjects(): Promise<Projects> {
+    return this.call('listprojects');
   }
 }

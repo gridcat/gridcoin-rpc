@@ -2,6 +2,7 @@ import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../
 import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
+import { LocalProject } from '../contracts/localProject';
 import { LoggingCategories } from '../contracts/logging';
 import { NetworkHealth } from '../contracts/networkHealth';
 import { Projects } from '../contracts/project';
@@ -186,5 +187,19 @@ export class Developer extends RPCBase {
    */
   public async network(): Promise<NetworkHealth> {
     return this.call('network');
+  }
+
+  /** @todo: implement parseaccrualsnapshotfile */
+
+  /** @todo: implement parselegacysb */
+
+  /**
+   * Show the status of locally attached BOINC projects.
+   *
+   * @returns {Promise<LocalProject[]>}
+   * @memberof Developer
+   */
+  public async projects(): Promise<LocalProject[]> {
+    return this.call('projects');
   }
 }

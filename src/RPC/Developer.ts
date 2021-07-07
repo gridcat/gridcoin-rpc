@@ -3,6 +3,7 @@ import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
 import { Projects } from '../contracts/project';
+import { ResearcherAccounts } from '../contracts/researcher';
 import { Contract } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
@@ -133,5 +134,15 @@ export class Developer extends RPCBase {
    */
   public async listProjects(): Promise<Projects> {
     return this.call('listprojects');
+  }
+
+  /**
+   * List researcher accounts in the accrual system and their current accruals.
+   *
+   * @returns {Promise<ResearcherAccounts>}
+   * @memberof Developer
+   */
+  public async listResearcherAccounts(): Promise<ResearcherAccounts> {
+    return this.call('listresearcheraccounts');
   }
 }

@@ -265,4 +265,23 @@ export class Developer extends RPCBase {
   public async listManifests(details: boolean, manifestHash?: string): Promise<Manifests | ManifestsDetailed> {
     return this.call('listmanifests', details, manifestHash);
   }
+
+  /** @todo: implement getmpart */
+
+  /** @todo: implement sendscraperfilemanifest */
+
+  /** @todo: implement savescraperfilemanifest */
+
+  /** @todo: implement deletecscrapermanifest */
+
+  /**
+   * Immediately archives the specified log. Currently valid values are debug and scraper.
+   *
+   * @param {('debug' | 'scraper')} log
+   * @returns {Promise<boolean>}
+   * @memberof Developer
+   */
+  public async archiveLog(log: 'debug' | 'scraper'): Promise<boolean> {
+    return this.call('archivelog', log);
+  }
 }

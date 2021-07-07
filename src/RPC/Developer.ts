@@ -4,6 +4,7 @@ import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
 import { LocalProject } from '../contracts/localProject';
 import { LoggingCategories } from '../contracts/logging';
+import { Manifests, ManifestsDetailed } from '../contracts/manifest';
 import { NetworkHealth } from '../contracts/networkHealth';
 import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
@@ -245,5 +246,23 @@ export class Developer extends RPCBase {
    */
   public async versionReport(lookBack?: number, full?: boolean): Promise<Version[]> {
     return this.call('versionreport', lookBack, full);
+  }
+
+  /** @todo: implement writedata */
+
+  public async listManifests(details: false, manifestHash?: string): Promise<Manifests>;
+
+  public async listManifests(details: true, manifestHash?: string): Promise<ManifestsDetailed>;
+
+  /**
+   * Show list of known ScraperManifest objects.
+   *
+   * @param {boolean} details - to show details of manifests
+   * @param {string} [manifestHash] - hash of specific manifest (Not provided returns all.)
+   * @returns {(Promise<Manifests | ManifestsDetailed>)}
+   * @memberof Developer
+   */
+  public async listManifests(details: boolean, manifestHash?: string): Promise<Manifests | ManifestsDetailed> {
+    return this.call('listmanifests', details, manifestHash);
   }
 }

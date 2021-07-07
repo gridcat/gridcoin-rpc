@@ -1,4 +1,5 @@
 import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../contracts/auditSnapshot';
+import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
 import { Contract } from '../contracts/transaction';
@@ -97,5 +98,23 @@ export class Developer extends RPCBase {
    */
   public async debug(enable: boolean): Promise<{ 'Logging category VERBOSE (aka old debug) ': boolean }> {
     return this.call('debug', enable);
+  }
+
+  /** @todo: implement dumpcontracts */
+
+  /**
+   * Show stats on what wallets and cpids staked recent blocks
+   * @description
+   * Mode 0: Startheight is the starting height, endheight is the chain head if not specified.
+   * Mode 1: Startheight is actually the number of blocks back from endheight or the chain head if not specified.
+   *
+   * @param {(0 | 1)} mode
+   * @param {number} [startHeight]
+   * @param {number} [endHeight]
+   * @returns {Promise<BlockStats>}
+   * @memberof Developer
+   */
+  public async getBlockStats(mode: 0 | 1, startHeight?: number, endHeight?: number): Promise<BlockStats> {
+    return this.call('getblockstats', mode, startHeight, endHeight);
   }
 }

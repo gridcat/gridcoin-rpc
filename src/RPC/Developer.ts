@@ -1,5 +1,6 @@
 import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../contracts/auditSnapshot';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
+import { ContractAverage } from '../contracts/contractAverage';
 import { Contract } from '../contracts/transaction';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
@@ -74,5 +75,15 @@ export class Developer extends RPCBase {
    */
   public async compareSnapshotAccrual(): Promise<CompareSnapshotAccural> {
     return this.call('comparesnapshotaccrual');
+  }
+
+  /**
+   * Displays information on your current contract average with regards to superblock contract
+   *
+   * @returns {Promise<ContractAverage>}
+   * @memberof Developer
+   */
+  public async currentContractAverage(): Promise<ContractAverage> {
+    return this.call('currentcontractaverage');
   }
 }

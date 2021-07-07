@@ -3,6 +3,7 @@ import { BlockStats } from '../contracts/blockStats';
 import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
 import { LoggingCategories } from '../contracts/logging';
+import { NetworkHealth } from '../contracts/networkHealth';
 import { Projects } from '../contracts/project';
 import { ResearcherAccounts } from '../contracts/researcher';
 import { Contract } from '../contracts/transaction';
@@ -175,5 +176,15 @@ export class Developer extends RPCBase {
     disable?: keyof LoggingCategories | 'all',
   ): Promise<LoggingCategories> {
     return this.call('logging', enable, disable);
+  }
+
+  /**
+   * Display information about the network health
+   *
+   * @returns {Promise<NetworkHealth>}
+   * @memberof Developer
+   */
+  public async network(): Promise<NetworkHealth> {
+    return this.call('network');
   }
 }

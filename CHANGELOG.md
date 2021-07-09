@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0...v3.0.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* **comments:** fix comments so <things> didn't get lost ([8cf47a4](https://github.com/gridcat/gridcoin-rpc/commit/8cf47a4aeb3de4aab5536f6266aebd9490beff02))
+
 # [3.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v2.0.0...v3.0.0) (2021-07-09)
 
 

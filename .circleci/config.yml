@@ -36,9 +36,8 @@ jobs:
   lint_commit_message:
     <<: *defaults
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/project
+          at: ~/grc
       - run:
           name: Define environment variable with lastest commit's message
           command: |
@@ -46,7 +45,7 @@ jobs:
             source $BASH_ENV
       - run:
           name: Lint commit message
-          command: echo "$COMMIT_MESSAGE" | ~/project/node_modules/.bin/commitlint commitlint
+          command: echo "$COMMIT_MESSAGE" | ~/grc/node_modules/.bin/commitlint commitlint
 
   deploy-npm:
     <<: *defaults

@@ -1,16 +1,16 @@
-export default interface IBackupPrivateKeys {
+export interface BackupPrivateKeys {
   /**
    * Backup location
    *
    * @type {string}
-   * @memberof IBackupPrivateKeys
+   * @memberof BackupPrivateKeys
    */
   location: string;
   /**
    * Result
    *
    * @type {boolean}
-   * @memberof IBackupPrivateKeys
+   * @memberof BackupPrivateKeys
    */
   result: boolean;
 }

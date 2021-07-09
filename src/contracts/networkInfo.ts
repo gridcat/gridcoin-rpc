@@ -1,25 +1,25 @@
-export default interface INetworkInfo {
+export interface NetworkInfo {
   version: string;
-  minor_version: number;
+  minorVersion: number;
   /**
    * the protocol version
    *
    * @type {number}
-   * @memberof INetworkInfo
+   * @memberof NetworkInfo
    */
   protocolversion: number;
   /**
    * the time offset
    *
    * @type {number}
-   * @memberof INetworkInfo
+   * @memberof NetworkInfo
    */
   timeoffset: number;
   /**
    * the number of connections
    *
    * @type {number}
-   * @memberof INetworkInfo
+   * @memberof NetworkInfo
    */
   connections: number;
   paytxfee: number;
@@ -28,9 +28,10 @@ export default interface INetworkInfo {
    * the proxy that is used for this network, or empty if none
    *
    * @type {string}
-   * @memberof INetworkInfo
+   * @memberof NetworkInfo
    */
   proxy: string;
   ip: string;
+  localaddresses: string[];
   errors: string;
 }

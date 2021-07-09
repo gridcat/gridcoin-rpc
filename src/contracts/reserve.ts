@@ -1,4 +1,4 @@
-export default interface IReserve {
+export interface Reserve {
   reserve: boolean;
   amount: number;
 }

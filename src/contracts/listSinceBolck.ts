@@ -1,6 +1,6 @@
-import ITransactionShort from './transactionShort';
+import { TransactionShort } from './transactionShort';
 
-export default interface IListSinceBlock {
-  transactions: Array<ITransactionShort>;
+export interface ListSinceBlock {
+  transactions: TransactionShort[];
   lastBlock: string;
 }

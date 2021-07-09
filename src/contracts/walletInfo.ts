@@ -1,32 +1,65 @@
-export default interface IWalletInfo {
+export interface WalletInfo {
   /**
-   * the wallet version
+   * the version of the wallet
    *
    * @type {number}
-   * @memberof IWalletInfo
+   * @memberof WalletInfo
    */
   walletversion: number;
+  /**
+   * the balance of the wallet
+   *
+   * @type {number}
+   * @memberof WalletInfo
+   */
   balance: number;
   /**
-   * the total confirmed balance of the wallet in GRC
+   * gridcoin from new stakes which have not yet matured
    *
    * @type {number}
-   * @memberof IWalletInfo
+   * @memberof WalletInfo
    */
   newmint: number;
-  stake: number;
   /**
-   * the timestamp (seconds since Unix epoch) of the oldest pre-generated key in the key pool
+   * the total amount staked
    *
    * @type {number}
-   * @memberof IWalletInfo
+   * @memberof WalletInfo
+   */
+  stake: number;
+  /**
+   * the oldest key from the keypool which is what’s used to generate addresses
+   *
+   * @type {number}
+   * @memberof WalletInfo
    */
   keypoololdest: number;
   /**
-   * how many new keys are pre-generated (only counts external keys)
+   * how many keys are in the keypool
    *
    * @type {number}
-   * @memberof IWalletInfo
+   * @memberof WalletInfo
    */
   keypoolsize: number;
+  /**
+   * Date until unlocked
+   *
+   * @type {number}
+   * @memberof WalletInfo
+   */
+  unlockedUntil: number;
+  /**
+   * If the wallet is currently staking
+   *
+   * @type {boolean}
+   * @memberof WalletInfo
+   */
+  staking: boolean;
+  /**
+   * Any errors stopping it from staking
+   *
+   * @type {string}
+   * @memberof WalletInfo
+   */
+  miningError: string;
 }

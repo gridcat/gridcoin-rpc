@@ -1,4 +1,4 @@
-export default interface IKeysPair {
+export interface KeysPair {
   PrivateKey: string;
   PublicKey: string;
 }

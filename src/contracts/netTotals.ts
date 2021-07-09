@@ -1,23 +1,23 @@
-export default interface INetTotals {
+export interface NetTotals {
   /**
    * Total bytes received
    *
    * @type {number}
-   * @memberof INetTotals
+   * @memberof NetTotals
    */
   totalbytesrecv: number;
   /**
    * Total bytes sent
    *
    * @type {number}
-   * @memberof INetTotals
+   * @memberof NetTotals
    */
   totalbytessent: number;
   /**
    * Current UNIX time in milliseconds
    *
    * @type {number}
-   * @memberof INetTotals
+   * @memberof NetTotals
    */
   timemillis: number;
 }

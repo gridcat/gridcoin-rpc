@@ -48,9 +48,9 @@ export class Developer extends RPCBase {
    * @description
    * Before invoking this command, import the master key used to sign and verify
    * transactions that contain administrative contracts. The label is optional:
-   *    importprivkey <private_key_hex> master
+   *    importprivkey *private_key_hex* master
    * Send some coins to the master key address if necessary:
-   *    sendtoaddress <address> <amount>
+   *    sendtoaddress *address* <amount>
    * To whitelist a project:
    *    addkey add project projectname url
    * To de-whitelist a project:
@@ -155,7 +155,7 @@ export class Developer extends RPCBase {
   }
 
   /**
-   * logging [json array category adds] [json array category removes]
+   * logging *json array category adds* *json array category removes*
    * Gets and sets the logging configuration.
    * When called without an argument, returns the list of categories with status that are currently being debug logged or not.
    * When called with arguments, adds or removes categories from debug logging and return the lists above.

@@ -33,6 +33,20 @@ jobs:
           name: Run tests
           command: npm run test:prod
 
+  lint_commit_message:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Define environment variable with lastest commit's message
+          command: |
+            echo 'export COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Lint commit message
+          command: echo "$COMMIT_MESSAGE" | npx commitlint
+
   deploy-npm:
     <<: *defaults
     steps:
@@ -68,6 +82,12 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
+      - lint_commit_message:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
       - test:
           filters:
             branches:
@@ -81,14 +101,7 @@ workflows:
               ignore: gh-pages
           requires:
             - build
-            - test
-      - deploy-beta:
-          filters:
-            branches:
-              only: beta
-              ignore: gh-pages
-          requires:
-            - build
+            - lint_commit_message
             - test
       - deploy-npm:
           filters:
@@ -97,4 +110,5 @@ workflows:
               ignore: gh-pages
           requires:
             - build
+            - lint_commit_message
             - test

@@ -1,4 +1,3 @@
-import assert from 'assert';
 import camelcaseKeys from 'camelcase-keys';
 import { RPCError } from './Errors/RpcError';
 import JsonRPC, { IJsonRPC, IParameters } from './lib/JsonRPC';

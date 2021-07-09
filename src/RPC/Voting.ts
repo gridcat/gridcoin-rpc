@@ -12,7 +12,7 @@ export abstract class Voting extends RPCBase {
   /**
    * Add a poll to the network.
    * Requires 100K GRC balance. Costs 50 GRC.
-   * Provide an empty string for <answers> when choosing "yes/no/abstain" for <responsetype>.
+   * Provide an empty string for *answers* when choosing "yes/no/abstain" for *responsetype*.
    *
    * @param {string} title - Title for the poll
    * @param {number} days - Number of days that the poll will run

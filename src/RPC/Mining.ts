@@ -66,7 +66,7 @@ export class Mining extends RPCBase {
   }
 
   /**
-   * Displays information about your beacon or the beacon for [cpid].
+   * Displays information about your beacon or the beacon for *cpid*.
    *
    * @param {CPID} [cpid]
    * @returns {Promise<BeaconStatusCollection>}

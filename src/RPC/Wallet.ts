@@ -110,7 +110,7 @@ export class Wallet extends RPCBase {
   /**
    * Creates a transaction that will send the given amount (rounded to 0.00000001) to no one making the coins disappear permanently.
    * No one can get back the coins spent by this command.
-   * If [hex string] is specified, it will add on to the script used in the transaction.
+   * If *hex string* is specified, it will add on to the script used in the transaction.
    *
    * Requires the wallet to be fully unlocked
    *
@@ -220,7 +220,7 @@ export class Wallet extends RPCBase {
   /**
    * Returns the current Gridcoin address for receiving payments to this account.
    * @description
-   * If <account> does not exist, it will be created along with an associated new address that will be returned.
+   * If account does not exist, it will be created along with an associated new address that will be returned.
    *
    * @param {string} account - an account name
    * @returns {Promise<Address>} - GRC address
@@ -282,7 +282,7 @@ export class Wallet extends RPCBase {
    * Returns a new Gridcoin address for receiving payments.
    * @description
    * If [account] is specified, it is added to the address book
-   * so payments received with the address will be credited to [account].
+   * so payments received with the address will be credited to *account*.
    *
    * @param {string} [account]
    * @returns {Promise<string>}
@@ -319,7 +319,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Get a string that is serialized, hex-encoded data for <txid> from the wallet.
+   * Get a string that is serialized, hex-encoded data for txid from the wallet.
    *
    * @param {TX} txid
    * @returns {Promise<string>}
@@ -330,8 +330,8 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Returns the total amount received by addresses with [account] in transactions with at least [minconf] confirmations.
-   * If [account] not provided return will include all transactions to all accounts.
+   * Returns the total amount received by addresses with *account* in transactions with at least *minconf* confirmations.
+   * If *account* not provided return will include all transactions to all accounts.
    *
    * @param {string} account - the account name
    * @param {number} [minconf=1] - the minimum number of confirmations
@@ -344,7 +344,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Returns the amount received by <gridcoinaddress> in transactions with at least [minconf] confirmations.
+   * Returns the amount received by gridcoinaddress in transactions with at least *minconf* confirmations.
    * @description
    * It correctly handles the case where someone has sent to the address in multiple transactions.
    * Keep in mind that addresses are only ever used for receiving transactions.
@@ -363,7 +363,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Get detailed information about in-wallet transaction <txid>
+   * Get detailed information about in-wallet transaction txid
    *
    * @param {TX} txid - The transaction id
    * @param {boolean} [includeWatchOnly=false] - Whether to include watchonly addresses in balance calculation and details
@@ -463,7 +463,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Get all transactions in blocks since block [blockhash], or all transactions if omitted
+   * Get all transactions in blocks since block *blockhash*, or all transactions if omitted
    *
    * @param {string} [blockHash] - The block hash to list transactions since
    * @param {number} [targetConfirmations] - The confirmations required, must be 1 or more
@@ -638,7 +638,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Sends <amount> of Gridcoin from <account> to <gridcoinaddress>.
+   * Sends *amount* of Gridcoin from *account* to *gridcoinaddress*.
    *
    * @param {string} account - Account FROM
    * @param {Address} address - Address TO
@@ -672,7 +672,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Send from <fromaccount> to a list of addresses.
+   * Send from *fromaccount* to a list of addresses.
    * Use '' if you don’t want to limit to one account label. Addresses should be listed in JSON format.
    *
    * @param {string} account -  - Account FROM
@@ -709,7 +709,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Sends <amount> of Gridcoin to <gridcoinaddress>.
+   * Sends amount of Gridcoin to gridcoinaddress.
    *
    * @param {Address} address - Recipient address
    * @param {number} amount - is a real and is rounded to the nearest 0.000001
@@ -761,7 +761,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Returns a signed a message using the private key from <Gridcoinaddress>.
+   * Returns a signed a message using the private key from *Gridcoinaddress*.
    * Lets you prove that this message came from the owner of an address.
    * You can verify a signed message with the verify message command.
    * (It will not send this message anywhere. You have to do that)
@@ -802,7 +802,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Return information about <gridcoinaddress>.
+   * Return information about *gridcoinaddress*.
    * @description
    * The validateaddress RPC accepts a block
    * verifies it is a valid addition to the block chain
@@ -817,7 +817,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Return information about <gridcoinpubkey>.
+   * Return information about *gridcoinpubkey*.
    *
    * @param {PublicKey} gridcoinPubkey
    * @returns {Promise<IAddress>}
@@ -860,8 +860,8 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Stores the wallet decryption key in memory for <timeout> seconds.
-   * if [stakingonly] is true sending functions are disabled.
+   * Stores the wallet decryption key in memory for *timeout* seconds.
+   * if *stakingonly* is true sending functions are disabled.
    *
    * @param {string} passphrase
    * @param {number} timeout
@@ -874,7 +874,7 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Changes the wallet passphrase from <oldpassphrase> to <newpassphrase>
+   * Changes the wallet passphrase from *oldpassphrase* to *newpassphrase*
    *
    * @param {string} oldPassphrase
    * @param {string} newPassphrase

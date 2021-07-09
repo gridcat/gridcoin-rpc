@@ -16,7 +16,7 @@ type addNodeCommand = 'add' | 'remove' | 'onetry';
 
 export class Network extends RPCBase {
   /**
-   * Attempts add or remove <node> from the addnode list or try a connection to <node> once
+   * Attempts add or remove *node* from the addnode list or try a connection to *node* once
    *
    * RPC command will always return { result: 'ok' }
    *
@@ -141,7 +141,7 @@ export class Network extends RPCBase {
   }
 
   /**
-   * Returns hash of block in best-block-chain at <index>
+   * Returns hash of block in best-block-chain at *index*
    *
    * @param {index} block - Block number for requested hash
    * @returns {Promise<string>}
@@ -313,7 +313,7 @@ export class Network extends RPCBase {
    *
    * @param {string} subnet - The IP/Subnet (see getpeerinfo for nodes IP) with an optional netmask (default is /32 = single IP)
    * @param {('add' | 'remove')} command - 'add' to add an IP/Subnet to the list, 'remove' to remove an IP/Subnet from the list
-   * @param {number} [banTime] - time in seconds how long (or until when if [absolute] is set) the IP is banned
+   * @param {number} [banTime] - time in seconds how long (or until when if *absolute* is set) the IP is banned
    * (0 or empty means using the default time of 24h which can also be overwritten by the -bantime startup argument)
    * @param {number | false} [absolute] - Defaults to false. If set, the bantime must be an absolute timestamp in seconds since epoch (Jan 1 1970 GMT).
    * @returns {Promise<null>}
@@ -329,7 +329,7 @@ export class Network extends RPCBase {
   }
 
   /**
-   * Returns all information about the block at <index>
+   * Returns all information about the block at *index*
    *
    * @param {number} index - Block number
    * @returns {Promise<Block>}

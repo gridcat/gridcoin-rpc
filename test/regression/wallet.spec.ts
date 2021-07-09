@@ -3,19 +3,18 @@ import chai, { expect } from 'chai';
 import chaiString from 'chai-string';
 import * as bitcoin from 'bitcoinjs-lib';
 import { GridcoinRPC } from '../../src/GridcoinRPC';
-import { TX } from '../../src/TX';
 
 chai.use(chaiString);
 
-const validAddresses = [
-  'muuGx4fwdNFU7ZsoTEHAXs3BtsaxgRKFRE',
-  'mkKj2dJREPDaztCvVZ9uLeFEfWnmR4xg5q',
-  'mpdD5xjx82oF9E4HGZwLaTZEx5Hu5xFi6J',
-  'mnAESTuL4bVX9zzKwwn6CU4WbDW4Tz8q9Z',
-  'mx8w3ZNnk119V9z35EqJNNLwiukzDt3UNR',
-  // multisig
-  '2NAQFNoQQvwFWhC4bEcJUf7XqrzBwzgujZw',
-];
+// const validAddresses = [
+//   'muuGx4fwdNFU7ZsoTEHAXs3BtsaxgRKFRE',
+//   'mkKj2dJREPDaztCvVZ9uLeFEfWnmR4xg5q',
+//   'mpdD5xjx82oF9E4HGZwLaTZEx5Hu5xFi6J',
+//   'mnAESTuL4bVX9zzKwwn6CU4WbDW4Tz8q9Z',
+//   'mx8w3ZNnk119V9z35EqJNNLwiukzDt3UNR',
+//   // multisig
+//   '2NAQFNoQQvwFWhC4bEcJUf7XqrzBwzgujZw',
+// ];
 
 describe.skip('Wallet', () => {
   let inst: GridcoinRPC;
@@ -23,18 +22,18 @@ describe.skip('Wallet', () => {
     inst = new GridcoinRPC({
       host: 'localhost',
       port: 47812,
-      username: 'Z3y50fjgx1sUpXBJpRMxkfah7V7NHqi5',
-      password: 'tSjaKWGQxpd2lYLwSRull9U2Vclypu7v',
+      username: '',
+      password: '',
     });
     await inst.repairWallet();
   });
 
-  describe.skip('checkwallet', () => {
-    it('should check wallet', async () => {
-      const res = await inst.checkWallet();
-      expect(res.walletCheckPassed).to.be.true;
-    });
-  });
+  // describe.skip('checkwallet', () => {
+  //   it('should check wallet', async () => {
+  //     const res = await inst.checkWallet();
+  //     expect(res.walletCheckPassed).to.be.true;
+  //   });
+  // });
 
   describe.skip('burn', () => {
     afterAll(async () => {

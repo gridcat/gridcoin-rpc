@@ -1,18 +1,25 @@
 # gridcoin-rpc – Promise based Gridcoin RPC client
 
-A JavaScript library for the interactions with gridcoin wallet
+TS library for the interactions with gridcoin RPC api
 
   [![NPM Version][npm-image]][npm-url]
   [![CI build][cci-image]][cci-url]
   [![SNYK report][snyk-image]][snyk-url]
+  [![semantic-release][semantic-image]][semantic-url]
+  [![Commitzen Friendly][commitzen-image]][commitzen-url]
 
-### Installation
+![](https://gateway.pinata.cloud/ipfs/QmVgrTvACHHdzzTDJouBEKY5Fs31gq9HdER6oY5joqpgr5)
+
+This library is intended to be the simple proxy for those who want to use JS/TS to tinker with Gridcoin RPC library. 
+Library won't do validation by itself, it relies on the RPC validation. It will just help you with a typings.
+
+## Installation
 
 ```bash
 npm install gridcoin-rpc
 ```
 
-### Usage
+## Usage
 
 ```javascript
 const { GridcoinRPC } = require('gridcoin-rpc');
@@ -24,15 +31,18 @@ const rpc = new GridcoinRPC({
   password: 'very-strong-password',
 });
 
-// Test connection
-rpc.testConnection()
-  .then(res => console.log(JSON.stringify(res, null, 2)))
-  .catch(err => console.log('!', err.message));
+async main = () => {
+  // Get wallet info
+  try {
+    const walletInfo = await rpc.getWalletInfo();
+    console.log(JSON.stringify(res, null, 2))
+  } catch (e) {
+    console.log(err.message)
+  }
+}
 
-// Get wallet info
-rpc.getWalletInfo()
-  .then(res => console.log(JSON.stringify(res, null, 2)))
-  .catch(err => console.log(err.message));
+main();
+
 
 // {
 //   "walletversion": 60000,
@@ -46,25 +56,16 @@ rpc.getWalletInfo()
 
 ```
 
-### Documentation
+## Documentation
 [API documentation](https://gridcat.github.io/gridcoin-rpc/)
 
-### Donate
+## Donate
 *GRC*: SJVaQcJriv7N8Py8eWjNUtWPTPBtDZashD
 
-*BTC*: 12sUqF4mBiocqRPPPCyUsrTL6gf3AG2oTz
-
-*XLM*: GDGOYINLUKGWDKRGZDDWE3UZLXBDN23KVCPCOAHXO4RB2DR3V7PQ7ENP
-
-### Follow me
+## Follow me
 [keybase](https://keybase.io/gridcat)
 
 [steemit](https://steemit.com/@gridcat/)
-
-#### External links
-
-- [tutorial](https://itnext.io/step-by-step-building-and-publishing-an-npm-typescript-package-44fe7164964c)
-- [boilerplate](https://github.com/alexjoverm/typescript-library-starter)
 
 [npm-image]: https://img.shields.io/npm/v/gridcoin-rpc.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/gridcoin-rpc
@@ -72,3 +73,7 @@ rpc.getWalletInfo()
 [cci-url]: https://circleci.com/gh/gridcat/workflows/gridcoin-rpc/tree/master
 [snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/gridcat/gridcoin-rpc.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/github/gridcat/gridcoin-rpc
+[semantic-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square
+[semantic-url]: https://github.com/semantic-release/semantic-release
+[commitzen-image]: https://img.shields.io/badge/commitzen-friendly-brightgreen.svg
+[commitzen-url]: https://commitzen.github.io/cz-cli

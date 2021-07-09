@@ -9,8 +9,8 @@ describe.skip('Network', () => {
     inst = new GridcoinRPC({
       host: 'localhost',
       port: 47812,
-      username: 'Z3y50fjgx1sUpXBJpRMxkfah7V7NHqi5',
-      password: 'tSjaKWGQxpd2lYLwSRull9U2Vclypu7v',
+      username: '',
+      password: '',
     });
   });
   describe('addnode', () => {

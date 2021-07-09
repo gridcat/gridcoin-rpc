@@ -1,53 +1,59 @@
-export default interface IPeer {
+export interface Peer {
+  id: number;
   /**
    * The IP address and port of the peer
    * host:port
    *
    * @type {string}
-   * @memberof IPeer
+   * @memberof Peer
    */
   addr: string;
+  addrlocal: string;
   /**
    * The services offered
    *
    * @type {string}
-   * @memberof IPeer
+   * @memberof Peer
    */
   services: string;
   /**
    * The time in seconds since epoch (Jan 1 1970 GMT) of the last send
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   lastsend: number;
   /**
    * The time in seconds since epoch (Jan 1 1970 GMT) of the last receive
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   lastrecv: number;
+  bytessent: number;
+  bytesrecv: number;
   /**
    * The connection time in seconds since epoch (Jan 1 1970 GMT)
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   conntime: number;
+  timeoffset: number;
   /**
    * ping time (if available)
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   pingtime: number;
+  minping: number;
   /**
    * The peer version, such as 7001
    * @example 7001
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   version: number;
   /**
@@ -55,21 +61,21 @@ export default interface IPeer {
    * @example /Satoshi:0.8.5/
    *
    * @type {string}
-   * @memberof IPeer
+   * @memberof Peer
    */
   subver: string;
   /**
    * Inbound (true) or Outbound (false)
    *
    * @type {boolean}
-   * @memberof IPeer
+   * @memberof Peer
    */
   inbound: boolean;
   /**
    * The starting height (block) of the peer
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   startingheight: number;
   nTrust: number;
@@ -77,8 +83,7 @@ export default interface IPeer {
    * The ban score
    *
    * @type {number}
-   * @memberof IPeer
+   * @memberof Peer
    */
   banscore: number;
-  'Neural Network': boolean;
 }

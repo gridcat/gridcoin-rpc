@@ -42,6 +42,15 @@ jobs:
           name: Semantic release
           command: npm run semantic-release
 
+  deploy-beta:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Semantic release
+          command: npm run semantic-release
+
   deploy-docs:
     <<: *defaults
     steps:
@@ -69,6 +78,14 @@ workflows:
           filters:
             branches:
               only: master
+              ignore: gh-pages
+          requires:
+            - build
+            - test
+      - deploy-beta:
+          filters:
+            branches:
+              only: beta
               ignore: gh-pages
           requires:
             - build

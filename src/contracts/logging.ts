@@ -1,0 +1,34 @@
+export interface LoggingCategories {
+  net: boolean;
+  tor: boolean;
+  mempool: boolean;
+  http: boolean;
+  bench: boolean;
+  zmq: boolean;
+  walletdb: boolean;
+  rpc: boolean;
+  estimatefee: boolean;
+  addrman: boolean;
+  selectcoins: boolean;
+  reindex: boolean;
+  cmpctblock: boolean;
+  rand: boolean;
+  misc: boolean;
+  proxy: boolean;
+  mempoolrej: boolean;
+  libevent: boolean;
+  coindb: boolean;
+  qt: boolean;
+  leveldb: boolean;
+  scraper: boolean;
+  manifest: boolean;
+  superblock: boolean;
+  beacon: boolean;
+  tally: boolean;
+  accrual: boolean;
+  contract: boolean;
+  miner: boolean;
+  vote: boolean;
+  verbose: boolean;
+  noisy: boolean;
+}

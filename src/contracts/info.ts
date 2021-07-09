@@ -1,9 +1,12 @@
-import IDifficulty from './difficulty';
-import INetworkInfo from './networkInfo';
-import IWallerInfo from './walletInfo';
+import { BlockchainDifficulty } from './blockchainInfo';
+import { NetworkInfo } from './networkInfo';
+import { WalletInfo } from './walletInfo';
 
-export default interface IInfo extends INetworkInfo, IWallerInfo {
+export interface Info extends
+  Omit<NetworkInfo, 'localaddresses'>,
+  Omit<WalletInfo, 'staking' & 'miningerror'>
+{
   moneysupply: number;
-  difficulty: IDifficulty;
+  difficulty: BlockchainDifficulty;
   testnet: boolean;
 }

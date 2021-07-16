@@ -12,7 +12,7 @@
   ],
   "module": "dist/GridcoinRPC.js",
   "main": "dist/GridcoinRPC.js",
-  "typings": "dist/types/GridcoinRPC.d.ts",
+  "typings": "dist/GridcoinRPC.d.ts",
   "files": [
     "dist"
   ],

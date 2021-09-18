@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/grc
   docker:
-    - image: circleci/node:14
+    - image: cimg/node:14.17.6
 
 jobs:
   build:

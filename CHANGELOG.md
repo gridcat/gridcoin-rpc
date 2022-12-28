@@ -1,3 +1,20 @@
+# [4.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.2...v4.0.0) (2022-12-28)
+
+
+### Bug Fixes
+
+* **docs:** fix documents generation ([56f1308](https://github.com/gridcat/gridcoin-rpc/commit/56f1308c245cee4caac1bbcb51ff238b3c4a8459))
+
+
+### chore
+
+* **dependencies:** upgrade dependencies ([54d0b24](https://github.com/gridcat/gridcoin-rpc/commit/54d0b24d18b18594863b1f5424f723ad17371899))
+
+
+### BREAKING CHANGES
+
+* **dependencies:** The minimum node version is 16 from now on
+
 ## [3.0.2](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.1...v3.0.2) (2021-07-16)
 
 

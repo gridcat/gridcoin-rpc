@@ -1,6 +1,6 @@
 {
   "name": "gridcoin-rpc",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "",
   "keywords": [
     "gridcoin",
@@ -38,7 +38,7 @@
     "_test:prod": "npm run lint && npm run test:unit -- --coverage --no-cache",
     "test:prod": "npm run lint",
     "build:docs": "ts-node --project tools/tsconfig.json tools/generate-doc.ts",
-    "deploy:docs": "ts-node --project tools/tsconfig.json tools/gh-pages-publish",
+    "deploy:docs": "tools/gh-pages-publish.sh",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "typecheck": "tsc --project tsconfig.json --noEmit",
@@ -90,7 +90,6 @@
     "@types/jest": "^29.2.4",
     "@types/node": "^18.11.15",
     "@types/rimraf": "^3.0.2",
-    "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "bitcoinjs-lib": "^6.1.0",

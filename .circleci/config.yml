@@ -110,6 +110,8 @@ workflows:
             - lint_commit_message
             - test
             - typecheck
+          context:
+            - semantic-release
       - deploy-npm:
           filters:
             branches:
@@ -120,3 +122,5 @@ workflows:
             - lint_commit_message
             - test
             - typecheck
+          context:
+            - semantic-release

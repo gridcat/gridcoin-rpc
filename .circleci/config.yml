@@ -3,7 +3,7 @@ version: 2
 defaults: &defaults
   working_directory: ~/grc
   docker:
-    - image: circleci/node:12
+    - image: cimg/node:16.17
 
 jobs:
   build:
@@ -46,17 +46,17 @@ jobs:
       - run:
           name: Lint commit message
           command: echo "$COMMIT_MESSAGE" | npx commitlint
-
-  deploy-npm:
+  
+  typecheck:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/grc
       - run:
-          name: Semantic release
-          command: npm run semantic-release
+          name: "Typecheck"
+          command: npm run typecheck 
 
-  deploy-beta:
+  deploy-npm:
     <<: *defaults
     steps:
       - attach_workspace:
@@ -88,6 +88,12 @@ workflows:
               ignore: gh-pages
           requires:
             - build
+      - typecheck:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
       - test:
           filters:
             branches:
@@ -103,6 +109,7 @@ workflows:
             - build
             - lint_commit_message
             - test
+            - typecheck
       - deploy-npm:
           filters:
             branches:
@@ -112,3 +119,4 @@ workflows:
             - build
             - lint_commit_message
             - test
+            - typecheck

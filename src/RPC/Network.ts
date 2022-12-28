@@ -100,7 +100,8 @@ export class Network extends RPCBase {
    * @memberof Network
    */
   public async getBlock<Type extends boolean>(
-    hash: string, txinfo: Type,
+    hash: string,
+    txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
     return this.call('getblock', hash, txinfo);
   }
@@ -115,7 +116,8 @@ export class Network extends RPCBase {
    * @memberof Network
    */
   public async getBlockByNumber<Type extends boolean>(
-    number: number, txinfo: Type,
+    number: number,
+    txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
     return this.call('getblockbynumber', number, txinfo);
   }

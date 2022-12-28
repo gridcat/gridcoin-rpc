@@ -8,7 +8,8 @@ rimraf.sync('docs');
 
 // Got no nice documentation how to run it from the code, keep failing
 // So I've decided to use easy way
-execSync('typedoc --out docs --theme minimal src');
+// execSync('npx typedoc --out docs --theme minimal src');
+execSync('npx typedoc --tsconfig ./tsconfig.json --out docs --theme default ./src/*');
 
 // Create file for the circleci so circleci will ignore it
 mkdirSync('docs/.circleci');

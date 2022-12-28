@@ -313,7 +313,8 @@ export class Wallet extends RPCBase {
    * @memberof Wallet
    */
   public async getRawTransaction<Type extends boolean>(
-    txid: TX, verbose: Type,
+    txid: TX,
+    verbose: Type,
   ): Promise<Type extends true ? DetailedRawTransaction : string> {
     return this.call('getrawtransaction', txid, verbose);
   }
@@ -685,7 +686,7 @@ export class Wallet extends RPCBase {
   public async sendMany(
     account: string,
     recipients: { [key: string]: number },
-    minConf = 1,
+    minConf = 1, // eslint-disable-line default-param-last
     comment?: string,
   ): Promise<TX> {
     return this.call<TX>(

@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.1...v3.0.2) (2021-07-16)
+
+
+### Bug Fixes
+
+* **declaration:** fix declaration file path ([043d93f](https://github.com/gridcat/gridcoin-rpc/commit/043d93faa2f2eea05cfa4743406a50b3eb21306b))
+
 ## [3.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.0...v3.0.1) (2021-07-09)
 
 

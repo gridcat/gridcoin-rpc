@@ -38,7 +38,7 @@
     "_test:prod": "npm run lint && npm run test:unit -- --coverage --no-cache",
     "test:prod": "npm run lint",
     "build:docs": "ts-node --project tools/tsconfig.json tools/generate-doc.ts",
-    "deploy:docs": "ts-node --project tools/tsconfig.json tools/gh-pages-publish",
+    "deploy:docs": "tools/gh-pages-publish.sh",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "typecheck": "tsc --project tsconfig.json --noEmit",

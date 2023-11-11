@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.0...v4.0.1) (2023-11-11)
+
+
+### Bug Fixes
+
+* **deps:** dependencies update ([16d63ab](https://github.com/gridcat/gridcoin-rpc/commit/16d63ab64b40f79d236af748ac94a1e74a4175c4))
+
 # [4.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v3.0.2...v4.0.0) (2022-12-28)
 
 

@@ -119,6 +119,6 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "camelcase-keys": "^7.0.2"
+    "camelcase-keys": "^9.1.2"
   }
 }

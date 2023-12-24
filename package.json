@@ -39,7 +39,6 @@
     "test:prod": "npm run lint",
     "build:docs": "ts-node --project tools/tsconfig.json tools/generate-doc.ts",
     "deploy:docs": "tools/gh-pages-publish.sh",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "semantic-release": "semantic-release"
@@ -97,7 +96,6 @@
     "chai-string": "^1.5.0",
     "colors": "^1.4.0",
     "commitizen": "^4.2.6",
-    "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.29.0",

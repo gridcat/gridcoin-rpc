@@ -1,0 +1,126 @@
+version: 2
+
+defaults: &defaults
+  working_directory: ~/grc
+  docker:
+    - image: cimg/node:16.17
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }} # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: npm install
+      - run: npm run build
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/grc
+          paths: .
+
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Run tests
+          command: npm run test:prod
+
+  lint_commit_message:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Define environment variable with lastest commit's message
+          command: |
+            echo 'export COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Lint commit message
+          command: echo "$COMMIT_MESSAGE" | npx commitlint
+  
+  typecheck:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: "Typecheck"
+          command: npm run typecheck 
+
+  deploy-npm:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Semantic release
+          command: npm run semantic-release
+
+  deploy-docs:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Deploy docs
+          command: npm run deploy:docs
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: gh-pages
+      - lint_commit_message:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
+      - typecheck:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
+      - test:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
+      - deploy-docs:
+          filters:
+            branches:
+              only: master
+              ignore: gh-pages
+          requires:
+            - build
+            - lint_commit_message
+            - test
+            - typecheck
+          context:
+            - semantic-release
+      - deploy-npm:
+          filters:
+            branches:
+              only: master
+              ignore: gh-pages
+          requires:
+            - build
+            - lint_commit_message
+            - test
+            - typecheck
+          context:
+            - semantic-release

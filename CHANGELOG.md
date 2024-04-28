@@ -1,3 +1,12 @@
+## [4.0.2](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.1...v4.0.2) (2024-04-28)
+
+
+### Bug Fixes
+
+* **esm:** downgrade camel case library ([57237c3](https://github.com/gridcat/gridcoin-rpc/commit/57237c391f6b8963844cccca888218df2fda6a62)), closes [#55](https://github.com/gridcat/gridcoin-rpc/issues/55)
+* **esm:** downgrade camelcase, so it won't enforce the ESM module ([bdf925c](https://github.com/gridcat/gridcoin-rpc/commit/bdf925c23acabbd1f7199ee3b964a6c8c21d579b))
+* upgrade camelcase-keys from 9.1.2 to 9.1.3 ([7e73217](https://github.com/gridcat/gridcoin-rpc/commit/7e732170c269e5130518988f1a5c4c95c2ce471b))
+
 ## [4.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.0...v4.0.1) (2023-11-11)
 
 

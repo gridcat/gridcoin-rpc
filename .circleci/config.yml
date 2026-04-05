@@ -32,6 +32,15 @@ jobs:
       - run:
           name: Run tests
           command: npm run test:prod
+  
+  test_smoke:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Run smoke tests
+          command: npm run test:smoke
 
   lint_commit_message:
     <<: *defaults
@@ -100,6 +109,14 @@ workflows:
               ignore: gh-pages
           requires:
             - build
+      - test_smoke:
+          filters:
+            branches:
+              ignore: gh-pages
+          requires:
+            - build
+          context:
+            - testnet
       - deploy-docs:
           filters:
             branches:
@@ -109,6 +126,7 @@ workflows:
             - build
             - lint_commit_message
             - test
+            - test_smoke
             - typecheck
           context:
             - semantic-release
@@ -121,6 +139,7 @@ workflows:
             - build
             - lint_commit_message
             - test
+            - test_smoke
             - typecheck
           context:
             - semantic-release

@@ -4,7 +4,6 @@ TS library for the interactions with gridcoin RPC api
 
   [![NPM Version][npm-image]][npm-url]
   [![CI build][cci-image]][cci-url]
-  [![SNYK report][snyk-image]][snyk-url]
   [![semantic-release][semantic-image]][semantic-url]
   [![Commitzen Friendly][commitzen-image]][commitzen-url]
 
@@ -12,6 +11,13 @@ TS library for the interactions with gridcoin RPC api
 
 This library is intended to be the simple proxy for those who want to use JS/TS to tinker with Gridcoin RPC library. 
 Library won't do validation by itself, it relies on the RPC validation. It will just help you with a typings.
+
+## Compatibility
+
+| gridcoin-rpc | Gridcoin-Research |
+|---|---|
+| v4.x | up to ~v5.3.x |
+| v5.x | v5.5.0.0+ |
 
 ## Installation
 

@@ -1,3 +1,9 @@
+export interface LocalAddress {
+  address: string;
+  port: number;
+  score: number;
+}
+
 export interface NetworkInfo {
   version: string;
   minorVersion: number;
@@ -32,6 +38,6 @@ export interface NetworkInfo {
    */
   proxy: string;
   ip: string;
-  localaddresses: string[];
+  localaddresses: LocalAddress[];
   errors: string;
 }

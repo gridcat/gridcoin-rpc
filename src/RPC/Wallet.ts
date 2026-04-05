@@ -1,10 +1,12 @@
 import { AddressValidation, PubKeyValidation } from '../contracts/validation';
-import { BackupPrivateKeys } from '../contracts/backupPrivateKeys';
 import { BackupWallet } from '../contracts/backupWallet';
 import { BalanceDetail } from '../contracts/balanceDetail';
 import { WalletFailStatus, WalletSuccessStatus } from '../contracts/checkwallet';
+import { ConsolidateMsUnspentResult, ConsolidateUnspentResult } from '../contracts/consolidateUnspent';
+import { ClaimHtlcResult, CreateHtlcResult, RefundHtlcResult } from '../contracts/htlc';
 import { KeysPair } from '../contracts/keysPair';
 import { ListSinceBlock } from '../contracts/listSinceBolck';
+import { MaintainBackupsResult } from '../contracts/maintainBackups';
 import { RainByMagnitude } from '../contracts/rainByMagnitude';
 import { Output, RawTransaction } from '../contracts/rawTransaction';
 import { Receivement } from '../contracts/receivement';
@@ -25,7 +27,7 @@ import {
   TX,
 } from '../types';
 
-export class Wallet extends RPCBase {
+export abstract class Wallet extends RPCBase {
   /**
    * Add a nrequired-to-sign multisignature address to the wallet.
    *
@@ -81,19 +83,6 @@ export class Wallet extends RPCBase {
   }
 
   /**
-   * Creates a backup of the private keys and creates a keys.dat files (also includes the date in the filename).
-   * The data in the file is formatted like this: Address: ADDRESS, Secret: PRIVATE KEY.
-   * File location and "result": true will be given if it successes, otherwise it will show an error message.
-   * Requires the wallet to be fully unlocked
-   *
-   * @returns {(Promise<BackupPrivateKeys> | never)}
-   * @memberof Wallet
-   */
-  public async backupPrivateKeys(): Promise<BackupPrivateKeys> | never {
-    return this.call<BackupPrivateKeys>('backupprivatekeys');
-  }
-
-  /**
    * Creates a backup of the wallet.dat and gridcoinresearch.conf files (it also adds dates in the backup files’ names).
    * Returns if it was successful for each file
    * The files will be created in the walletbackups folder.
@@ -141,6 +130,50 @@ export class Wallet extends RPCBase {
   }
 
   /**
+   * Claim an HTLC output using the preimage.
+   *
+   * @param {TX} htlcTxid - Transaction ID of the HTLC funding tx
+   * @param {number} vout - Output index of the HTLC
+   * @param {Hex} preimageHex - The preimage (hex encoded)
+   * @param {Address} destinationAddr - Address to send claimed funds to
+   * @returns {Promise<ClaimHtlcResult>}
+   * @memberof Wallet
+   */
+  public async claimHtlc(
+    htlcTxid: TX,
+    vout: number,
+    preimageHex: Hex,
+    destinationAddr: Address,
+  ): Promise<ClaimHtlcResult> {
+    return this.call<ClaimHtlcResult>('claimhtlc', htlcTxid, vout, preimageHex, destinationAddr);
+  }
+
+  /**
+   * Create a Hash Time-Locked Contract.
+   *
+   * Returns a JSON object with the P2SH address and redeem script.
+   * If amount is provided, funds the HTLC with a transaction.
+   * Requires the wallet to be fully unlocked if amount is provided.
+   *
+   * @param {Address} receiverAddr - Address of the receiver (claim path)
+   * @param {Address} senderAddr - Address of the sender (refund path)
+   * @param {Hex} hashHex - SHA256 hash of the preimage (64 hex chars)
+   * @param {number} timeout - Absolute locktime for refund path
+   * @param {number} [amount] - Amount in GRC to fund the HTLC
+   * @returns {Promise<CreateHtlcResult>}
+   * @memberof Wallet
+   */
+  public async createHtlc(
+    receiverAddr: Address,
+    senderAddr: Address,
+    hashHex: Hex,
+    timeout: number,
+    amount?: number,
+  ): Promise<CreateHtlcResult> {
+    return this.call<CreateHtlcResult>('createhtlc', receiverAddr, senderAddr, hashHex, timeout, amount);
+  }
+
+  /**
    * Create a transaction spending the given inputs and creating new outputs.
    *
    * Outputs can be addresses or data.
@@ -178,7 +211,35 @@ export class Wallet extends RPCBase {
     );
   }
 
-  /** @todo: consolidatemsunspent */
+  /**
+   * Searches a block range for a multisig address with unspent utxos and consolidates them
+   * into a transaction ready for signing to return to the same address in a consolidated amount.
+   * Will determine multi-sig type and ensure the transaction does not exceed size limits.
+   *
+   * @param {Address} address - Multi-signature address
+   * @param {number} blockStart - Block number to start search from
+   * @param {number} blockEnd - Block number to end search on
+   * @param {number} [maxGrc] - Highest utxo value to include in search results in halfords (0 is default)
+   * @param {number} [maxInputs] - Maximum inputs desired (overridden if calculated max is less)
+   * @returns {Promise<ConsolidateMsUnspentResult>}
+   * @memberof Wallet
+   */
+  public async consolidateMsUnspent(
+    address: Address,
+    blockStart: number,
+    blockEnd: number,
+    maxGrc?: number,
+    maxInputs?: number,
+  ): Promise<ConsolidateMsUnspentResult> {
+    return this.call<ConsolidateMsUnspentResult>(
+      'consolidatemsunspent',
+      address,
+      blockStart,
+      blockEnd,
+      maxGrc,
+      maxInputs,
+    );
+  }
 
   /**
    * Return a JSON object representing the serialized, hex-encoded transaction
@@ -202,13 +263,52 @@ export class Wallet extends RPCBase {
     return this.call<Script>('decodescript', script);
   }
 
-  /** @todo: dumpprivkey */
-  /** @todo: dumpwallet */
-  /** @todo: encryptwallet */
+  /**
+   * Reveals the private key corresponding to the given address.
+   * Requires the wallet to be fully unlocked.
+   *
+   * @param {Address} address - Address of requested key
+   * @param {boolean} [dumpHex] - If true, also dump private and public key as hex strings
+   * @returns {Promise<string | { privateKey: string; privateKeyHex: string; publicKeyHex: string }>}
+   * @memberof Wallet
+   */
+  public async dumpPrivKey(
+    address: Address,
+    dumpHex?: boolean,
+  ): Promise<string | { privateKey: string; privateKeyHex: string; publicKeyHex: string }> {
+    return this.call('dumpprivkey', address, dumpHex);
+  }
+
+  /**
+   * Dumps all wallet keys in a human-readable format into the specified file.
+   * If a path is not specified in the filename, the data directory is used.
+   *
+   * @param {string} filename - Filename to dump wallet to
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async dumpWallet(filename: string): Promise<null> {
+    return this.call('dumpwallet', filename);
+  }
+
+  /**
+   * Encrypts the wallet with the given passphrase.
+   * After encryption, the server will stop and must be restarted to run with the encrypted wallet.
+   * The keypool is flushed and a new HD seed is generated.
+   * You need to make a new backup after encrypting.
+   *
+   * @param {string} passphrase - The passphrase to encrypt the wallet with
+   * @returns {Promise<string>}
+   * @memberof Wallet
+   */
+  public async encryptWallet(passphrase: string): Promise<string> {
+    return this.call('encryptwallet', passphrase);
+  }
 
   /**
    * Returns the account associated with the given address.
    *
+   * @deprecated
    * @param {string} gridcoinAddress
    * @returns {Promise<string>} - an account name
    * @memberof Wallet
@@ -222,6 +322,7 @@ export class Wallet extends RPCBase {
    * @description
    * If account does not exist, it will be created along with an associated new address that will be returned.
    *
+   * @deprecated
    * @param {string} account - an account name
    * @returns {Promise<Address>} - GRC address
    * @memberof Wallet
@@ -233,6 +334,7 @@ export class Wallet extends RPCBase {
   /**
    * Returns the list of addresses for the given account.
    *
+   * @deprecated
    * @param {string} account - the account name
    * @returns {Promise<Address[]>} - a list of addresses
    * @memberof Wallet
@@ -398,8 +500,31 @@ export class Wallet extends RPCBase {
     return this.call<WalletInfo>('getwalletinfo');
   }
 
-  /** @todo: importprivkey */
-  /** @todo: importwallet */
+  /**
+   * Adds a private key (as returned by dumpprivkey) to your wallet.
+   * WARNING: If rescan is true, a rescan of the blockchain will occur which could take up to 20 minutes.
+   *
+   * @param {string} privKey - The private key (see dumpprivkey)
+   * @param {string} [label] - Label for the imported address
+   * @param {boolean} [rescan=true] - Whether to rescan the blockchain (default true)
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async importPrivKey(privKey: string, label?: string, rescan?: boolean): Promise<null> {
+    return this.call('importprivkey', privKey, label, rescan);
+  }
+
+  /**
+   * Imports keys from a wallet dump file (see dumpwallet).
+   * If a path is not specified in the filename, the data directory is used.
+   *
+   * @param {string} filename - Filename of the wallet to import
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async importWallet(filename: string): Promise<null> {
+    return this.call('importwallet', filename);
+  }
 
   /**
    * Fills the keypool.
@@ -541,7 +666,40 @@ export class Wallet extends RPCBase {
     return this.call<TransactionUnspent[]>('listunspent', minConf, maxConf, ...addresses);
   }
 
-  /** @todo: consolidateunspent */
+  /**
+   * Consolidate UTXOs to/on a given address.
+   *
+   * The optional UTXO size parameter will result in consolidating UTXOs to generate
+   * the largest output possible less than that size or the total value of the specified
+   * maximum number of smallest inputs, whichever is less.
+   *
+   * Designed to be run repeatedly; becomes a no-op if UTXOs are fully consolidated.
+   * The address MUST exist in your wallet beforehand.
+   *
+   * @param {Address} address - The Gridcoin address target for consolidation
+   * @param {number} [utxoSize] - Target consolidation output size
+   * @param {number} [maxInputs] - Maximum number of inputs (clamped to system max)
+   * @param {boolean} [sweepAll] - If true, use all addresses as input sources
+   * @param {boolean} [sweepChange] - If true, consolidate change. Forced true if sweepAll is true
+   * @returns {Promise<ConsolidateUnspentResult>}
+   * @memberof Wallet
+   */
+  public async consolidateUnspent(
+    address: Address,
+    utxoSize?: number,
+    maxInputs?: number,
+    sweepAll?: boolean,
+    sweepChange?: boolean,
+  ): Promise<ConsolidateUnspentResult> {
+    return this.call<ConsolidateUnspentResult>(
+      'consolidateunspent',
+      address,
+      utxoSize,
+      maxInputs,
+      sweepAll,
+      sweepChange,
+    );
+  }
 
   /**
    * Make a public/private key pair.
@@ -554,7 +712,21 @@ export class Wallet extends RPCBase {
     return this.call<KeysPair>('makekeypair', prefix);
   }
 
-  /** @todo: maintainbackups */
+  /**
+   * Maintain backup retention. Creates backups and optionally removes old ones.
+   * Requires -maintainbackupretention to be set as a startup argument or in the config file.
+   *
+   * WARNING: Default values for number and days are 365 each. Both values are clamped
+   * to a minimum of 7 to prevent unintended consequences.
+   *
+   * @param {number} [retentionByNumber] - Number of files to retain
+   * @param {number} [retentionByDays] - Number of days to retain
+   * @returns {Promise<MaintainBackupsResult>}
+   * @memberof Wallet
+   */
+  public async maintainBackups(retentionByNumber?: number, retentionByDays?: number): Promise<MaintainBackupsResult> {
+    return this.call<MaintainBackupsResult>('maintainbackups', retentionByNumber, retentionByDays);
+  }
 
   /**
    * rain coins by magnitude on network
@@ -741,6 +913,7 @@ export class Wallet extends RPCBase {
    * Sets the account associated with the given address.
    * Assigning address that is already assigned to the same account will create a new address associated with that account.
    *
+   * @deprecated
    * @param {Address} address
    * @param {string} account
    * @returns {Promise<null>}
@@ -884,5 +1057,56 @@ export class Wallet extends RPCBase {
    */
   public async walletPassPhraseChange(oldPassphrase: string, newPassphrase: string): Promise<null> {
     return this.call('walletpassphrasechange', oldPassphrase, newPassphrase);
+  }
+
+  /**
+   * Refund an HTLC output after the timeout has passed.
+   *
+   * @param {TX} htlcTxid - Transaction ID of the HTLC funding tx
+   * @param {number} vout - Output index of the HTLC
+   * @param {Address} destinationAddr - Address to send refunded funds to
+   * @returns {Promise<RefundHtlcResult>}
+   * @memberof Wallet
+   */
+  public async refundHtlc(htlcTxid: TX, vout: number, destinationAddr: Address): Promise<RefundHtlcResult> {
+    return this.call<RefundHtlcResult>('refundhtlc', htlcTxid, vout, destinationAddr);
+  }
+
+  /**
+   * Set or generate a new HD wallet seed. Non-HD wallets will not be upgraded to HD.
+   * Wallets that are already HD will have a new HD seed set so that new keys added
+   * to the keypool will be derived from this new seed.
+   *
+   * You will need to make a new backup after setting the HD wallet seed.
+   *
+   * @param {boolean} [newKeyPool=true] - Whether to flush old unused addresses and regenerate the keypool
+   * @param {string} [seed] - The WIF private key to use as the new HD seed; if not provided a random seed will be used
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async setHdSeed(newKeyPool?: boolean, seed?: string): Promise<null> {
+    return this.call('sethdseed', newKeyPool, seed);
+  }
+
+  /**
+   * Upgrade the wallet. Upgrades to the latest version if no version number is specified.
+   * New keys may be generated and a new wallet backup will need to be made.
+   *
+   * @param {number} [version] - The version number to upgrade to. Default is the latest wallet version.
+   * @returns {Promise<string>}
+   * @memberof Wallet
+   */
+  public async upgradeWallet(version?: number): Promise<string> {
+    return this.call('upgradewallet', version);
+  }
+
+  /**
+   * Runs several tests to diagnose issues in the wallet.
+   *
+   * @returns {Promise<Record<string, unknown>>}
+   * @memberof Wallet
+   */
+  public async walletDiagnose(): Promise<Record<string, unknown>> {
+    return this.call('walletdiagnose');
   }
 }

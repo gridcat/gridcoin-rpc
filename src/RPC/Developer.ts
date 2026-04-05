@@ -1,6 +1,5 @@
 import { AuditSnapshot, AuditSnapshotAccurals, AuditSnapshotDetailed } from '../contracts/auditSnapshot';
 import { BlockStats } from '../contracts/blockStats';
-import { CompareSnapshotAccural } from '../contracts/compareSnapshot';
 import { ContractAverage } from '../contracts/contractAverage';
 import { LocalProject } from '../contracts/localProject';
 import { LoggingCategories } from '../contracts/logging';
@@ -15,7 +14,7 @@ import { Version } from '../contracts/version';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
 
-export class Developer extends RPCBase {
+export abstract class Developer extends RPCBase {
   public async auditSnapshotAccrual(cpid: CPID, detailed: false): Promise<AuditSnapshot>;
 
   public async auditSnapshotAccrual(cpid: CPID, detailed: true): Promise<AuditSnapshotDetailed>;
@@ -78,16 +77,6 @@ export class Developer extends RPCBase {
   }
 
   /**
-   * Compare snapshot and legacy accrual for active CPIDs.
-   *
-   * @returns {Promise<CompareSnapshotAccural>}
-   * @memberof Developer
-   */
-  public async compareSnapshotAccrual(): Promise<CompareSnapshotAccural> {
-    return this.call('comparesnapshotaccrual');
-  }
-
-  /**
    * Displays information on your current contract average with regards to superblock contract
    *
    * @returns {Promise<ContractAverage>}
@@ -110,7 +99,57 @@ export class Developer extends RPCBase {
     return this.call('debug', enable);
   }
 
-  /** @todo: implement dumpcontracts */
+  /**
+   * Audit beacons on the network.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async beaconAudit(): Promise<unknown> {
+    return this.call('beaconaudit');
+  }
+
+  /**
+   * Modify a Gridcoin setting at runtime.
+   *
+   * @param {string} name - Setting name
+   * @param {string} value - New setting value
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async changeSettings(name: string, value: string): Promise<unknown> {
+    return this.call('changesettings', name, value);
+  }
+
+  /**
+   * Convergence report from the scraper.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async convergenceReport(): Promise<unknown> {
+    return this.call('convergencereport');
+  }
+
+  /**
+   * Dump all contracts from the blockchain.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async dumpContracts(): Promise<unknown> {
+    return this.call('dumpcontracts');
+  }
+
+  /**
+   * Export statistics.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async exportStats(): Promise<unknown> {
+    return this.call('exportstats1');
+  }
 
   /**
    * Show stats on what wallets and cpids staked recent blocks
@@ -128,11 +167,60 @@ export class Developer extends RPCBase {
     return this.call('getblockstats', mode, startHeight, endHeight);
   }
 
-  /** @todo: implement getlistof */
+  /**
+   * Display the automatically greylisted projects based on Zero Credit Days (ZCD)
+   * and Whitelist Activity Score (WAS).
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async getAutoGreylist(): Promise<unknown> {
+    return this.call('getautogreylist');
+  }
 
-  /** @todo: implement inspectaccrualsnapshot */
+  /**
+   * Get a scraper convergence part by content hash.
+   *
+   * @param {string} hash - The content hash of the part
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async getMpart(hash: string): Promise<unknown> {
+    return this.call('getmpart', hash);
+  }
 
-  /** @todo: implement listdata */
+  /**
+   * Show recent blocks with optional detail.
+   *
+   * @param {number} [count] - Number of recent blocks to show
+   * @param {boolean} [detail] - Show detailed information
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async getRecentBlocks(count?: number, detail?: boolean): Promise<unknown> {
+    return this.call('getrecentblocks', count, detail);
+  }
+
+  /**
+   * Inspect an accrual snapshot.
+   *
+   * @param {number} [height] - Block height of the snapshot
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async inspectAccrualSnapshot(height?: number): Promise<unknown> {
+    return this.call('inspectaccrualsnapshot', height);
+  }
+
+  /**
+   * Display active alerts on the network.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listAlerts(): Promise<unknown> {
+    return this.call('listalerts');
+  }
 
   /**
    * Displays information about whitelisted projects.
@@ -152,6 +240,56 @@ export class Developer extends RPCBase {
    */
   public async listResearcherAccounts(): Promise<ResearcherAccounts> {
     return this.call('listresearcheraccounts');
+  }
+
+  /**
+   * List active scrapers on the network.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listScrapers(): Promise<unknown> {
+    return this.call('listscrapers');
+  }
+
+  /**
+   * List side stake allocations.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listSideStakes(): Promise<unknown> {
+    return this.call('listsidestakes');
+  }
+
+  /**
+   * List mandatory side stake allocations.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listMandatorySideStakes(): Promise<unknown> {
+    return this.call('listmandatorysidestakes');
+  }
+
+  /**
+   * List protocol entries in the protocol registry.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listProtocolEntries(): Promise<unknown> {
+    return this.call('listprotocolentries');
+  }
+
+  /**
+   * List current Gridcoin settings.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async listSettings(): Promise<unknown> {
+    return this.call('listsettings');
   }
 
   /**
@@ -193,9 +331,27 @@ export class Developer extends RPCBase {
     return this.call('network');
   }
 
-  /** @todo: implement parseaccrualsnapshotfile */
+  /**
+   * Parse an accrual snapshot from a file.
+   *
+   * @param {string} filename - Path to the snapshot file
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async parseAccrualSnapshotFile(filename: string): Promise<unknown> {
+    return this.call('parseaccrualsnapshotfile', filename);
+  }
 
-  /** @todo: implement parselegacysb */
+  /**
+   * Parse a legacy superblock.
+   *
+   * @param {string} superblock - The legacy superblock data
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async parseLegacySb(superblock: string): Promise<unknown> {
+    return this.call('parselegacysb', superblock);
+  }
 
   /**
    * Show the status of locally attached BOINC projects.
@@ -208,24 +364,87 @@ export class Developer extends RPCBase {
   }
 
   /**
-   * Re-reads config file; Does not overwrite pre-existing loaded values
+   * Read data from the Gridcoin config/data store.
    *
-   * @returns {Promise<{ readconfig: 1 }>}
+   * @param {string} key - The key to read
+   * @returns {Promise<unknown>}
    * @memberof Developer
    */
-  public async readConfig(): Promise<{ readconfig: 1 }> {
-    return this.call('readconfig');
+  public async readData(key: string): Promise<unknown> {
+    return this.call('readdata', key);
   }
 
-  /** @todo: implement readdata */
+  /**
+   * Reorganize the blockchain to a specified height. This is a dangerous admin-only operation.
+   *
+   * @param {number} height - The block height to reorganize to
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async reorganize(height: number): Promise<unknown> {
+    return this.call('reorganize', height);
+  }
 
-  /** @todo: implement reorganize */
+  /**
+   * Send an alert to the network. Admin-only.
+   *
+   * @param {string} privateKey - Admin private key
+   * @param {string} alertKey - Alert key
+   * @param {number} minVer - Minimum version
+   * @param {number} maxVer - Maximum version
+   * @param {number} priority - Alert priority
+   * @param {string} comment - Alert comment
+   * @param {string} statusBar - Status bar message
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async sendAlert(
+    privateKey: string,
+    alertKey: string,
+    minVer: number,
+    maxVer: number,
+    priority: number,
+    comment: string,
+    statusBar: string,
+  ): Promise<unknown> {
+    return this.call('sendalert', privateKey, alertKey, minVer, maxVer, priority, comment, statusBar);
+  }
 
-  /** @todo: implement sendalert */
+  /**
+   * Send an alert (v2) to the network. Admin-only.
+   *
+   * @param {string} privateKey - Admin private key
+   * @param {string} alertKey - Alert key
+   * @param {number} minVer - Minimum version
+   * @param {number} maxVer - Maximum version
+   * @param {number} priority - Alert priority
+   * @param {string} comment - Alert comment
+   * @param {string} statusBar - Status bar message
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async sendAlert2(
+    privateKey: string,
+    alertKey: string,
+    minVer: number,
+    maxVer: number,
+    priority: number,
+    comment: string,
+    statusBar: string,
+  ): Promise<unknown> {
+    return this.call('sendalert2', privateKey, alertKey, minVer, maxVer, priority, comment, statusBar);
+  }
 
-  /** @todo: implement sendalert2 */
-
-  /** @todo: implement sendblock */
+  /**
+   * Send a block to the network.
+   *
+   * @param {string} blockData - Hex-encoded block data
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async sendBlock(blockData: string): Promise<unknown> {
+    return this.call('sendblock', blockData);
+  }
 
   /**
    * Displays average information for current superblock
@@ -249,7 +468,17 @@ export class Developer extends RPCBase {
     return this.call('versionreport', lookBack, full);
   }
 
-  /** @todo: implement writedata */
+  /**
+   * Write data to the Gridcoin config/data store.
+   *
+   * @param {string} key - The key to write
+   * @param {string} value - The value to write
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async writeData(key: string, value: string): Promise<unknown> {
+    return this.call('writedata', key, value);
+  }
 
   public async listManifests(details: false, manifestHash?: string): Promise<Manifests>;
 
@@ -267,13 +496,36 @@ export class Developer extends RPCBase {
     return this.call('listmanifests', details, manifestHash);
   }
 
-  /** @todo: implement getmpart */
+  /**
+   * Send a scraper file manifest to the network.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async sendScraperFileManifest(): Promise<unknown> {
+    return this.call('sendscraperfilemanifest');
+  }
 
-  /** @todo: implement sendscraperfilemanifest */
+  /**
+   * Save a scraper file manifest.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async saveScraperFileManifest(): Promise<unknown> {
+    return this.call('savescraperfilemanifest');
+  }
 
-  /** @todo: implement savescraperfilemanifest */
-
-  /** @todo: implement deletecscrapermanifest */
+  /**
+   * Delete a scraper manifest.
+   *
+   * @param {string} manifestHash - Hash of the manifest to delete
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async deleteCScraperManifest(manifestHash: string): Promise<unknown> {
+    return this.call('deletecscrapermanifest', manifestHash);
+  }
 
   /**
    * Immediately archives the specified log. Currently valid values are debug and scraper.
@@ -286,9 +538,15 @@ export class Developer extends RPCBase {
     return this.call('archivelog', log);
   }
 
-  /** @todo: implement testnewsb */
-
-  /** @todo: implement convergencereport */
+  /**
+   * Test building a new superblock from current convergence data.
+   *
+   * @returns {Promise<unknown>}
+   * @memberof Developer
+   */
+  public async testNewSb(): Promise<unknown> {
+    return this.call('testnewsb');
+  }
 
   /**
    * Report containing various statistics about the scraper.

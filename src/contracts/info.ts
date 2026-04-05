@@ -1,12 +1,27 @@
 import { BlockchainDifficulty } from './blockchainInfo';
-import { NetworkInfo } from './networkInfo';
-import { WalletInfo } from './walletInfo';
 
-export interface Info extends
-  Omit<NetworkInfo, 'localaddresses'>,
-  Omit<WalletInfo, 'staking' & 'miningerror'>
-{
+export interface Info {
+  version: string;
+  minorVersion: number;
+  protocolversion: number;
+  walletversion: number;
+  balance: number;
+  newmint: number;
+  stake: number;
+  blocks: number;
+  inSync: boolean;
+  timeoffset: number;
+  uptime: number;
   moneysupply: number;
+  connections: number;
+  proxy: string;
+  ip: string;
   difficulty: BlockchainDifficulty;
   testnet: boolean;
+  keypoololdest: number;
+  keypoolsize: number;
+  paytxfee: number;
+  mininput: number;
+  unlockedUntil?: number;
+  errors: string;
 }

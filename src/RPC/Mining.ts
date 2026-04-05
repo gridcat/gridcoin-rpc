@@ -1,4 +1,5 @@
 import { AdvertiseBeacon } from '../contracts/advertiseBeacon';
+import { AdvertiseBeaconV3Result, BeaconAuthResult } from '../contracts/beaconAuth';
 import { Beacon, BeaconConvergence } from '../contracts/beaconConvergence';
 import { BeaconRevoke } from '../contracts/beacondRevoke';
 import { BeaconReport } from '../contracts/beaconReport';
@@ -6,14 +7,15 @@ import { BeaconStatusCollection } from '../contracts/beaconStatus';
 import { ProjectMagnitude } from '../contracts/explainMagnitude';
 import { Lifetime } from '../contracts/lifetime';
 import { Magnitude } from '../contracts/magnitude';
-import { MiningInfo } from '../contracts/miningInfo';
+import { MiningInfo, StakingInfo } from '../contracts/miningInfo';
+import { MrcInfo, MrcRequestResult } from '../contracts/mrc';
 import { Stake } from '../contracts/stake';
 import { Superblock } from '../contracts/superblock';
 import { SuperblockAge } from '../contracts/superblockAge';
 import { RPCBase } from '../RPCBase';
 import { CPID } from '../types';
 
-export class Mining extends RPCBase {
+export abstract class Mining extends RPCBase {
   /**
    * Sends out a beacon (only applicable to solo mining).
    *
@@ -28,6 +30,40 @@ export class Mining extends RPCBase {
    */
   public async advertiseBeacon(force?: boolean): Promise<AdvertiseBeacon> | never {
     return this.call<AdvertiseBeacon>('advertisebeacon', force);
+  }
+
+  /**
+   * Send a v3 beacon with a BOINC account ownership proof.
+   *
+   * The ownership proof XML is returned by the BOINC project's proof-of-account-ownership page.
+   * It must contain <master_url>, <msg>, and <signature> elements.
+   * The <msg> field should have the format: "{account_id} {beacon_public_key_hex}"
+   * (the project generates this when you enter the beacon public key from beaconauth).
+   *
+   * Requires wallet to be fully unlocked.
+   *
+   * @param {string} ownershipProofXml - The XML block returned by the BOINC project
+   * @param {boolean} [force] - If true, send even when an active or pending beacon exists
+   * @returns {Promise<AdvertiseBeaconV3Result>}
+   * @memberof Mining
+   */
+  public async advertiseBeaconV3(ownershipProofXml: string, force?: boolean): Promise<AdvertiseBeaconV3Result> {
+    return this.call<AdvertiseBeaconV3Result>('advertisebeaconv3', ownershipProofXml, force);
+  }
+
+  /**
+   * Generate a beacon key pair and return the public key hex.
+   * Use the public key to obtain a BOINC account ownership proof from a project
+   * that supports the ownership proof extension, then call advertiseBeaconV3
+   * with the proof to send the beacon.
+   *
+   * Requires wallet to be fully unlocked.
+   *
+   * @returns {Promise<BeaconAuthResult>}
+   * @memberof Mining
+   */
+  public async beaconAuth(): Promise<BeaconAuthResult> {
+    return this.call<BeaconAuthResult>('beaconauth');
   }
 
   /**
@@ -100,13 +136,57 @@ export class Mining extends RPCBase {
   }
 
   /**
+   * Returns an object containing staking-related information.
+   *
+   * @returns {Promise<StakingInfo>}
+   * @memberof Mining
+   */
+  public async getStakingInfo(): Promise<StakingInfo> {
+    return this.call<StakingInfo>('getstakinginfo');
+  }
+
+  /**
+   * Creates an MRC (Manual Research Claim) request. Requires an unlocked wallet.
+   *
+   * @param {boolean} [dryRun] - If true, calculate the reward and fee but do not send the contract. Defaults to false.
+   * @param {boolean} [force] - If true, create even if it results in a reward loss or ban. Only works on testnet.
+   * @param {number} [fee] - Custom fee to use instead of the calculated fee. Must not be lower than the calculated fee.
+   * @returns {Promise<MrcRequestResult>}
+   * @memberof Mining
+   */
+  public async createMrcRequest(dryRun?: boolean, force?: boolean, fee?: number): Promise<MrcRequestResult> {
+    return this.call<MrcRequestResult>('createmrcrequest', dryRun, force, fee);
+  }
+
+  /**
+   * Display MRC (Manual Research Claim) information.
+   *
+   * @param {boolean} [detailed] - Output MRC details. Defaults to false.
+   * @param {CPID | '*'} [cpid] - CPID to query. Defaults to current wallet CPID. Use "*" for all CPIDs (network wide).
+   * @param {number} [lowHeight] - Low height for scope. Defaults to V12 block height.
+   * @param {number} [highHeight] - High height for scope. Defaults to current block.
+   * @returns {Promise<MrcInfo>}
+   * @memberof Mining
+   */
+  public async getMrcInfo(
+    detailed?: boolean,
+    cpid?: CPID | '*',
+    lowHeight?: number,
+    highHeight?: number,
+  ): Promise<MrcInfo> {
+    return this.call<MrcInfo>('getmrcinfo', detailed, cpid, lowHeight, highHeight);
+  }
+
+  /**
    * Lists Information on the current block, mining settings, and network difficulty.
    * @description
+   * Alias for getstakinginfo, kept for backward compatibility.
    * Documentation of Stake Miner and "getmininginfo" explanation.
    * https://github.com/gridcoin/Gridcoin-Research/blob/master/doc/stake-miner.txt
    *
+   * @deprecated Use getStakingInfo() instead — getmininginfo is an alias in the daemon
    * @returns {Promise<MiningInfo>}
-   * @memberof GridcoinRPC
+   * @memberof Mining
    */
   public async getMiningInfo(): Promise<MiningInfo> {
     return this.call<MiningInfo>('getmininginfo');
@@ -189,6 +269,6 @@ export class Mining extends RPCBase {
     displayContract?: boolean,
     cpid?: CPID,
   ): Promise<Superblock[]> {
-    return this.call<Superblock[]>('superblockage', lookback, displayContract, cpid);
+    return this.call<Superblock[]>('superblocks', lookback, displayContract, cpid);
   }
 }

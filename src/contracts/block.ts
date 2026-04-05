@@ -117,6 +117,10 @@ export interface Block {
   signature: string;
   claim: Claim;
   feesCollected: number;
+  /** MRC foundation fees (block version >= 12) */
+  mrcFoundationFees?: number;
+  /** MRC staker fees (block version >= 12) */
+  mrcStakerFees?: number;
   isSuperBlock: boolean;
   isContract: boolean;
 }

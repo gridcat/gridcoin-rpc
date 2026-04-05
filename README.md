@@ -19,6 +19,7 @@ Library won't do validation by itself, it relies on the RPC validation. It will 
 | v4.x | up to ~v5.3.x |
 | v5.x | v5.5.0.0+ |
 
+
 ## Installation
 
 ```bash

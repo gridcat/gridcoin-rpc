@@ -248,7 +248,7 @@ export interface MiningInfo {
    * @type {CPID}
    * @memberof MiningInfo
    */
-  CPID: CPID;
+  cpid: CPID;
   /**
    * Current magnitude of the CPID (only present when CPID is valid)
    *

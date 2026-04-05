@@ -1,5 +1,6 @@
 import {
   Poll,
+  ResponseType,
   Vote,
   VoteResult,
   WeightType,
@@ -12,19 +13,26 @@ export abstract class Voting extends RPCBase {
   /**
    * Add a poll to the network.
    * Requires 100K GRC balance. Costs 50 GRC.
-   * Provide an empty string for *answers* when choosing "yes/no/abstain" for *responsetype*.
+   * Requires the wallet to be fully unlocked.
    *
+   * Provide an empty string for *answers* when choosing "yes/no/abstain" for *responsetype*.
+   * Certain poll types may require additional fields. You can query required fields
+   * by calling the RPC with only the type parameter.
+   *
+   * @param {string} type - Type of poll (e.g. 'survey', 'project', etc.)
    * @param {string} title - Title for the poll
    * @param {number} days - Number of days that the poll will run
    * @param {string} question - Prompt that voters shall answer
-   * @param {string[]} answers - Answers for voters to choose from.
+   * @param {string[]} answers - Answers for voters to choose from. Separate with semicolons.
    * @param {WeightType} weightType - Weighing method for the poll: 1 = Balance, 2 = Magnitude + Balance
    * @param {ResponseType} responseType - 1 = yes/no/abstain, 2 = single-choice, 3 = multiple-choice
    * @param {string} url - Discussion web page URL for the poll
+   * @param {string} [requiredFields] - Required additional fields as "name1=value1;name2=value2"
    * @returns {Promise<Poll>}
    * @memberof Voting
    */
   public async addPoll(
+    type: string,
     title: string,
     days: number,
     question: string,
@@ -32,9 +40,11 @@ export abstract class Voting extends RPCBase {
     weightType: WeightType,
     responseType: ResponseType,
     url: string,
+    requiredFields?: string,
   ): Promise<Poll> {
     return this.call<Poll>(
       'addpoll',
+      type,
       title,
       days,
       question,
@@ -42,6 +52,7 @@ export abstract class Voting extends RPCBase {
       weightType,
       responseType,
       url,
+      requiredFields,
     );
   }
 
@@ -99,5 +110,16 @@ export abstract class Voting extends RPCBase {
    */
   public async voteDetails(voteIdOrTitle: string): Promise<Vote[]> {
     return this.call<Vote[]>('votedetails', voteIdOrTitle);
+  }
+
+  /**
+   * Test the poll notification system.
+   *
+   * @param {string} pollTxid - Transaction id of the poll to test notification
+   * @returns {Promise<string>}
+   * @memberof Voting
+   */
+  public async testPollNotification(pollTxid: string): Promise<string> {
+    return this.call<string>('testpollnotification', pollTxid);
   }
 }

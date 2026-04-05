@@ -1,12 +1,16 @@
-export function applyMixins(derivedCtor: any, constructors: any[]): void {
+type Constructor = abstract new (...args: any[]) => object;
+
+export function applyMixins(derivedCtor: Constructor, constructors: Constructor[]): void {
   constructors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
-      Object.defineProperty(
-        derivedCtor.prototype,
-        name,
-        Object.getOwnPropertyDescriptor(baseCtor.prototype, name)
-          || Object.create(null),
-      );
+      if (name !== 'constructor') {
+        Object.defineProperty(
+          derivedCtor.prototype,
+          name,
+          Object.getOwnPropertyDescriptor(baseCtor.prototype, name)
+            || Object.create(null),
+        );
+      }
     });
   });
 }

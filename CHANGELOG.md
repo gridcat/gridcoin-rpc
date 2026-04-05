@@ -1,3 +1,72 @@
+# [5.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.2...v5.0.0) (2026-04-05)
+
+
+### Bug Fixes
+
+* cpid key shall be lowercase ([1d843a4](https://github.com/gridcat/gridcoin-rpc/commit/1d843a40b4a6e2f42b0d4a7bb73ad5ce82dd5713))
+* fix ts related OMIT issue ([6674d4c](https://github.com/gridcat/gridcoin-rpc/commit/6674d4c755f1826c95effc4e08fb1741b494e275))
+* mistake in the block count property ([44c9e7c](https://github.com/gridcat/gridcoin-rpc/commit/44c9e7c1a7cf316e071113c821208586f6ef1836))
+
+
+### Features
+
+* add masterkey to the wallet info ([57b4a25](https://github.com/gridcat/gridcoin-rpc/commit/57b4a2549306d1ea7fd8e564769fa56f81f59139))
+* add mrc related info into block info ([ac6357e](https://github.com/gridcat/gridcoin-rpc/commit/ac6357e14062b45cb0fa66e3d69ee295e6cb7230))
+* **rpc:** update API to match Gridcoin-Research v5.5.0.0 ([54cc53d](https://github.com/gridcat/gridcoin-rpc/commit/54cc53ddcdb8980f9dcc28e1d8e8c4322cf976b3))
+
+
+### BREAKING CHANGES
+
+* **rpc:** aligns TypeScript wrapper with Gridcoin-Research v5.5.0.0.
+
+    Fixes:
+        Fix superBlocks() RPC call: use 'superblocks' (was 'superblockage') (src/RPC/Mining.ts)
+    Removed (dead/removed RPCs):
+        Remove backupPrivateKeys() and contracts/backupPrivateKeys.ts (src/RPC/Wallet.ts)
+        Remove compareSnapshotAccrual() and contracts/compareSnapshot.ts (src/RPC/Developer.ts)
+        Remove getSuperVotes() and contracts/superVotes.ts (src/RPC/Network.ts)
+        Remove memoryPool() and contracts/memoryPool.ts (src/RPC/Network.ts)
+        Remove readConfig() and inline type (src/RPC/Developer.ts) — remove readdata @todo comment
+    Changed signatures / deprecations:
+        Update addPoll() signature: add first param type: string and optional last param requiredFields?: string (src/RPC/Voting.ts)
+        Add getStakingInfo() -> 'getstakinginfo' and mark getMiningInfo() @deprecated; rename/update MiningInfo -> StakingInfo and add missing fields (src/RPC/Mining.ts, src/contracts/)
+    New user-facing RPCs added:
+        Wallet (HTLC):
+            createHtlc(receiverAddr, senderAddr, hashHex, timeout, amount?) (src/RPC/Wallet.ts)
+            claimHtlc(htlcTxid, vout, preimageHex, destinationAddr) (src/RPC/Wallet.ts)
+            refundHtlc(htlcTxid, vout, destinationAddr) (src/RPC/Wallet.ts)
+            Add contracts/htlc.ts
+        Wallet (UTXO consolidation):
+            consolidateUnspent(address, utxoSize?, maxInputs?, sweepAll?, sweepChange?) (src/RPC/Wallet.ts)
+            consolidateMsUnspent(address, blockStart, blockEnd, maxGrc?, maxInputs?) (src/RPC/Wallet.ts)
+        Mining / Staking / MRC:
+            createMrcRequest(dryRun?, force?, fee?) (src/RPC/Mining.ts)
+            getMrcInfo(detailed?, cpid?, lowHeight?, highHeight?) (src/RPC/Mining.ts)
+            advertiseBeaconV3(force?) / beaconAuth(cpid, senderAddress) (src/RPC/Mining.ts)
+        Network:
+            getBlockByMinTime(timestamp, txinfo?) (src/RPC/Network.ts)
+            getBlocksBatch(startingBlock, numberOfBlocks, txinfo?) -> Block[] (src/RPC/Network.ts)
+            getNodeAddresses(count?) -> NodeAddress[] (add contracts/NodeAddress.ts) (src/RPC/Network.ts)
+            stop() -> string (src/RPC/Network.ts)
+        Wallet (key management / misc):
+            dumpPrivKey(address) -> string
+            dumpWallet(filename) -> string
+            encryptWallet(passphrase) -> string
+            importPrivKey(privKey, label?, rescan?) -> null
+            importWallet(filename) -> null
+            maintainBackups()
+            walletDiagnose()
+            setHdSeed(newKeyPool?, seed?)
+            upgradeWallet() (all added to src/RPC/Wallet.ts; several had @todo previously)
+        Voting:
+            testPollNotification(pollTxid) (src/RPC/Voting.ts)
+    Developer / Admin commands added (Developer.ts):
+        Tier 1: readData, writeData, listSettings, changeSettings, listAlerts, listProtocolEntries, listScrapers, listSideStakes, listMandatorySideStakes, getAutoGreylist
+        Tier 2 (scraper/admin; Promise where undocumented): beaconAudit, dumpContracts, inspectAccrualSnapshot, parseAccrualSnapshotFile, parseLegacySb, exportStats1, getRecentBlocks, reorganize, sendAlert, sendAlert2, sendBlock, getMpart, sendScraperFileManifest, saveScraperFileManifest, deleteCScraperManifest, testNewSb, convergenceReport
+        Move exportstats1 and getrecentblocks from Network.ts to Developer.ts
+    Contracts:
+        Add contracts/htlc.ts, NodeAddress, update StakingInfo/MiningInfo shape and SideStaking, delete contracts: backupPrivateKeys.ts, compareSnapshot.ts, superVotes.ts, memoryPool.ts
+
 ## [4.0.2](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.1...v4.0.2) (2024-04-28)
 
 

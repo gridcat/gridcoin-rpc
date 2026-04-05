@@ -4,7 +4,6 @@ TS library for the interactions with gridcoin RPC api
 
   [![NPM Version][npm-image]][npm-url]
   [![CI build][cci-image]][cci-url]
-  [![SNYK report][snyk-image]][snyk-url]
   [![semantic-release][semantic-image]][semantic-url]
   [![Commitzen Friendly][commitzen-image]][commitzen-url]
 

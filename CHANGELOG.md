@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v5.0.0...v5.0.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* production tests ([200ca1e](https://github.com/gridcat/gridcoin-rpc/commit/200ca1e246b93b1bed46c87ed81f471da159a994))
+
 # [5.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.2...v5.0.0) (2026-04-05)
 
 

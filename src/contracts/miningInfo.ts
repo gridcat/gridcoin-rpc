@@ -39,10 +39,14 @@ export interface StakeWeight {
   legacy: number;
 }
 
-export interface SideStakingAllocations {
+export interface SideStakingAllocation {
   address: Address;
   allocationPct: number;
+  status: string;
 }
+
+/** @deprecated Use SideStakingAllocation instead */
+export type SideStakingAllocations = SideStakingAllocation;
 
 export interface SideStaking {
   /**
@@ -51,14 +55,14 @@ export interface SideStaking {
    * @type {boolean}
    * @memberof SideStaking
    */
-  sideStakingEnabled: boolean;
+  localSideStakingEnabled: boolean;
   /**
    *  list of addresses and percentages for side staking
    *
-   * @type {SideStakingAllocations[]}
+   * @type {SideStakingAllocation[]}
    * @memberof SideStaking
    */
-  sideStakingAllocations: SideStakingAllocations[];
+  sideStakingAllocations: SideStakingAllocation[];
 }
 
 export interface StakeSplittingParams {
@@ -246,19 +250,26 @@ export interface MiningInfo {
    */
   CPID: CPID;
   /**
+   * Current magnitude of the CPID (only present when CPID is valid)
+   *
+   * @type {number}
+   * @memberof MiningInfo
+   */
+  currentMagnitude?: number;
+  /**
    * Amount in GRC paid out per unit of magnitude (only shows up if CPIDs is valid)
    *
    * @type {number}
    * @memberof MiningInfo
    */
-  magnitudeUnit: number;
+  magnitudeUnit?: number;
   /**
    * Amount in GRC that the wallet is owed for BOINC rewards
    *
    * @type {number}
    * @memberof MiningInfo
    */
-  boincRewardPending: number;
+  boincRewardPending?: number;
   /**
    * If you are staking only will be Staking Only - REASON
    * where REASON is some string explaining why you are not able to stake.
@@ -277,3 +288,6 @@ export interface MiningInfo {
    */
   currentPoll: string;
 }
+
+/** Alias for MiningInfo — getstakinginfo and getmininginfo return the same data */
+export type StakingInfo = MiningInfo;

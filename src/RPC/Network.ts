@@ -1,20 +1,20 @@
 import { Banned } from '../contracts/banned';
 import { Block, BlockWithTX } from '../contracts/block';
 import { BlockchainDifficulty, BlockchainInfo } from '../contracts/blockchainInfo';
+import { BlocksBatch, BlocksBatchDetailed } from '../contracts/blocksBatch';
 import { BurnReport } from '../contracts/burnReport';
 import { Checkpoint } from '../contracts/checkpoint';
 import { CurrentTime } from '../contracts/currentTime';
 import { Info } from '../contracts/info';
-import { MemoryPool } from '../contracts/memoryPool';
 import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
+import { NodeAddress } from '../contracts/nodeAddress';
 import { Peer } from '../contracts/peer';
-import { SuperVotesModeJson1, SuperVotesModeJson2, SuperVotesModeText } from '../contracts/superVotes';
 import { RPCBase } from '../RPCBase';
 
 type addNodeCommand = 'add' | 'remove' | 'onetry';
 
-export class Network extends RPCBase {
+export abstract class Network extends RPCBase {
   /**
    * Attempts add or remove *node* from the addnode list or try a connection to *node* once
    *
@@ -123,6 +123,41 @@ export class Network extends RPCBase {
   }
 
   /**
+   * Returns details of the block at or just after the given timestamp.
+   *
+   * @template Type
+   * @param {number} timestamp - Unix timestamp
+   * @param {Type} [txinfo] - optional to print more detailed tx info
+   * @returns {Promise<Type extends true ? BlockWithTX : Block>}
+   * @memberof Network
+   */
+  public async getBlockByMinTime<Type extends boolean>(
+    timestamp: number,
+    txinfo?: Type,
+  ): Promise<Type extends true ? BlockWithTX : Block> {
+    return this.call('getblockbymintime', timestamp, txinfo);
+  }
+
+  /**
+   * Returns a JSON array with details of the requested blocks starting
+   * with the given block-number or hash. Limited to 1000 blocks.
+   *
+   * @template Type
+   * @param {(number | string)} startingBlock - Block number or hash for the start of the batch
+   * @param {number} numberOfBlocks - Number of blocks to return (max 1000)
+   * @param {Type} [txinfo] - optional to print more detailed tx info
+   * @returns {Promise<Type extends true ? BlocksBatchDetailed : BlocksBatch>}
+   * @memberof Network
+   */
+  public async getBlocksBatch<Type extends boolean>(
+    startingBlock: number | string,
+    numberOfBlocks: number,
+    txinfo?: Type,
+  ): Promise<Type extends true ? BlocksBatchDetailed : BlocksBatch> {
+    return this.call('getblocksbatch', startingBlock, numberOfBlocks, txinfo);
+  }
+
+  /**
    * Displays data on current blockchain
    *
    * @returns {Promise<BlockchainInfo>}
@@ -224,6 +259,17 @@ export class Network extends RPCBase {
   }
 
   /**
+   * Return known addresses which can potentially be used to find new nodes in the network.
+   *
+   * @param {number} [count=1] - How many addresses to return
+   * @returns {Promise<NodeAddress[]>}
+   * @memberof Network
+   */
+  public async getNodeAddresses(count?: number): Promise<NodeAddress[]> {
+    return this.call<NodeAddress[]>('getnodeaddresses', count);
+  }
+
+  /**
    * Returns data about each connected network node.
    *
    * @returns {Promise<Peer[]>}
@@ -254,16 +300,6 @@ export class Network extends RPCBase {
   }
 
   /**
-   * Displays included and excluded memory pool txs
-   *
-   * @returns {Promise<MemoryPool>}
-   * @memberof Network
-   */
-  public async memoryPool(): Promise<MemoryPool> {
-    return this.call('memorypool');
-  }
-
-  /**
    * Displays current network time
    *
    * @returns {Promise<{ networkTime: number }>}
@@ -284,31 +320,6 @@ export class Network extends RPCBase {
   public async ping(): Promise<null> {
     return this.call('ping');
   }
-
-  public async getSuperVotes(mode: 0, superBlock: string): Promise<SuperVotesModeText>;
-
-  public async getSuperVotes(mode: 1, superBlock: string): Promise<SuperVotesModeJson1>;
-
-  public async getSuperVotes(mode: 2, superBlock: string): Promise<SuperVotesModeJson2>;
-
-  /**
-   * Report votes for specified superblock.
-   *
-   * @param {(0 | 1 | 2)} mode - mode: 0=text, 1,2=json
-   * @param {string} superBlock - block hash or last= currently active, now= ongoing sb votes.
-   * @returns {(Promise<SuperVotesModeText | SuperVotesModeJson1 | SuperVotesModeJson2>)}
-   * @memberof Network
-   */
-  public async getSuperVotes(
-    mode: 0 | 1 | 2,
-    superBlock: string,
-  ): Promise<SuperVotesModeText | SuperVotesModeJson1 | SuperVotesModeJson2> {
-    return this.call('getsupervotes', mode, superBlock);
-  }
-
-  /** @todo: implement exportstats1 */
-
-  /** @todo: implement getrecentblocks */
 
   /**
    * add or remove an IP/Subnet from the banned list.
@@ -339,5 +350,15 @@ export class Network extends RPCBase {
    */
   public async showBlock(index: number): Promise<Block> {
     return this.call('showblock', index);
+  }
+
+  /**
+   * Stop Gridcoin server.
+   *
+   * @returns {Promise<string>}
+   * @memberof Network
+   */
+  public async stop(): Promise<string> {
+    return this.call('stop');
   }
 }

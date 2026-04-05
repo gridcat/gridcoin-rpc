@@ -47,7 +47,14 @@ export interface WalletInfo {
    * @type {number}
    * @memberof WalletInfo
    */
-  unlockedUntil: number;
+  unlockedUntil?: number;
+  /**
+   * The master key ID for HD wallets
+   *
+   * @type {string}
+   * @memberof WalletInfo
+   */
+  masterkeyid?: string;
   /**
    * If the wallet is currently staking
    *

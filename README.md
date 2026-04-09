@@ -84,3 +84,7 @@ main();
 [semantic-url]: https://github.com/semantic-release/semantic-release
 [commitzen-image]: https://img.shields.io/badge/commitzen-friendly-brightgreen.svg
 [commitzen-url]: https://commitzen.github.io/cz-cli
+
+---
+
+<p align="center">Made with ❤️ by @gridcat</p>

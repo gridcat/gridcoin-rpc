@@ -1,0 +1,15 @@
+name: Stamp Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  stamp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: gridcat/gridcoin-stamp-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

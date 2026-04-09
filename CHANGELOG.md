@@ -1,3 +1,24 @@
+## [5.0.3](https://github.com/gridcat/gridcoin-rpc/compare/v5.0.2...v5.0.3) (2026-04-09)
+
+
+### Bug Fixes
+
+* technical release ([8f16e79](https://github.com/gridcat/gridcoin-rpc/commit/8f16e79d3717381489c593e0c308583f0c9ce18f))
+
+## [5.0.2](https://github.com/gridcat/gridcoin-rpc/compare/v5.0.1...v5.0.2) (2026-04-05)
+
+
+### Bug Fixes
+
+* dummy release ([03589ff](https://github.com/gridcat/gridcoin-rpc/commit/03589ff4bc166f57873a4b1984988a5baad31773))
+
+## [5.0.1](https://github.com/gridcat/gridcoin-rpc/compare/v5.0.0...v5.0.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* production tests ([200ca1e](https://github.com/gridcat/gridcoin-rpc/commit/200ca1e246b93b1bed46c87ed81f471da159a994))
+
 # [5.0.0](https://github.com/gridcat/gridcoin-rpc/compare/v4.0.2...v5.0.0) (2026-04-05)
 
 

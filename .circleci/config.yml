@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 defaults: &defaults
   working_directory: ~/grc
@@ -84,7 +84,6 @@ jobs:
           command: npm run deploy:docs
 
 workflows:
-  version: 2
   test-deploy:
     jobs:
       - build:

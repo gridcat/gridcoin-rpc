@@ -1,15 +1,18 @@
 import { CPID, TX } from '../types';
 
 export type Sharetype = 'Balance' | 'Magnitude + Balance';
-export enum WeightType {
-  'Balance' = 1,
-  'Magnitude + Balance' = 2,
-}
-export enum ResponseType {
-  'yes/no/abstain' = 1,
-  'single-choice' = 2,
-  'multiple-choice' = 3,
-}
+export const WeightType = {
+  Balance: 1,
+  'Magnitude + Balance': 2,
+} as const;
+export type WeightType = typeof WeightType[keyof typeof WeightType];
+
+export const ResponseType = {
+  'yes/no/abstain': 1,
+  'single-choice': 2,
+  'multiple-choice': 3,
+} as const;
+export type ResponseType = typeof ResponseType[keyof typeof ResponseType];
 
 export interface VoteChoice {
   id: number;

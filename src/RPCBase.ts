@@ -1,5 +1,5 @@
-import camelcaseKeys from 'camelcase-keys';
 import { RPCError } from './Errors/RpcError';
+import { camelCaseKeys } from './lib/camelCase';
 import JsonRPC, { IJsonRPC, IParameters } from './lib/JsonRPC';
 
 export type callParameters =
@@ -17,6 +17,11 @@ type filteredCallParameters =
   | string[]
   | Record<string, unknown>
   | Record<string, unknown>[];
+
+/**
+ * Response keys that must survive camelCase conversion untouched
+ */
+const EXCLUDED_KEYS = ['p2sh'];
 
 interface RPCResponse {
   result: any;
@@ -68,13 +73,7 @@ export class RPCBase {
         result.error.code,
       );
     }
-    return camelcaseKeys(
-      result.result,
-      {
-        exclude: ['p2sh'],
-        deep: true,
-      },
-    );
+    return camelCaseKeys<T>(result.result, EXCLUDED_KEYS);
   }
 
   /**

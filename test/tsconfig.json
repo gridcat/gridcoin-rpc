@@ -6,6 +6,7 @@
     "declaration": false,
     "strict": false,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "types": ["jest", "node"]
   }
 }

@@ -32,6 +32,7 @@ const configuredTimeout = Number.parseInt(process.env.GRC_RPC_TIMEOUT || '120000
 const SMOKE_TIMEOUT = Number.isFinite(configuredTimeout) && configuredTimeout > 0
   ? configuredTimeout
   : 120000;
+const EXPECTED_VERSION_PATTERN = new RegExp(`^${EXPECTED_VERSION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
 
 const isConfigured = HOST && PORT;
 
@@ -64,7 +65,7 @@ describeSmoke('Smoke Tests (live daemon)', () => {
     it(`daemon version should start with ${EXPECTED_VERSION}`, async () => {
       const info = await rpc.getInfo();
       expect(info).to.have.property('version');
-      expect((info as any).version).to.be.a('string').and.to.startWith(EXPECTED_VERSION);
+      expect((info as any).version).to.match(EXPECTED_VERSION_PATTERN);
     });
   });
 

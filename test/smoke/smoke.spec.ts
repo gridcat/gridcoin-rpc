@@ -11,7 +11,8 @@
  *   GRC_RPC_PASS     - RPC password
  *
  * Optional:
- *   GRC_RPC_VERSION  - Expected daemon version string (default: 'v5.5.0.0')
+ *   GRC_RPC_VERSION  - Expected daemon version prefix (default: 'v5.5.')
+ *   GRC_RPC_TIMEOUT  - Per-test timeout in milliseconds (default: 120000)
  *   GRC_RPC_SSL      - Set to 'true' to use HTTPS (default: false)
  *
  * Run:
@@ -26,12 +27,20 @@ const PORT = parseInt(process.env.GRC_RPC_PORT || '0', 10);
 const USER = process.env.GRC_RPC_USER || '';
 const PASS = process.env.GRC_RPC_PASS || '';
 const USE_SSL = process.env.GRC_RPC_SSL === 'true';
+const EXPECTED_VERSION = process.env.GRC_RPC_VERSION || 'v5.5.';
+const configuredTimeout = Number.parseInt(process.env.GRC_RPC_TIMEOUT || '120000', 10);
+const SMOKE_TIMEOUT = Number.isFinite(configuredTimeout) && configuredTimeout > 0
+  ? configuredTimeout
+  : 120000;
+const EXPECTED_VERSION_PATTERN = new RegExp(`^${EXPECTED_VERSION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`);
 
 const isConfigured = HOST && PORT;
 
 const describeSmoke = isConfigured ? describe : describe.skip;
 
-jest.setTimeout(30000);
+// Some read-only diagnostic RPCs scan wallet or chain state and can exceed the
+// normal unit-test timeout on a busy daemon. Keep the value configurable for CI.
+jest.setTimeout(SMOKE_TIMEOUT);
 
 describeSmoke('Smoke Tests (live daemon)', () => {
   let rpc: GridcoinRPC;
@@ -53,10 +62,10 @@ describeSmoke('Smoke Tests (live daemon)', () => {
   // ──────────────────────────────────────────────
 
   describe('version check', () => {
-    it('daemon version should start with v5.5.0', async () => {
+    it(`daemon version should start with ${EXPECTED_VERSION}`, async () => {
       const info = await rpc.getInfo();
       expect(info).to.have.property('version');
-      expect((info as any).version).to.match(/^v5\.5\.0/);
+      expect((info as any).version).to.match(EXPECTED_VERSION_PATTERN);
     });
   });
 

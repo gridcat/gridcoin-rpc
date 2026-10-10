@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/grc
   docker:
-    - image: cimg/node:16.17
+    - image: cimg/node:24.21
 
 jobs:
   build:

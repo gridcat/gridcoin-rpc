@@ -28,6 +28,18 @@ class TestableRPCBase extends RPCBase {
   public async testCall<T>(command: string, ...params: any[]): Promise<T> {
     return this.call<T>(command, ...params);
   }
+
+  public async testCallPreservingKeys<T>(
+    paths: string[],
+    command: string,
+    ...params: any[]
+  ): Promise<T> {
+    return this.callPreservingKeys<T>(
+      paths,
+      command,
+      ...params,
+    );
+  }
 }
 
 const configMock = { host: 'localhost', port: 1751 };
@@ -166,6 +178,28 @@ describe('RPCBase', () => {
       expect(result[0]).to.have.property('addressType', 'p2pkh');
       expect(result[0]).to.have.property('isValid', true);
       expect(result[1]).to.have.property('addressType', 'p2sh');
+    });
+  });
+
+  describe('callPreservingKeys', () => {
+    it('should keep keys at the given paths and convert the rest', async () => {
+      mock.response = { result: { n3b25ho5EDjTGrj5oVkCviMMtDY1X4CZZo: { some_field: 1 } } };
+      const result = await rpc.testCallPreservingKeys<any>([''], 'getaddressesbylabel', 'mylabel');
+      expect(result).to.deep.equal({ n3b25ho5EDjTGrj5oVkCviMMtDY1X4CZZo: { someField: 1 } });
+      expect(mock.lastCommand).to.equal('getaddressesbylabel');
+      expect(mock.lastParams).to.deep.equal(['mylabel']);
+    });
+
+    it('should throw RPCError with the daemon code', async () => {
+      // Error case
+      mock.response = { result: null, error: { code: -11, message: 'No addresses with label x' } };
+      try {
+        await rpc.testCallPreservingKeys([''], 'getaddressesbylabel', 'x');
+        expect.fail('Should have thrown');
+      } catch (e) {
+        expect(e).to.be.instanceof(RPCError);
+        expect((e as RPCError).code).to.equal(-11);
+      }
     });
   });
 

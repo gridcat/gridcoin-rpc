@@ -5,6 +5,11 @@ import { WalletFailStatus, WalletSuccessStatus } from '../contracts/checkwallet'
 import { ConsolidateMsUnspentResult, ConsolidateUnspentResult } from '../contracts/consolidateUnspent';
 import { ClaimHtlcResult, CreateHtlcResult, RefundHtlcResult } from '../contracts/htlc';
 import { KeysPair } from '../contracts/keysPair';
+import {
+  LabelAddresses,
+  MigrateLabelsResult,
+  ReceivedByLabel,
+} from '../contracts/label';
 import { ListSinceBlock } from '../contracts/listSinceBolck';
 import { MaintainBackupsResult } from '../contracts/maintainBackups';
 import { RainByMagnitude } from '../contracts/rainByMagnitude';
@@ -344,6 +349,18 @@ export abstract class Wallet extends RPCBase {
   }
 
   /**
+   * Returns the addresses that carry the given label.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @param {string} label - the label
+   * @returns {Promise<LabelAddresses>} - addresses as keys, kept verbatim
+   * @memberof Wallet
+   */
+  public async getAddressesByLabel(label: string): Promise<LabelAddresses> {
+    return this.callPreservingKeys<LabelAddresses>([''], 'getaddressesbylabel', label);
+  }
+
+  /**
    * Get current balance
    * @description
    * If account is not specified, returns the server's total available balance
@@ -466,6 +483,20 @@ export abstract class Wallet extends RPCBase {
   }
 
   /**
+   * Returns the total amount received by addresses with the label
+   * in transactions with at least [minconf] confirmations.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @param {string} label - the label, may be the default label using ""
+   * @param {number} [minconf=1] - the minimum number of confirmations
+   * @returns {Promise<number>} - the number of coins received
+   * @memberof Wallet
+   */
+  public async getReceivedByLabel(label: string, minconf = 1): Promise<number> {
+    return this.call<number>('getreceivedbylabel', label, minconf);
+  }
+
+  /**
    * Get detailed information about in-wallet transaction txid
    *
    * @param {TX} txid - The transaction id
@@ -550,7 +581,7 @@ export abstract class Wallet extends RPCBase {
     minConf = 1,
     includeWatchOnly = false,
   ): Promise<{ [key: string]: number }> {
-    return this.call('listaccounts', minConf, includeWatchOnly);
+    return this.callPreservingKeys([''], 'listaccounts', minConf, includeWatchOnly);
   }
 
   /**
@@ -562,6 +593,18 @@ export abstract class Wallet extends RPCBase {
    */
   public async listAddressGroupings(): Promise<[string, number][][]> {
     return this.call('listaddressgroupings');
+  }
+
+  /**
+   * Returns all labels, or only those used by addresses with the given purpose.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @param {('send' | 'receive')} [purpose] - only list labels with this address purpose
+   * @returns {Promise<string[]>}
+   * @memberof Wallet
+   */
+  public async listLabels(purpose?: 'send' | 'receive'): Promise<string[]> {
+    return this.call<string[]>('listlabels', purpose);
   }
 
   /** @todo: listreceivedbyaccount */
@@ -582,6 +625,29 @@ export abstract class Wallet extends RPCBase {
   ): Promise<Receivement[]> {
     return this.call<Receivement[]>(
       'listreceivedbyaddress',
+      minConf,
+      includeEmpty,
+      includeWatchOnly,
+    );
+  }
+
+  /**
+   * Returns the total received per label.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @param {number} [minConf=1] - The minimum number of confirmations before payments are included.
+   * @param {boolean} [includeEmpty=false] - Whether to include labels that haven't received any payments.
+   * @param {boolean} [includeWatchOnly=false] - Whether to include watchonly addresses (see 'importaddress').
+   * @returns {Promise<ReceivedByLabel[]>}
+   * @memberof Wallet
+   */
+  public async listReceivedByLabel(
+    minConf = 1,
+    includeEmpty = false,
+    includeWatchOnly = false,
+  ): Promise<ReceivedByLabel[]> {
+    return this.call<ReceivedByLabel[]>(
+      'listreceivedbylabel',
       minConf,
       includeEmpty,
       includeWatchOnly,
@@ -726,6 +792,18 @@ export abstract class Wallet extends RPCBase {
    */
   public async maintainBackups(retentionByNumber?: number, retentionByDays?: number): Promise<MaintainBackupsResult> {
     return this.call<MaintainBackupsResult>('maintainbackups', retentionByNumber, retentionByDays);
+  }
+
+  /**
+   * Backfills the purpose of address book entries created before labels existed,
+   * part of the accounts -> labels migration. Safe to run more than once.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @returns {Promise<MigrateLabelsResult>}
+   * @memberof Wallet
+   */
+  public async migrateLabels(): Promise<MigrateLabelsResult> {
+    return this.call<MigrateLabelsResult>('migratelabels');
   }
 
   /**
@@ -921,6 +999,19 @@ export abstract class Wallet extends RPCBase {
    */
   public async setAccount(address: Address, account: string): Promise<null> {
     return this.call('setaccount', address, account);
+  }
+
+  /**
+   * Sets the label associated with the given address.
+   * Requires a wallet with the label system (not in 5.5.1.0).
+   *
+   * @param {Address} address - the address to be associated with a label
+   * @param {string} label - the label to assign to the address
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async setLabel(address: Address, label: string): Promise<null> {
+    return this.call<null>('setlabel', address, label);
   }
 
   /**

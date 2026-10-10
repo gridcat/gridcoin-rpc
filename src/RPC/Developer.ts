@@ -83,7 +83,10 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async currentContractAverage(): Promise<ContractAverage> {
-    return this.call('currentcontractaverage');
+    return this.callPreservingKeys(
+      ['contract.magnitudes', 'contract.projects'],
+      'currentcontractaverage',
+    );
   }
 
   /**
@@ -164,7 +167,13 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async getBlockStats(mode: 0 | 1, startHeight?: number, endHeight?: number): Promise<BlockStats> {
-    return this.call('getblockstats', mode, startHeight, endHeight);
+    return this.callPreservingKeys(
+      ['versions', 'cpids', 'orgs'],
+      'getblockstats',
+      mode,
+      startHeight,
+      endHeight,
+    );
   }
 
   /**
@@ -229,7 +238,7 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async listProjects(): Promise<Projects> {
-    return this.call('listprojects');
+    return this.callPreservingKeys([''], 'listprojects');
   }
 
   /**
@@ -493,7 +502,7 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async listManifests(details: boolean, manifestHash?: string): Promise<Manifests | ManifestsDetailed> {
-    return this.call('listmanifests', details, manifestHash);
+    return this.callPreservingKeys([''], 'listmanifests', details, manifestHash);
   }
 
   /**

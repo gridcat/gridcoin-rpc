@@ -127,6 +127,11 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'getaddressesbyaccount',
     params: ['myaccount'],
   }, {
+    method: 'getAddressesByLabel',
+    args: ['mylabel'],
+    command: 'getaddressesbylabel',
+    params: ['mylabel'],
+  }, {
     method: 'getBalance',
     args: [],
     command: 'getbalance',
@@ -166,6 +171,11 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     args: ['addr1'],
     command: 'getreceivedbyaddress',
     params: ['addr1', 1],
+  }, {
+    method: 'getReceivedByLabel',
+    args: ['mylabel'],
+    command: 'getreceivedbylabel',
+    params: ['mylabel', 1],
   }, {
     method: 'getTransaction',
     args: ['txhash'],
@@ -207,9 +217,19 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'listaddressgroupings',
     params: [],
   }, {
+    method: 'listLabels',
+    args: ['receive'],
+    command: 'listlabels',
+    params: ['receive'],
+  }, {
     method: 'listReceivedByAddress',
     args: [],
     command: 'listreceivedbyaddress',
+    params: [1, false, false],
+  }, {
+    method: 'listReceivedByLabel',
+    args: [],
+    command: 'listreceivedbylabel',
     params: [1, false, false],
   }, {
     method: 'listSinceBlock',
@@ -245,6 +265,11 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     method: 'maintainBackups',
     args: [],
     command: 'maintainbackups',
+    params: [],
+  }, {
+    method: 'migrateLabels',
+    args: [],
+    command: 'migratelabels',
     params: [],
   }, {
     method: 'rainByMagnitude',
@@ -296,6 +321,11 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     args: ['addr', 'label'],
     command: 'setaccount',
     params: ['addr', 'label'],
+  }, {
+    method: 'setLabel',
+    args: ['addr1', 'mylabel'],
+    command: 'setlabel',
+    params: ['addr1', 'mylabel'],
   }, {
     method: 'setTXfee',
     args: [0.001],

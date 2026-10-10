@@ -77,25 +77,58 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 }
 
 /**
+ * Recursive worker for camelCaseKeys
+ *
+ * @param {unknown} value
+ * @param {ReadonlyArray<string>} exclude
+ * @param {ReadonlyArray<string>} dataKeyPaths
+ * @param {string} path - dotted path of `value` in the converted response, '' for the root
+ * @returns {unknown}
+ */
+function walk(
+  value: unknown,
+  exclude: readonly string[],
+  dataKeyPaths: readonly string[],
+  path: string,
+): unknown {
+  if (Array.isArray(value)) {
+    return value.map((item) => walk(item, exclude, dataKeyPaths, path));
+  }
+  if (!isPlainObject(value)) {
+    return value;
+  }
+  const keysAreData = dataKeyPaths.indexOf(path) !== -1;
+  const result: Record<string, unknown> = {};
+  Object.keys(value).forEach((key) => {
+    const converted = keysAreData ? key : convertKey(key, exclude);
+    const segment = keysAreData ? '*' : converted;
+    const childPath = path === '' ? segment : `${path}.${segment}`;
+    result[converted] = walk(value[key], exclude, dataKeyPaths, childPath);
+  });
+  return result;
+}
+
+/**
  * Recursively convert every key of a JSON-RPC response to camelCase
+ *
+ * Some responses use data as keys (addresses, CPIDs, project names, hashes),
+ * which camelCase would corrupt. List the objects holding such keys in
+ * `dataKeyPaths`: dotted paths of converted key names, `''` for the root and
+ * `*` for a data key, e.g. `['contract.magnitudes']` or `['', '*.items']`.
+ * Their keys are kept verbatim; everything below them is still converted.
  *
  * @template T
  * @param {unknown} value
  * @param {ReadonlyArray<string>} [exclude] keys to leave exactly as they are
+ * @param {ReadonlyArray<string>} [dataKeyPaths] objects whose keys are data, not field names
  * @returns {T}
  */
-export function camelCaseKeys<T>(value: unknown, exclude: readonly string[] = []): T {
-  if (Array.isArray(value)) {
-    return value.map((item) => camelCaseKeys(item, exclude)) as unknown as T;
-  }
-  if (!isPlainObject(value)) {
-    return value as T;
-  }
-  const result: Record<string, unknown> = {};
-  Object.keys(value).forEach((key) => {
-    result[convertKey(key, exclude)] = camelCaseKeys(value[key], exclude);
-  });
-  return result as unknown as T;
+export function camelCaseKeys<T>(
+  value: unknown,
+  exclude: readonly string[] = [],
+  dataKeyPaths: readonly string[] = [],
+): T {
+  return walk(value, exclude, dataKeyPaths, '') as T;
 }
 
 export default camelCaseKeys;

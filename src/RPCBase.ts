@@ -65,6 +65,28 @@ export class RPCBase {
     command: string,
     ...parameters: callParameters[]
   ): Promise<T> | never {
+    return this.callPreservingKeys<T>([], command, ...parameters);
+  }
+
+  /**
+   * Same as call(), for responses that use data (addresses, CPIDs, project names,
+   * hashes) as object keys. Keys of the objects at `dataKeyPaths` are returned
+   * verbatim; see camelCaseKeys for the path syntax.
+   *
+   * @protected
+   * @template T
+   * @param {ReadonlyArray<string>} dataKeyPaths
+   * @param {string} command
+   * @param {...Array<callParameters>} parameters
+   * @returns {Promise<T> | never}
+   * @throws
+   * @memberof RPCBase
+   */
+  protected async callPreservingKeys<T>(
+    dataKeyPaths: readonly string[],
+    command: string,
+    ...parameters: callParameters[]
+  ): Promise<T> | never {
     const filteredParameters = this.filterParameters(parameters);
     const result: RPCResponse = await this.client.request(command, filteredParameters);
     if (result.error) {
@@ -73,7 +95,7 @@ export class RPCBase {
         result.error.code,
       );
     }
-    return camelCaseKeys<T>(result.result, EXCLUDED_KEYS);
+    return camelCaseKeys<T>(result.result, EXCLUDED_KEYS, dataKeyPaths);
   }
 
   /**

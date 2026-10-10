@@ -550,7 +550,7 @@ export abstract class Wallet extends RPCBase {
     minConf = 1,
     includeWatchOnly = false,
   ): Promise<{ [key: string]: number }> {
-    return this.call('listaccounts', minConf, includeWatchOnly);
+    return this.callPreservingKeys([''], 'listaccounts', minConf, includeWatchOnly);
   }
 
   /**

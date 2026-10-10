@@ -133,4 +133,54 @@ describe('camelCase', () => {
       expect(camelCaseKeys({ some_date: date })).to.deep.equal({ someDate: date });
     });
   });
+
+  describe('data keys', () => {
+    // Shapes taken from a 5.5.1.7 testnet node
+    it('keeps root keys verbatim when the root holds data keys', () => {
+      const response = { n3b25ho5EDjTGrj5oVkCviMMtDY1X4CZZo: { purpose: 'receive' } };
+      // Error case
+      expect(camelCaseKeys(response)).to.deep.equal({
+        n3B25Ho5EDjTGrj5OVkCviMMtDy1X4CzZo: { purpose: 'receive' },
+      });
+      expect(camelCaseKeys(response, EXCLUDED, [''])).to.deep.equal(response);
+    });
+
+    it('still converts the fields under a data key', () => {
+      const response = {
+        'TN-Grid': { average_rac: 0, total_credit: 1 },
+      };
+      expect(camelCaseKeys(response, EXCLUDED, [''])).to.deep.equal({
+        'TN-Grid': { averageRac: 0, totalCredit: 1 },
+      });
+    });
+
+    it('keeps nested data keys and converts everything around them', () => {
+      const response = {
+        contract: {
+          magnitudes: { '0ca9e97f18b87e18cbcd9dc98bb37864': 0.04 },
+          projects: { 'TN-Grid': { average_rac: 0 } },
+        },
+        beacon_count: 2,
+      };
+      expect(camelCaseKeys(response, EXCLUDED, ['contract.magnitudes', 'contract.projects'])).to.deep.equal({
+        contract: {
+          magnitudes: { '0ca9e97f18b87e18cbcd9dc98bb37864': 0.04 },
+          projects: { 'TN-Grid': { averageRac: 0 } },
+        },
+        beaconCount: 2,
+      });
+    });
+
+    it('matches paths by converted names and * for data keys', () => {
+      const response = { some_hash: { item_list: { Key_A: 1 } } };
+      expect(camelCaseKeys(response, EXCLUDED, ['', '*.itemList'])).to.deep.equal({
+        some_hash: { itemList: { Key_A: 1 } },
+      });
+    });
+
+    it('applies the same path to every array element', () => {
+      const response = [{ Key_A: 1 }, { Key_B: 2 }];
+      expect(camelCaseKeys(response, EXCLUDED, [''])).to.deep.equal(response);
+    });
+  });
 });

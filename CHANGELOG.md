@@ -1,3 +1,16 @@
+# [5.1.0](https://github.com/[secure]/gridcoin-rpc/compare/v5.0.4...v5.1.0) (2026-10-10)
+
+
+### Bug Fixes
+
+* keep data keys intact in RPC responses ([eb5fb70](https://github.com/[secure]/gridcoin-rpc/commit/eb5fb70b648e9cb3deec86791dfe8e27d12f3441))
+* update release toolchain and run CI on node 24 ([965726f](https://github.com/[secure]/gridcoin-rpc/commit/965726f6d334e94694a4c6553cff695cfbe17b6b))
+
+
+### Features
+
+* add label RPCs ([f568afb](https://github.com/[secure]/gridcoin-rpc/commit/f568afb31758f45cd80c9a7f5783a5b20fc0fc20))
+
 ## [5.0.4](https://github.com/gridcat/gridcoin-rpc/compare/v5.0.3...v5.0.4) (2026-08-18)
 
 

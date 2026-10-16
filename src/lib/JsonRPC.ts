@@ -99,7 +99,7 @@ class JsonRPC implements IJsonRPC {
     }
     this.ca = parameters.ca;
     this.ssl = !!parameters.ssl;
-    this.sslStrict = !parameters.sslStrict;
+    this.sslStrict = !!parameters.sslStrict;
     const providers: IProviders = parameters.providers || { http, https };
     if (this.ssl) {
       this.provider = providers.https.request;

@@ -99,7 +99,7 @@ class JsonRPC implements IJsonRPC {
     }
     this.ca = parameters.ca;
     this.ssl = !!parameters.ssl;
-    this.sslStrict = !parameters.sslStrict;
+    this.sslStrict = !!parameters.sslStrict;
     const providers: IProviders = parameters.providers || { http, https };
     if (this.ssl) {
       this.provider = providers.https.request;
@@ -131,7 +131,7 @@ class JsonRPC implements IJsonRPC {
       path: this.path,
       headers: {
         Host: this.host,
-        'Content-Length': strigifyRequest.length,
+        'Content-Length': Buffer.byteLength(strigifyRequest),
       },
       agent: false,
       rejectUnauthorized: this.ssl && this.sslStrict !== false,
@@ -152,6 +152,7 @@ class JsonRPC implements IJsonRPC {
       req.on('error', reject);
       req.on('response', (response: any) => {
         let buffer = '';
+        response.setEncoding('utf8');
         if (response.statusCode === 401) {
           reject(new AuthenticationError());
           return;

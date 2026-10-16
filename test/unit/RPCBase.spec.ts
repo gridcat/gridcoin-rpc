@@ -60,10 +60,37 @@ describe('RPCBase', () => {
       expect(mock.lastParams).to.deep.equal(['a', 'b']);
     });
 
-    it('should strip undefined parameters in the middle', async () => {
+    // JSON-RPC parameters are positional. A skipped optional argument in the
+    // middle must be sent as null so the arguments after it keep their slots;
+    // only trailing gaps may be dropped.
+    it('should send null for an undefined parameter in the middle', async () => {
       mock.response = { result: 'ok' };
-      await rpc.testCall('somecommand', 'a', undefined, 'b', undefined);
-      expect(mock.lastParams).to.deep.equal(['a', 'b']);
+      await rpc.testCall('somecommand', 'a', undefined, 'b');
+      expect(mock.lastParams).to.deep.equal(['a', null, 'b']);
+    });
+
+    it('should send null for several consecutive gaps in the middle', async () => {
+      mock.response = { result: 'ok' };
+      await rpc.testCall('somecommand', 'a', undefined, undefined, 'b');
+      expect(mock.lastParams).to.deep.equal(['a', null, null, 'b']);
+    });
+
+    it('should still drop trailing undefined parameters after a gap', async () => {
+      mock.response = { result: 'ok' };
+      await rpc.testCall('somecommand', 'a', undefined, 'b', undefined, undefined);
+      expect(mock.lastParams).to.deep.equal(['a', null, 'b']);
+    });
+
+    it('should leave an explicit null untouched', async () => {
+      mock.response = { result: 'ok' };
+      await rpc.testCall('somecommand', 'a', null, 'b');
+      expect(mock.lastParams).to.deep.equal(['a', null, 'b']);
+    });
+
+    it('should apply the same rule through callPreservingKeys', async () => {
+      mock.response = { result: {} };
+      await rpc.testCallPreservingKeys([], 'somecommand', 0, undefined, 100);
+      expect(mock.lastParams).to.deep.equal([0, null, 100]);
     });
 
     it('should pass all parameters when none are undefined', async () => {

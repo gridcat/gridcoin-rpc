@@ -131,7 +131,7 @@ class JsonRPC implements IJsonRPC {
       path: this.path,
       headers: {
         Host: this.host,
-        'Content-Length': strigifyRequest.length,
+        'Content-Length': Buffer.byteLength(strigifyRequest),
       },
       agent: false,
       rejectUnauthorized: this.ssl && this.sslStrict !== false,

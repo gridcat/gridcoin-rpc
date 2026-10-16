@@ -66,3 +66,27 @@ describe('JsonRpc', () => {
     });
   });
 });
+
+describe('JsonRpc request encoding', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+  it('should send a Content-Length matching the UTF-8 byte length, not the string length', async () => {
+    let contentLength = 0;
+    let bodyBytes = 0;
+    nock(`http://${HOST}`)
+      .post('/', (body) => {
+        bodyBytes = Buffer.byteLength(JSON.stringify(body));
+        return true;
+      })
+      .reply(function reply() {
+        contentLength = Number(this.req.headers['content-length']);
+        return [200, RESPONSE];
+      });
+    const jsonRPC = new JsonRpc({ host: HOST, port: 80 });
+    const result = await jsonRPC.request('addpoll', ['Ünïcödé — тест']);
+    expect(result).to.be.deep.equal(RESPONSE);
+    expect(contentLength).to.equal(bodyBytes);
+    expect(contentLength).to.be.greaterThan('Ünïcödé — тест'.length);
+  });
+});

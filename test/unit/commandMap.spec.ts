@@ -87,6 +87,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'consolidatemsunspent',
     params: ['addr', 100, 200],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'consolidateMsUnspent',
+    args: ['addr', 100, 200, undefined, 10],
+    command: 'consolidatemsunspent',
+    params: ['addr', 100, 200, null, 10],
+  }, {
     method: 'decodeRawTransaction',
     args: ['rawhex'],
     command: 'decoderawtransaction',
@@ -197,6 +203,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'importprivkey',
     params: ['privkey', 'label', false],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'importPrivKey',
+    args: ['privkey', undefined, false],
+    command: 'importprivkey',
+    params: ['privkey', null, false],
+  }, {
     method: 'importWallet',
     args: ['dump.dat'],
     command: 'importwallet',
@@ -237,6 +249,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'listsinceblock',
     params: ['blockhash', 6],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'listSinceBlock',
+    args: [undefined, 6],
+    command: 'listsinceblock',
+    params: [null, 6],
+  }, {
     method: 'listStakes',
     args: [],
     command: 'liststakes',
@@ -257,6 +275,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'consolidateunspent',
     params: ['addr'],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'consolidateUnspent',
+    args: ['addr', undefined, 50],
+    command: 'consolidateunspent',
+    params: ['addr', null, 50],
+  }, {
     method: 'makeKeyPair',
     args: [],
     command: 'makekeypair',
@@ -266,6 +290,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     args: [],
     command: 'maintainbackups',
     params: [],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'maintainBackups',
+    args: [undefined, 30],
+    command: 'maintainbackups',
+    params: [null, 30],
   }, {
     method: 'migrateLabels',
     args: [],
@@ -292,15 +322,33 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'reservebalance',
     params: [true, 50],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'reserveBalance',
+    args: [undefined, 50],
+    command: 'reservebalance',
+    params: [null, 50],
+  }, {
     method: 'scanForUnspent',
     args: ['addr', 0, 1000],
     command: 'scanforunspent',
     params: ['addr', 0, 1000],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'scanForUnspent',
+    args: ['addr', 0, 1000, undefined, 'type'],
+    command: 'scanforunspent',
+    params: ['addr', 0, 1000, null, 'type'],
+  }, {
     method: 'sendFrom',
     args: ['acc', 'addr', 10],
     command: 'sendfrom',
     params: ['acc', 'addr', 10],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'sendFrom',
+    args: ['acc', 'addr', 10, undefined, undefined, undefined, 'hello'],
+    command: 'sendfrom',
+    params: ['acc', 'addr', 10, null, null, null, 'hello'],
   }, {
     method: 'sendMany',
     args: ['acc', { addr1: 1 }],
@@ -316,6 +364,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     args: ['addr', 5.0],
     command: 'sendtoaddress',
     params: ['addr', 5.0],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'sendToAddress',
+    args: ['addr', 5.0, undefined, undefined, 'hello'],
+    command: 'sendtoaddress',
+    params: ['addr', 5.0, null, null, 'hello'],
   }, {
     method: 'setAccount',
     args: ['addr', 'label'],
@@ -382,6 +436,12 @@ const WALLET_COMMANDS: CommandMapEntry[] = [
     command: 'sethdseed',
     params: [true, 'wif_key'],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'setHdSeed',
+    args: [undefined, 'wif_key'],
+    command: 'sethdseed',
+    params: [null, 'wif_key'],
+  }, {
     method: 'upgradeWallet',
     args: [],
     command: 'upgradewallet',
@@ -447,10 +507,22 @@ const MINING_COMMANDS: CommandMapEntry[] = [
     command: 'createmrcrequest',
     params: [true, false, 0.5],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'createMrcRequest',
+    args: [undefined, true],
+    command: 'createmrcrequest',
+    params: [null, true],
+  }, {
     method: 'getMrcInfo',
     args: [true, '*', 100, 200],
     command: 'getmrcinfo',
     params: [true, '*', 100, 200],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'getMrcInfo',
+    args: [undefined, '*'],
+    command: 'getmrcinfo',
+    params: [null, '*'],
   }, {
     method: 'getMiningInfo',
     args: [],
@@ -491,6 +563,12 @@ const MINING_COMMANDS: CommandMapEntry[] = [
     args: [14, true, 'cpid1'],
     command: 'superblocks',
     params: [14, true, 'cpid1'],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'superBlocks',
+    args: [undefined, true],
+    command: 'superblocks',
+    params: [null, true],
   },
 ];
 
@@ -632,6 +710,12 @@ const NETWORK_COMMANDS: CommandMapEntry[] = [
     command: 'setban',
     params: ['1.2.3.0/24', 'add', 3600],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'setBan',
+    args: ['1.2.3.0/24', 'add', undefined, true],
+    command: 'setban',
+    params: ['1.2.3.0/24', 'add', null, true],
+  }, {
     method: 'showBlock',
     args: [100],
     command: 'showblock',
@@ -742,6 +826,12 @@ const DEVELOPER_COMMANDS: CommandMapEntry[] = [
     command: 'getblockstats',
     params: [0, 100, 200],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'getBlockStats',
+    args: [0, undefined, 200],
+    command: 'getblockstats',
+    params: [0, null, 200],
+  }, {
     method: 'getAutoGreylist',
     args: [],
     command: 'getautogreylist',
@@ -807,6 +897,12 @@ const DEVELOPER_COMMANDS: CommandMapEntry[] = [
     command: 'logging',
     params: ['all', 'net'],
   }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'logging',
+    args: [undefined, 'net'],
+    command: 'logging',
+    params: [null, 'net'],
+  }, {
     method: 'network',
     args: [],
     command: 'network',
@@ -861,6 +957,12 @@ const DEVELOPER_COMMANDS: CommandMapEntry[] = [
     args: [100, true],
     command: 'versionreport',
     params: [100, true],
+  }, {
+    // skipped optional argument in the middle must be sent as null
+    method: 'versionReport',
+    args: [undefined, true],
+    command: 'versionreport',
+    params: [null, true],
   }, {
     method: 'writeData',
     args: ['key1', 'val1'],

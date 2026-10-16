@@ -7,6 +7,7 @@ export type callParameters =
   | number
   | boolean
   | undefined
+  | null
   | string[]
   | Record<string, unknown>
   | Record<string, unknown>[];
@@ -14,6 +15,7 @@ type filteredCallParameters =
   string
   | number
   | boolean
+  | null
   | string[]
   | Record<string, unknown>
   | Record<string, unknown>[];
@@ -99,7 +101,11 @@ export class RPCBase {
   }
 
   /**
-   * Filter out undefined parameters
+   * Normalise undefined parameters for a positional JSON-RPC call
+   *
+   * Trailing undefined parameters are dropped. An undefined parameter followed
+   * by a defined one is sent as null, so the parameters after it keep their
+   * positions; the daemon treats null as "not provided" for optional arguments.
    *
    * @private
    * @param {Array<callParameters>} parameters
@@ -107,6 +113,12 @@ export class RPCBase {
    * @memberof RPCBase
    */
   private filterParameters(parameters: callParameters[]): filteredCallParameters[] {
-    return parameters.filter((element) => element !== undefined);
+    let end = parameters.length;
+    while (end > 0 && parameters[end - 1] === undefined) {
+      end -= 1;
+    }
+    return parameters
+      .slice(0, end)
+      .map((element) => (element === undefined ? null : element));
   }
 }

@@ -1,3 +1,13 @@
+## [5.1.1](https://github.com/[secure]/gridcoin-rpc/compare/v5.1.0...v5.1.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* fix reverted sslStrict logic ([97375f1](https://github.com/[secure]/gridcoin-rpc/commit/97375f1f9abf526dccdb4dab210ee762aa491530))
+* fix the content length issue ([bfba0c4](https://github.com/[secure]/gridcoin-rpc/commit/bfba0c4559e46ecf985fdc04a9ccb9ff9439a849))
+* undefined in parameters to cast to null ([519c060](https://github.com/[secure]/gridcoin-rpc/commit/519c06084993174b3a1be2bd1ee892d971da0d5c))
+* unicode breaks json ([8a2e136](https://github.com/[secure]/gridcoin-rpc/commit/8a2e136acac0ca9d3b40e08c044d3209f0e656c4))
+
 # [5.1.0](https://github.com/[secure]/gridcoin-rpc/compare/v5.0.4...v5.1.0) (2026-10-10)
 
 

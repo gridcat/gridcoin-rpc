@@ -152,6 +152,7 @@ class JsonRPC implements IJsonRPC {
       req.on('error', reject);
       req.on('response', (response: any) => {
         let buffer = '';
+        response.setEncoding('utf8');
         if (response.statusCode === 401) {
           reject(new AuthenticationError());
           return;

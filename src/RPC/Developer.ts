@@ -131,7 +131,15 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async convergenceReport(): Promise<unknown> {
-    return this.call('convergencereport');
+    return this.callPreservingKeys(
+      [
+        'detailedConvergenceOutput.currentConvergence.superblockFromCurrentConvergence.magnitudes',
+        'detailedConvergenceOutput.currentConvergence.superblockFromCurrentConvergence.projects',
+        'detailedConvergenceOutput.pastConvergences.superblockFromThisPastConvergence.magnitudes',
+        'detailedConvergenceOutput.pastConvergences.superblockFromThisPastConvergence.projects',
+      ],
+      'convergencereport',
+    );
   }
 
   /**
@@ -218,7 +226,7 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async inspectAccrualSnapshot(height?: number): Promise<unknown> {
-    return this.call('inspectaccrualsnapshot', height);
+    return this.callPreservingKeys(['records'], 'inspectaccrualsnapshot', height);
   }
 
   /**
@@ -348,7 +356,7 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async parseAccrualSnapshotFile(filename: string): Promise<unknown> {
-    return this.call('parseaccrualsnapshotfile', filename);
+    return this.callPreservingKeys(['records'], 'parseaccrualsnapshotfile', filename);
   }
 
   /**
@@ -359,7 +367,11 @@ export abstract class Developer extends RPCBase {
    * @memberof Developer
    */
   public async parseLegacySb(superblock: string): Promise<unknown> {
-    return this.call('parselegacysb', superblock);
+    return this.callPreservingKeys(
+      ['contract.magnitudes', 'contract.projects'],
+      'parselegacysb',
+      superblock,
+    );
   }
 
   /**

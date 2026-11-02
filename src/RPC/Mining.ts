@@ -269,6 +269,12 @@ export abstract class Mining extends RPCBase {
     displayContract?: boolean,
     cpid?: CPID,
   ): Promise<Superblock[]> {
-    return this.call<Superblock[]>('superblocks', lookback, displayContract, cpid);
+    return this.callPreservingKeys<Superblock[]>(
+      ['contractContents.magnitudes', 'contractContents.projects'],
+      'superblocks',
+      lookback,
+      displayContract,
+      cpid,
+    );
   }
 }

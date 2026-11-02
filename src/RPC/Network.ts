@@ -14,6 +14,9 @@ import { RPCBase } from '../RPCBase';
 
 type addNodeCommand = 'add' | 'remove' | 'onetry';
 
+// Superblock magnitudes are keyed by CPID, projects by project name
+const BLOCK_DATA_KEYS = ['superblock.magnitudes', 'superblock.projects'];
+
 export abstract class Network extends RPCBase {
   /**
    * Attempts add or remove *node* from the addnode list or try a connection to *node* once
@@ -103,7 +106,7 @@ export abstract class Network extends RPCBase {
     hash: string,
     txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblock', hash, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblock', hash, txinfo);
   }
 
   /**
@@ -119,7 +122,7 @@ export abstract class Network extends RPCBase {
     number: number,
     txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblockbynumber', number, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblockbynumber', number, txinfo);
   }
 
   /**
@@ -135,7 +138,7 @@ export abstract class Network extends RPCBase {
     timestamp: number,
     txinfo?: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblockbymintime', timestamp, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblockbymintime', timestamp, txinfo);
   }
 
   /**
@@ -154,7 +157,13 @@ export abstract class Network extends RPCBase {
     numberOfBlocks: number,
     txinfo?: Type,
   ): Promise<Type extends true ? BlocksBatchDetailed : BlocksBatch> {
-    return this.call('getblocksbatch', startingBlock, numberOfBlocks, txinfo);
+    return this.callPreservingKeys(
+      ['blocks.superblock.magnitudes', 'blocks.superblock.projects'],
+      'getblocksbatch',
+      startingBlock,
+      numberOfBlocks,
+      txinfo,
+    );
   }
 
   /**

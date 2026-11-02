@@ -55,6 +55,13 @@ export interface IParameters {
   password?: string;
   ca?: string | Buffer | Array<string | Buffer>;
   ssl?: boolean;
+  /**
+   * Verify the server's TLS certificate when `ssl` is on (default true).
+   * Pass `false` only for a self-signed certificate you cannot add to `ca`.
+   *
+   * @type {boolean}
+   * @memberof IParameters
+   */
   sslStrict?: boolean;
   providers?: IProviders;
 }
@@ -99,7 +106,7 @@ class JsonRPC implements IJsonRPC {
     }
     this.ca = parameters.ca;
     this.ssl = !!parameters.ssl;
-    this.sslStrict = !!parameters.sslStrict;
+    this.sslStrict = parameters.sslStrict !== false;
     const providers: IProviders = parameters.providers || { http, https };
     if (this.ssl) {
       this.provider = providers.https.request;
@@ -134,7 +141,7 @@ class JsonRPC implements IJsonRPC {
         'Content-Length': Buffer.byteLength(strigifyRequest),
       },
       agent: false,
-      rejectUnauthorized: this.ssl && this.sslStrict !== false,
+      rejectUnauthorized: this.ssl && this.sslStrict,
     };
 
     if (this.auth) {

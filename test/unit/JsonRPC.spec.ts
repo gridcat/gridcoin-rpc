@@ -123,3 +123,39 @@ describe('JsonRpc response decoding', () => {
     expect(result.result.title).to.equal(TITLE);
   });
 });
+
+describe('JsonRpc TLS verification', () => {
+  // Capture the options handed to the transport; the request itself is never sent
+  const capture = (parameters: { ssl?: boolean, sslStrict?: boolean }) => {
+    let options: http.RequestOptions = {};
+    const request = (requestOptions: http.RequestOptions) => {
+      options = requestOptions;
+      return { end: () => undefined, on: () => undefined };
+    };
+    const providers = { http: { request }, https: { request } };
+    const jsonRPC = new JsonRpc({
+      host: HOST,
+      port: 443,
+      ...parameters,
+      providers,
+    });
+    jsonRPC.request('getinfo', []);
+    return options as http.RequestOptions & { rejectUnauthorized?: boolean };
+  };
+
+  it('should verify the certificate by default', () => {
+    expect(capture({ ssl: true }).rejectUnauthorized).to.equal(true);
+  });
+
+  it('should verify the certificate when sslStrict is true', () => {
+    expect(capture({ ssl: true, sslStrict: true }).rejectUnauthorized).to.equal(true);
+  });
+
+  it('should skip verification only when sslStrict is false', () => {
+    expect(capture({ ssl: true, sslStrict: false }).rejectUnauthorized).to.equal(false);
+  });
+
+  it('should not ask for verification without ssl', () => {
+    expect(capture({}).rejectUnauthorized).to.equal(false);
+  });
+});

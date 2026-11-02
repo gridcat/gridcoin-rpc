@@ -24,6 +24,31 @@ import { TransactionShort } from '../contracts/transactionShort';
 import { TransactionUnspent } from '../contracts/transactionUnspent';
 import { UnspentReport, UTXO } from '../contracts/utxo';
 import { WalletInfo } from '../contracts/walletInfo';
+import {
+  CancelUnbroadcastTransactionResult,
+  FundRawTransactionOptions,
+  FundRawTransactionResult,
+  PreviousTransactionOutput,
+  SignedRawTransactionResult,
+  SplitUnspentResult,
+} from '../contracts/walletTransaction';
+import {
+  DecodedPsgt,
+  FinalizedPsgt,
+  FundedPsgt,
+  ProcessedPsgt,
+  PsgtAnalysis,
+  PsgtFundingOptions,
+  PsgtInput,
+  PsgtOutputs,
+} from '../contracts/psgt';
+import {
+  DumpSeedPhraseResult,
+  MakeSeedPhraseResult,
+  RestoreSeedPhraseResult,
+  SeedPhraseInfo,
+  SweepUncoveredCoinsResult,
+} from '../contracts/seedPhrase';
 import { RPCBase } from '../RPCBase';
 import {
   Address,
@@ -313,7 +338,7 @@ export abstract class Wallet extends RPCBase {
   /**
    * Returns the account associated with the given address.
    *
-   * @deprecated
+   * @deprecated Use getAddressesByLabel to inspect label membership.
    * @param {string} gridcoinAddress
    * @returns {Promise<string>} - an account name
    * @memberof Wallet
@@ -327,7 +352,7 @@ export abstract class Wallet extends RPCBase {
    * @description
    * If account does not exist, it will be created along with an associated new address that will be returned.
    *
-   * @deprecated
+   * @deprecated Use getNewAddress with a label.
    * @param {string} account - an account name
    * @returns {Promise<Address>} - GRC address
    * @memberof Wallet
@@ -339,7 +364,7 @@ export abstract class Wallet extends RPCBase {
   /**
    * Returns the list of addresses for the given account.
    *
-   * @deprecated
+   * @deprecated Use getAddressesByLabel.
    * @param {string} account - the account name
    * @returns {Promise<Address[]>} - a list of addresses
    * @memberof Wallet
@@ -456,7 +481,7 @@ export abstract class Wallet extends RPCBase {
    * @param {string} account - the account name
    * @param {number} [minconf=1] - the minimum number of confirmations
    * @returns {Promise<number>} - the number of coins received
-   * @deprecated
+   * @deprecated Use getReceivedByLabel.
    * @memberof Wallet
    */
   public async getReceivedByAccount(account: string, minconf = 1): Promise<number> {
@@ -571,7 +596,7 @@ export abstract class Wallet extends RPCBase {
   /**
    * Returns UniValue that has account names as keys, account balances as values.
    *
-   * @deprecated
+   * @deprecated Use listLabels and getAddressesByLabel.
    * @param {number} [minConf=1] - Only include transactions with at least this many confirmations
    * @param {boolean} [includeWatchOnly=false] Include balances in watchonly addresses (@see importaddress)
    * @returns {Promise<{ [key: string]: number }>} - The property name is the account name, and the value is the total balance for the account
@@ -891,6 +916,7 @@ export abstract class Wallet extends RPCBase {
   /**
    * Sends *amount* of Gridcoin from *account* to *gridcoinaddress*.
    *
+   * @deprecated Use sendToAddress; use label RPCs for address grouping.
    * @param {string} account - Account FROM
    * @param {Address} address - Address TO
    * @param {number} amount - Amount to send
@@ -991,7 +1017,7 @@ export abstract class Wallet extends RPCBase {
    * Sets the account associated with the given address.
    * Assigning address that is already assigned to the same account will create a new address associated with that account.
    *
-   * @deprecated
+   * @deprecated Use setLabel.
    * @param {Address} address
    * @param {string} account
    * @returns {Promise<null>}
@@ -1044,6 +1070,7 @@ export abstract class Wallet extends RPCBase {
    * Sign inputs for raw transaction (serialized, hex-encoded).
    *
    *
+   * @deprecated Use signRawTransactionWithKey or signRawTransactionWithWallet.
    * @param {string} rawTransaction - raw transaction (serialized, hex-encoded)
    * @param {TransactionDependencies[]|null} transactionDependencies - is an array of previous transaction outputs that this transaction depends on but may not yet be in the blockchain.
    * @param {string[]|null} privateKeys - is an array of base58-encoded private keys that, if given, will be the only keys used to sign the transaction
@@ -1199,5 +1226,307 @@ export abstract class Wallet extends RPCBase {
    */
   public async walletDiagnose(): Promise<Record<string, unknown>> {
     return this.call('walletdiagnose');
+  }
+
+  /**
+   * Fund a raw transaction with no existing inputs. Requires an unlocked wallet if encrypted.
+   *
+   * @param {string} hexstring - Serialized transaction in hex
+   * @param {FundRawTransactionOptions} [options] - Change and watch-only input options
+   * @returns {Promise<FundRawTransactionResult>}
+   * @memberof Wallet
+   */
+  public async fundRawTransaction(
+    hexstring: string,
+    options?: FundRawTransactionOptions,
+  ): Promise<FundRawTransactionResult> {
+    return this.call('fundrawtransaction', hexstring, options);
+  }
+
+  /**
+   * Sign a raw transaction using only the supplied private keys.
+   *
+   * @param {string} hexstring - Serialized transaction in hex
+   * @param {string[]} privateKeys - Base58-encoded private keys
+   * @param {PreviousTransactionOutput[]} [prevtxs] - Previous dependent outputs
+   * @param {SigHashType} [sigHashType=ALL] - Signature hash type
+   * @returns {Promise<SignedRawTransactionResult>}
+   * @memberof Wallet
+   */
+  public async signRawTransactionWithKey(
+    hexstring: string,
+    privateKeys: string[],
+    prevtxs?: PreviousTransactionOutput[] | null,
+    sigHashType?: SigHashType,
+  ): Promise<SignedRawTransactionResult> {
+    return this.call(
+      'signrawtransactionwithkey',
+      hexstring,
+      privateKeys,
+      prevtxs,
+      sigHashType,
+    );
+  }
+
+  /**
+   * Sign a raw transaction with wallet keys. Requires an unlocked wallet if encrypted.
+   *
+   * @param {string} hexstring - Serialized transaction in hex
+   * @param {PreviousTransactionOutput[]} [prevtxs] - Previous dependent outputs
+   * @param {SigHashType} [sigHashType=ALL] - Signature hash type
+   * @returns {Promise<SignedRawTransactionResult>}
+   * @memberof Wallet
+   */
+  public async signRawTransactionWithWallet(
+    hexstring: string,
+    prevtxs?: PreviousTransactionOutput[] | null,
+    sigHashType?: SigHashType,
+  ): Promise<SignedRawTransactionResult> {
+    return this.call(
+      'signrawtransactionwithwallet',
+      hexstring,
+      prevtxs,
+      sigHashType,
+    );
+  }
+
+  /**
+   * Abandon an eligible wallet transaction and its wallet descendants, releasing their inputs.
+   *
+   * @param {string} txid - Wallet transaction ID absent from blocks and the mempool
+   * @returns {Promise<null>}
+   * @memberof Wallet
+   */
+  public async abandonTransaction(txid: string): Promise<null> {
+    return this.call('abandontransaction', txid);
+  }
+
+  /**
+   * Split an address's spendable outputs into uniform pieces returned to the same address.
+   * Supply at most one nonzero size or count; omit both for the optimal staking size.
+   *
+   * @param {Address} address - Address whose outputs will be split
+   * @param {number|string|null} [pieceSize] - Piece amount; zero or null means unset
+   * @param {number|null} [pieceCount] - Integer piece count; zero or null means unset
+   * @returns {Promise<SplitUnspentResult>}
+   * @memberof Wallet
+   */
+  public async splitUnspent(
+    address: Address,
+    pieceSize?: number | string | null,
+    pieceCount?: number | null,
+  ): Promise<SplitUnspentResult> {
+    return this.call(
+      'splitunspent',
+      address,
+      pieceSize,
+      pieceCount,
+    );
+  }
+
+  /**
+   * Cancel a still-unbroadcast transaction, abandoning its wallet entry and releasing inputs.
+   * Refuses transactions restored by a reorganization or with mempool descendants.
+   *
+   * @param {string} txid - Transaction ID in the mempool
+   * @returns {Promise<CancelUnbroadcastTransactionResult>}
+   * @memberof Wallet
+   */
+  public async cancelUnbroadcastTransaction(txid: string): Promise<CancelUnbroadcastTransactionResult> {
+    return this.call('cancelunbroadcasttransaction', txid);
+  }
+
+  /**
+   * Generate and activate a new 24-word seed phrase. Requires an unlocked wallet if encrypted.
+   *
+   * @param {string} [phrasePassword=''] - Additional password required to restore the phrase
+   * @returns {Promise<MakeSeedPhraseResult>}
+   * @memberof Wallet
+   */
+  public async makeSeedPhrase(phrasePassword?: string): Promise<MakeSeedPhraseResult> {
+    return this.call('makeseedphrase', phrasePassword);
+  }
+
+  /**
+   * Restore and activate a seed phrase, optionally rescanning from its birthday.
+   * Requires an unlocked wallet if encrypted.
+   *
+   * @param {string} seedphrase - The 24 words separated by single spaces
+   * @param {string} [phrasePassword=''] - The phrase's password
+   * @param {boolean} [rescan=true] - Rescan with automatic keypool look-ahead
+   * @returns {Promise<RestoreSeedPhraseResult>}
+   * @memberof Wallet
+   */
+  public async restoreSeedPhrase(
+    seedphrase: string,
+    phrasePassword?: string,
+    rescan?: boolean,
+  ): Promise<RestoreSeedPhraseResult> {
+    return this.call(
+      'restoreseedphrase',
+      seedphrase,
+      phrasePassword,
+      rescan,
+    );
+  }
+
+  /**
+   * Display the stored seed phrase. Requires an unlocked wallet if encrypted.
+   *
+   * @returns {Promise<DumpSeedPhraseResult>}
+   * @memberof Wallet
+   */
+  public async dumpSeedPhrase(): Promise<DumpSeedPhraseResult> {
+    return this.call('dumpseedphrase');
+  }
+
+  /**
+   * Report seed phrase coverage without revealing secrets or requiring an unlocked wallet.
+   *
+   * @returns {Promise<SeedPhraseInfo>}
+   * @memberof Wallet
+   */
+  public async getSeedPhraseInfo(): Promise<SeedPhraseInfo> {
+    return this.call('getseedphraseinfo');
+  }
+
+  /**
+   * Sweep uncovered confirmed coins to a phrase-covered address.
+   * Requires an unlocked wallet if encrypted, except for a dry run.
+   *
+   * @param {Address} [destination] - Defaults to a fresh phrase-covered keypool address
+   * @param {number} [maxInputs] - Defaults to and is capped at the consolidation input limit
+   * @param {boolean} [dryRun=false] - Report selection without sending
+   * @returns {Promise<SweepUncoveredCoinsResult>}
+   * @memberof Wallet
+   */
+  public async sweepUncoveredCoins(
+    destination?: Address | null,
+    maxInputs?: number | null,
+    dryRun?: boolean,
+  ): Promise<SweepUncoveredCoinsResult> {
+    return this.call(
+      'sweepuncoveredcoins',
+      destination,
+      maxInputs,
+      dryRun,
+    );
+  }
+
+  /**
+   * Create an unsigned PSGT.
+   *
+   * @param {PsgtInput[]} inputs - Transaction outpoints
+   * @param {PsgtOutputs} outputs - Addresses mapped to GRC amounts
+   * @param {number} [ntime] - Nonnegative timestamp in seconds; defaults to adjusted time
+   * @returns {Promise<string>} - Base64-encoded PSGT
+   * @memberof Wallet
+   */
+  public async createPsgt(inputs: PsgtInput[], outputs: PsgtOutputs, ntime?: number): Promise<string> {
+    return this.call('createpsgt', inputs, outputs, ntime);
+  }
+
+  /**
+   * Decode a PSGT's unsigned transaction and input/output metadata.
+   *
+   * @param {string} psgt - Base64-encoded PSGT
+   * @returns {Promise<DecodedPsgt>}
+   * @memberof Wallet
+   */
+  public async decodePsgt(psgt: string): Promise<DecodedPsgt> {
+    const dataKeys = ['inputs.partialSignatures', 'inputs.unknown', 'outputs.unknown'];
+    return this.callPreservingKeys(dataKeys, 'decodepsgt', psgt);
+  }
+
+  /**
+   * Analyze the material and next roles needed to complete a PSGT.
+   *
+   * @param {string} psgt - Base64-encoded PSGT
+   * @returns {Promise<PsgtAnalysis>}
+   * @memberof Wallet
+   */
+  public async analyzePsgt(psgt: string): Promise<PsgtAnalysis> {
+    return this.call('analyzepsgt', psgt);
+  }
+
+  /**
+   * Merge PSGTs for the same transaction.
+   *
+   * @param {string[]} psgts - Base64-encoded PSGTs
+   * @returns {Promise<string>} - Base64-encoded combined PSGT
+   * @memberof Wallet
+   */
+  public async combinePsgt(psgts: string[]): Promise<string> {
+    return this.call('combinepsgt', psgts);
+  }
+
+  /**
+   * Finalize a PSGT, returning transaction hex only when complete.
+   *
+   * @param {string} psgt - Base64-encoded PSGT
+   * @returns {Promise<FinalizedPsgt>}
+   * @memberof Wallet
+   */
+  public async finalizePsgt(psgt: string): Promise<FinalizedPsgt> {
+    return this.call('finalizepsgt', psgt);
+  }
+
+  /**
+   * Convert a raw transaction to PSGT, retaining existing scriptSigs as final metadata.
+   *
+   * @param {string} hexstring - Serialized transaction in hex
+   * @returns {Promise<string>} - Base64-encoded PSGT
+   * @memberof Wallet
+   */
+  public async convertToPsgt(hexstring: string): Promise<string> {
+    return this.call('converttopsgt', hexstring);
+  }
+
+  /**
+   * Fill missing previous transactions in a PSGT using the node's transaction data.
+   *
+   * @param {string} psgt - Base64-encoded PSGT
+   * @returns {Promise<string>} - Base64-encoded updated PSGT
+   * @memberof Wallet
+   */
+  public async utxoUpdatePsgt(psgt: string): Promise<string> {
+    return this.call('utxoupdatepsgt', psgt);
+  }
+
+  /**
+   * Create and fund a PSGT, optionally signing it. The handler requires an unlocked wallet even when sign is false.
+   *
+   * @param {PsgtInput[]} inputs - Input outpoints; an empty array allows wallet selection
+   * @param {PsgtOutputs} outputs - Addresses mapped to GRC amounts
+   * @param {PsgtFundingOptions} [options] - Optional change address; defaults to the keypool
+   * @param {boolean} [sign=true] - Sign with wallet keys
+   * @returns {Promise<FundedPsgt>}
+   * @memberof Wallet
+   */
+  public async walletCreateFundedPsgt(
+    inputs: PsgtInput[],
+    outputs: PsgtOutputs,
+    options?: PsgtFundingOptions | null,
+    sign?: boolean,
+  ): Promise<FundedPsgt> {
+    return this.call(
+      'walletcreatefundedpsgt',
+      inputs,
+      outputs,
+      options,
+      sign,
+    );
+  }
+
+  /**
+   * Fill and sign a PSGT with wallet keys. Requires an unlocked wallet if encrypted.
+   *
+   * @param {string} psgt - Base64-encoded PSGT
+   * @param {SigHashType} [sigHashType=ALL] - Signature hash type
+   * @returns {Promise<ProcessedPsgt>}
+   * @memberof Wallet
+   */
+  public async walletProcessPsgt(psgt: string, sigHashType?: SigHashType): Promise<ProcessedPsgt> {
+    return this.call('walletprocesspsgt', psgt, sigHashType);
   }
 }

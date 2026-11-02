@@ -10,9 +10,14 @@ import { NetTotals } from '../contracts/netTotals';
 import { NetworkInfo } from '../contracts/networkInfo';
 import { NodeAddress } from '../contracts/nodeAddress';
 import { Peer } from '../contracts/peer';
+import { ClockStats } from '../contracts/clockStats';
+import { MempoolAcceptResult, MempoolEntry, MempoolInfo } from '../contracts/mempool';
 import { RPCBase } from '../RPCBase';
 
 type addNodeCommand = 'add' | 'remove' | 'onetry';
+
+// Superblock magnitudes are keyed by CPID, projects by project name
+const BLOCK_DATA_KEYS = ['superblock.magnitudes', 'superblock.projects'];
 
 export abstract class Network extends RPCBase {
   /**
@@ -103,7 +108,7 @@ export abstract class Network extends RPCBase {
     hash: string,
     txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblock', hash, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblock', hash, txinfo);
   }
 
   /**
@@ -119,7 +124,7 @@ export abstract class Network extends RPCBase {
     number: number,
     txinfo: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblockbynumber', number, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblockbynumber', number, txinfo);
   }
 
   /**
@@ -135,7 +140,7 @@ export abstract class Network extends RPCBase {
     timestamp: number,
     txinfo?: Type,
   ): Promise<Type extends true ? BlockWithTX : Block> {
-    return this.call('getblockbymintime', timestamp, txinfo);
+    return this.callPreservingKeys(BLOCK_DATA_KEYS, 'getblockbymintime', timestamp, txinfo);
   }
 
   /**
@@ -154,7 +159,13 @@ export abstract class Network extends RPCBase {
     numberOfBlocks: number,
     txinfo?: Type,
   ): Promise<Type extends true ? BlocksBatchDetailed : BlocksBatch> {
-    return this.call('getblocksbatch', startingBlock, numberOfBlocks, txinfo);
+    return this.callPreservingKeys(
+      ['blocks.superblock.magnitudes', 'blocks.superblock.projects'],
+      'getblocksbatch',
+      startingBlock,
+      numberOfBlocks,
+      txinfo,
+    );
   }
 
   /**
@@ -360,5 +371,82 @@ export abstract class Network extends RPCBase {
    */
   public async stop(): Promise<string> {
     return this.call('stop');
+  }
+
+  /**
+   * Return transaction counts and memory usage for the active mempool.
+   *
+   * @returns {Promise<MempoolInfo>}
+   * @memberof Network
+   */
+  public async getMempoolInfo(): Promise<MempoolInfo> {
+    return this.call('getmempoolinfo');
+  }
+
+  /**
+   * Return mempool data for a transaction currently in the pool.
+   *
+   * @param {string} txid - Transaction ID
+   * @returns {Promise<MempoolEntry>}
+   * @memberof Network
+   */
+  public async getMempoolEntry(txid: string): Promise<MempoolEntry> {
+    return this.call('getmempoolentry', txid);
+  }
+
+  /**
+   * Check whether raw transactions would be accepted, without submitting them.
+   *
+   * @param {string[]} rawtxs - Hex-encoded transactions
+   * @returns {Promise<MempoolAcceptResult[]>}
+   * @memberof Network
+   */
+  public async testMempoolAccept(rawtxs: string[]): Promise<MempoolAcceptResult[]> {
+    return this.call('testmempoolaccept', rawtxs);
+  }
+
+  /**
+   * Return a proof that the supplied transactions occur in a main-chain block.
+   *
+   * @param {string[]} txids - Transaction IDs in the same block
+   * @param {string} [blockhash] - Specific containing block; otherwise resolved from the first transaction
+   * @returns {Promise<string>} - Hex-encoded proof
+   * @memberof Network
+   */
+  public async getTxOutProof(txids: string[], blockhash?: string): Promise<string> {
+    return this.call('gettxoutproof', txids, blockhash);
+  }
+
+  /**
+   * Verify an inclusion proof and return its committed transaction IDs.
+   *
+   * @param {string} proof - Hex-encoded proof from gettxoutproof
+   * @returns {Promise<string[]>} - Empty when invalid; errors if the block is outside the best chain
+   * @memberof Network
+   */
+  public async verifyTxOutProof(proof: string): Promise<string[]> {
+    return this.call('verifytxoutproof', proof);
+  }
+
+  /**
+   * Immediately disconnect a peer identified by address or node ID.
+   *
+   * @param {string} [address] - Peer address; use an empty string to select by node ID
+   * @param {number} [nodeid] - Peer ID, mutually exclusive with a nonempty address
+   * @returns {Promise<null>}
+   * @memberof Network
+   */
+  public async disconnectNode(address?: string | null, nodeid?: number): Promise<null> {
+    return this.call('disconnectnode', address, nodeid);
+  }
+
+  /**
+   * Return network clock state and cumulative received-block timestamp lead counts.
+   *
+   * @returns {Promise<ClockStats>}
+   * @memberof Network
+   */
+  public async getClockStats(): Promise<ClockStats> {
+    return this.call('getclockstats');
   }
 }

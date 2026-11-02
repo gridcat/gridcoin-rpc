@@ -28,6 +28,7 @@ export abstract class Voting extends RPCBase {
    * @param {ResponseType} responseType - 1 = yes/no/abstain, 2 = single-choice, 3 = multiple-choice
    * @param {string} url - Discussion web page URL for the poll
    * @param {string} [requiredFields] - Required additional fields as "name1=value1;name2=value2"
+   * @param {string} [feeOutpoint] - Fee-paying UTXO in "<txid>:<vout>" form
    * @returns {Promise<Poll>}
    * @memberof Voting
    */
@@ -41,6 +42,7 @@ export abstract class Voting extends RPCBase {
     responseType: ResponseType,
     url: string,
     requiredFields?: string,
+    feeOutpoint?: string,
   ): Promise<Poll> {
     return this.call<Poll>(
       'addpoll',
@@ -53,6 +55,7 @@ export abstract class Voting extends RPCBase {
       responseType,
       url,
       requiredFields,
+      feeOutpoint,
     );
   }
 

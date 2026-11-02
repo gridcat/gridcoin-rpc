@@ -9,6 +9,7 @@ export interface PollResults {
   pollId: string;
   votes: number;
   invalidVotes: number;
+  supersededVotes: number;
   totalWeight: number;
   topChoiceId: number;
   topChoice: string;

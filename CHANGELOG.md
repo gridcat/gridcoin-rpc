@@ -1,3 +1,16 @@
+# [5.2.0](https://github.com/[secure]/gridcoin-rpc/compare/v5.1.1...v5.2.0) (2026-11-02)
+
+
+### Bug Fixes
+
+* comply to the new npm rules ([dda7bbc](https://github.com/[secure]/gridcoin-rpc/commit/dda7bbc79ba3e0f7b52f6e5957b166588bc470ce))
+* keep superblock and accrual snapshot data keys intact ([990cbcd](https://github.com/[secure]/gridcoin-rpc/commit/990cbcd98193375bc4aae7c4710941b552d75c05))
+
+
+### Features
+
+* support Gridcoin 5.5.2.0 RPCs ([85db324](https://github.com/[secure]/gridcoin-rpc/commit/85db324231c203168d58d706802762c9ef9c5356))
+
 ## [5.1.1](https://github.com/[secure]/gridcoin-rpc/compare/v5.1.0...v5.1.1) (2026-10-16)
 
 

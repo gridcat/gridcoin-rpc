@@ -31,10 +31,12 @@ const SEND_AMOUNT = 0.01;
 const BURN_AMOUNT = 0.001;
 // Not a stamp prefix (5ea1ed / f055aa), so stamp scrapers ignore it
 const BURN_DATA = Buffer.from('gridcoin-rpc smoke').toString('hex');
-// Label of an address that never receives coins, for the splitunspent no-op
-const EMPTY_LABEL = 'gridcoin-rpc-smoke-empty';
+// Label of the address used for the splitunspent no-op. The value predates the
+// keypool leak below and stays, so runs keep reusing the same address.
+const SPLIT_LABEL = 'gridcoin-rpc-smoke-empty';
 
 const RPC_INVALID_ADDRESS_OR_KEY = -5;
+const RPC_INVALID_PARAMETER = -8;
 const RPC_WALLET_INVALID_LABEL_NAME = -11;
 const TXID = /^[0-9a-f]{64}$/;
 
@@ -109,19 +111,29 @@ describeSpend('Spend smoke tests (live testnet wallet)', () => {
     await expectInMempool(txid);
   });
 
-  it('splitUnspent on an empty address has nothing to split', async () => {
-    // A real split makes pieces of at least 800 GRC, so only the no-op is tested.
-    // 5.5.2.0 refuses getaccountaddress without enableaccounts=1, so the address
-    // is found by label and created on the first run only.
-    let empty: string;
+  it('splitUnspent on a small address has nothing to split', async () => {
+    // A real split makes pieces of at least 800 GRC (by default the much larger
+    // efficiency-optimal size), so only the no-op is tested. 5.5.2.0 refuses
+    // getaccountaddress without enableaccounts=1, so the address is found by
+    // label and created on the first run only.
+    let small: string;
     try {
-      [empty] = Object.keys(await rpc.getAddressesByLabel(EMPTY_LABEL));
+      [small] = Object.keys(await rpc.getAddressesByLabel(SPLIT_LABEL));
     } catch (e: any) {
       if (e?.code !== RPC_WALLET_INVALID_LABEL_NAME) throw e;
-      empty = await rpc.getNewAddress(EMPTY_LABEL);
+      small = await rpc.getNewAddress(SPLIT_LABEL);
     }
-    const result = await rpc.splitUnspent(empty);
-    expect(result.result).to.equal(false);
-    expect(result.utxosSwept).to.equal(0);
+    // "Nothing to split" comes back two ways: result false for an address with
+    // no coins, an error for one holding less than a piece. walletcreatefundedpsgt
+    // hands its change key back to the keypool, so a "new" address can already
+    // hold PSGT change.
+    try {
+      const result = await rpc.splitUnspent(small);
+      expect(result.result).to.equal(false);
+      expect(result.utxosSwept).to.equal(0);
+    } catch (e: any) {
+      if (e?.code !== RPC_INVALID_PARAMETER) throw e;
+      expect(e.message).to.match(/nothing to split/);
+    }
   });
 });

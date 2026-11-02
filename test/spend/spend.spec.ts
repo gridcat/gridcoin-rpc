@@ -31,10 +31,11 @@ const SEND_AMOUNT = 0.01;
 const BURN_AMOUNT = 0.001;
 // Not a stamp prefix (5ea1ed / f055aa), so stamp scrapers ignore it
 const BURN_DATA = Buffer.from('gridcoin-rpc smoke').toString('hex');
-// Stable account that never receives coins, for the splitunspent no-op
-const EMPTY_ACCOUNT = 'gridcoin-rpc-smoke-empty';
+// Label of an address that never receives coins, for the splitunspent no-op
+const EMPTY_LABEL = 'gridcoin-rpc-smoke-empty';
 
 const RPC_INVALID_ADDRESS_OR_KEY = -5;
+const RPC_WALLET_INVALID_LABEL_NAME = -11;
 const TXID = /^[0-9a-f]{64}$/;
 
 jest.setTimeout(120000);
@@ -109,8 +110,16 @@ describeSpend('Spend smoke tests (live testnet wallet)', () => {
   });
 
   it('splitUnspent on an empty address has nothing to split', async () => {
-    // A real split makes pieces of at least 800 GRC, so only the no-op is tested
-    const empty = await rpc.getAccountAddress(EMPTY_ACCOUNT);
+    // A real split makes pieces of at least 800 GRC, so only the no-op is tested.
+    // 5.5.2.0 refuses getaccountaddress without enableaccounts=1, so the address
+    // is found by label and created on the first run only.
+    let empty: string;
+    try {
+      [empty] = Object.keys(await rpc.getAddressesByLabel(EMPTY_LABEL));
+    } catch (e: any) {
+      if (e?.code !== RPC_WALLET_INVALID_LABEL_NAME) throw e;
+      empty = await rpc.getNewAddress(EMPTY_LABEL);
+    }
     const result = await rpc.splitUnspent(empty);
     expect(result.result).to.equal(false);
     expect(result.utxosSwept).to.equal(0);

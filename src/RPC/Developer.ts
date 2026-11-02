@@ -11,6 +11,8 @@ import { ScrapeReport } from '../contracts/scrapeReport';
 import { SuperblockAverage } from '../contracts/superblockAverage';
 import { Contract } from '../contracts/transaction';
 import { Version } from '../contracts/version';
+import { RawProjectStatuses } from '../contracts/rawProjectStatus';
+import { WalletState } from '../contracts/walletState';
 import { RPCBase } from '../RPCBase';
 import { CPID, TX } from '../types';
 
@@ -577,5 +579,26 @@ export abstract class Developer extends RPCBase {
    */
   public async scrapeReport(): Promise<ScrapeReport> {
     return this.call('scraperreport');
+  }
+
+  /**
+   * Inspect wallet transaction states and the balance calculation.
+   *
+   * @param {boolean} [verbose=false] - Include per-transaction state details
+   * @returns {Promise<WalletState>}
+   * @memberof Developer
+   */
+  public async inspectWalletState(verbose?: boolean): Promise<WalletState> {
+    return this.call('inspectwalletstate', verbose);
+  }
+
+  /**
+   * Return project contract states from storage before the automatic greylist overlay.
+   *
+   * @returns {Promise<RawProjectStatuses>} - Entries keyed by unchanged project short names
+   * @memberof Developer
+   */
+  public async getRawProjectStatus(): Promise<RawProjectStatuses> {
+    return this.callPreservingKeys([''], 'getrawprojectstatus');
   }
 }

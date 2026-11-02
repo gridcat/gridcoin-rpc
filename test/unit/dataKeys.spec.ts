@@ -92,4 +92,43 @@ describe('Data keys in responses', () => {
       expect(snapshot).to.deep.equal({ version: 1, height: 100, records: { [CPID]: 1.5 } });
     });
   });
+
+  it('decodePsgt() preserves signature key IDs and unknown hex keys while converting metadata', async () => {
+    const keyId = '0abc123def456abc789def012abc345def678abc90';
+    const unknownKey = '01ab23cd';
+    mock.result = {
+      tx: { vout: [{ scriptPubKey: { reqSigs: 2 } }] },
+      inputs: [{
+        partial_signatures: { [keyId]: 'signature' },
+        unknown: { [unknownKey]: 'input value' },
+        non_witness_utxo_hex: 'hex',
+        final_scriptSig: { asm: 'OP_TRUE', hex: '51' },
+        bip32_derivs: [{ master_fingerprint: 'ab12', pubkey: 'pub', path: 'm/0' }],
+      }],
+      outputs: [{ unknown: { [unknownKey]: 'output value' }, redeem_script: { asm: '', hex: '' } }],
+    };
+    const decoded = await rpc.decodePsgt('base64');
+    expect(decoded).to.deep.equal({
+      tx: { vout: [{ scriptPubKey: { reqSigs: 2 } }] },
+      inputs: [{
+        partialSignatures: { [keyId]: 'signature' },
+        unknown: { [unknownKey]: 'input value' },
+        nonWitnessUtxoHex: 'hex',
+        finalScriptSig: { asm: 'OP_TRUE', hex: '51' },
+        bip32Derivs: [{ masterFingerprint: 'ab12', pubkey: 'pub', path: 'm/0' }],
+      }],
+      outputs: [{ unknown: { [unknownKey]: 'output value' }, redeemScript: { asm: '', hex: '' } }],
+    });
+  });
+
+  it('getRawProjectStatus() preserves project names and converts contract fields', async () => {
+    mock.result = {
+      sr_base: { display_name: 'SRBase', current_project_entry_tx_hash: 'hash' },
+      'PrimeGrid.Test': { requires_external_adapter: true },
+    };
+    expect(await rpc.getRawProjectStatus()).to.deep.equal({
+      sr_base: { displayName: 'SRBase', currentProjectEntryTxHash: 'hash' },
+      'PrimeGrid.Test': { requiresExternalAdapter: true },
+    });
+  });
 });

@@ -103,7 +103,7 @@ export interface StakeSplitting {
    * @type {StakeSplittingParams}
    * @memberof StakeSplitting
    */
-  stakeSplittingParams: StakeSplittingParams;
+  stakeSplittingParams?: StakeSplittingParams;
 }
 
 export interface MiningInfo {
@@ -134,7 +134,7 @@ export interface MiningInfo {
    * @type {number}
    * @memberof MiningInfo
    */
-  netstakingGRCvalue: number;
+  netstakingGrCvalue: number;
   /**
    * True/False on wether or not you are staking
    *

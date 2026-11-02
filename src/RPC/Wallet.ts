@@ -227,14 +227,14 @@ export abstract class Wallet extends RPCBase {
    *    "data\": "hex",     (string, required) The key is "data", the value is hex encoded data
    *    ...
    *  }
-   * @returns {Promise<{ transaction: string }>}
+   * @returns {Promise<string>} The unsigned transaction as a hex string
    * @memberof Wallet
    */
   public async createRawTransaction(
     transactions: RawTransaction[],
     outputs: Output,
-  ): Promise<{ transaction: string }> {
-    return this.call<{ transaction: string }>(
+  ): Promise<string> {
+    return this.call<string>(
       'createrawtransaction',
       transactions as any,
       outputs,

@@ -42,6 +42,17 @@ jobs:
           name: Run smoke tests
           command: npm run test:smoke
 
+  test_smoke_spend:
+    <<: *defaults
+    environment:
+      GRC_SMOKE_SPEND: 'true'
+    steps:
+      - attach_workspace:
+          at: ~/grc
+      - run:
+          name: Run spending smoke tests (testnet)
+          command: npm run test:spend
+
   lint_commit_message:
     <<: *defaults
     steps:
@@ -114,12 +125,28 @@ workflows:
               ignore: gh-pages
           requires:
             - build
+      # Smokes run last: only after every other check has passed
       - test_smoke:
           filters:
             branches:
               ignore: gh-pages
           requires:
             - build
+            - lint_commit_message
+            - test
+            - typecheck
+          context:
+            - testnet
+      # Spends real tGRC, so dev and master only, and only after the
+      # read-only smokes pass
+      - test_smoke_spend:
+          filters:
+            branches:
+              only:
+                - dev
+                - master
+          requires:
+            - test_smoke
           context:
             - testnet
       - deploy-docs:
@@ -132,6 +159,7 @@ workflows:
             - lint_commit_message
             - test
             - test_smoke
+            - test_smoke_spend
             - typecheck
           context:
             - semantic-release
@@ -145,6 +173,7 @@ workflows:
             - lint_commit_message
             - test
             - test_smoke
+            - test_smoke_spend
             - typecheck
           context:
             - semantic-release
